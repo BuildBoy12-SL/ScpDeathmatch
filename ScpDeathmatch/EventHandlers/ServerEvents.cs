@@ -23,7 +23,7 @@ namespace ScpDeathmatch.EventHandlers
     public class ServerEvents
     {
         private readonly Plugin plugin;
-        private readonly List<CoroutineHandle> commandCoroutines = new List<CoroutineHandle>();
+        private readonly List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerEvents"/> class.
@@ -59,15 +59,15 @@ namespace ScpDeathmatch.EventHandlers
 
         private void OnRoundStarted()
         {
-            foreach (CoroutineHandle coroutineHandle in commandCoroutines)
+            foreach (CoroutineHandle coroutineHandle in coroutineHandles)
             {
                 if (coroutineHandle.IsRunning)
                     Timing.KillCoroutines(coroutineHandle);
             }
 
-            commandCoroutines.Clear();
+            coroutineHandles.Clear();
             foreach (ConfiguredCommand command in plugin.Config.CommandList)
-                commandCoroutines.Add(command.Execute());
+                coroutineHandles.Add(command.Execute());
 
             foreach (KeyValuePair<DoorType, float> kvp in plugin.Config.DoorLocks)
             {

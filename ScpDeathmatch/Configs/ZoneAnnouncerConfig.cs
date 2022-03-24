@@ -26,14 +26,6 @@ namespace ScpDeathmatch.Configs
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the zones that the announcer will skip.
-        /// </summary>
-        public List<ZoneType> DisabledZones { get; set; } = new List<ZoneType>
-        {
-            ZoneType.Unspecified,
-        };
-
-        /// <summary>
         /// Gets or sets the initial delay of the announcer.
         /// </summary>
         public float AnnouncerFirstDelay { get; set; } = 120f;
@@ -44,29 +36,21 @@ namespace ScpDeathmatch.Configs
         public float AnnouncerDelay { get; set; } = 60f;
 
         /// <summary>
-        /// Gets or sets the announcement for players in <see cref="ZoneType.Entrance"/>.
+        /// Gets or sets the message to append to the start of the zone announcement.
         /// </summary>
-        public string EntranceAnnouncement { get; set; } = string.Empty;
+        public string StartupNoise { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the announcement for players in <see cref="ZoneType.HeavyContainment"/>.
+        /// Gets or sets the announcements for each zone.
         /// </summary>
-        public string HeavyContainmentAnnouncement { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the announcement for players in <see cref="ZoneType.LightContainment"/>.
-        /// </summary>
-        public string LightContainmentAnnouncement { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the announcement for players in <see cref="ZoneType.Surface"/>.
-        /// </summary>
-        public string SurfaceAnnouncement { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the announcement for players in <see cref="ZoneType.Unspecified"/>.
-        /// </summary>
-        public string UnspecifiedAnnouncement { get; set; } = string.Empty;
+        public Dictionary<ZoneType, string> Announcements { get; set; } = new Dictionary<ZoneType, string>
+        {
+            [ZoneType.Entrance] = string.Empty,
+            [ZoneType.HeavyContainment] = string.Empty,
+            [ZoneType.LightContainment] = string.Empty,
+            [ZoneType.Surface] = string.Empty,
+            [ZoneType.Unspecified] = string.Empty,
+        };
 
         /// <summary>
         /// Gets or sets a value indicating whether the cassie noise will be suppressed.

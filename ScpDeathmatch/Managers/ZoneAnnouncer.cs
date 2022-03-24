@@ -62,36 +62,27 @@ namespace ScpDeathmatch.Managers
 
             foreach (ZoneType zoneType in Enum.GetValues(typeof(ZoneType)))
             {
-                if (plugin.Config.ZoneAnnouncer.DisabledZones.Contains(zoneType))
+                if (!plugin.Config.ZoneAnnouncer.Announcements.TryGetValue(zoneType, out string announcement) ||
+                    string.IsNullOrEmpty(announcement))
                     continue;
 
                 int playerCount = Player.Get(player => player.IsAlive && player.Zone == zoneType).Count();
                 if (playerCount < 1)
                     continue;
 
-                switch (zoneType)
-                {
-                    case ZoneType.Entrance:
-                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.EntranceAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
-                        break;
-                    case ZoneType.HeavyContainment:
-                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.HeavyContainmentAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
-                        break;
-                    case ZoneType.LightContainment:
-                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.LightContainmentAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
-                        break;
-                    case ZoneType.Surface:
-                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.SurfaceAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
-                        break;
-                    case ZoneType.Unspecified:
-                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.UnspecifiedAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
-                        break;
-                }
-
-                announcementBuilder.Append(" . ");
+                announcementBuilder
+                    .Append(announcement.Replace("$PLAYERS", playerCount.ToString()))
+                    .Append(" . ");
             }
 
-            Cassie.Message(StringBuilderPool.Shared.ToStringReturn(announcementBuilder), !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
+            string builtAnnouncement = StringBuilderPool.Shared.ToStringReturn(announcementBuilder);
+            if (string.IsNullOrEmpty(builtAnnouncement))
+                return;
+
+            if (!string.IsNullOrEmpty(plugin.Config.ZoneAnnouncer.StartupNoise))
+                builtAnnouncement = plugin.Config.ZoneAnnouncer.StartupNoise + " " + builtAnnouncement;
+
+            Cassie.Message(builtAnnouncement, isNoisy: !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
         }
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
