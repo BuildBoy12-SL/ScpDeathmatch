@@ -10,13 +10,15 @@ namespace ScpDeathmatch.Managers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
+    using NorthwoodLib.Pools;
 
     /// <summary>
-    /// Handles the announcement of players per zone.
+    /// Handles the announcement of player counts.
     /// </summary>
     public class ZoneAnnouncer
     {
@@ -56,31 +58,40 @@ namespace ScpDeathmatch.Managers
             if (!plugin.Config.ZoneAnnouncer.IsEnabled)
                 return;
 
+            StringBuilder announcementBuilder = StringBuilderPool.Shared.Rent();
+
             foreach (ZoneType zoneType in Enum.GetValues(typeof(ZoneType)))
             {
                 if (plugin.Config.ZoneAnnouncer.DisabledZones.Contains(zoneType))
                     continue;
 
-                string playerCount = Player.Get(player => player.IsAlive && player.Zone == zoneType).Count().ToString();
+                int playerCount = Player.Get(player => player.IsAlive && player.Zone == zoneType).Count();
+                if (playerCount < 1)
+                    continue;
+
                 switch (zoneType)
                 {
                     case ZoneType.Entrance:
-                        Cassie.Message(plugin.Config.ZoneAnnouncer.EntranceAnnouncement.Replace("$PLAYERS", playerCount), isNoisy: !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
+                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.EntranceAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
                         break;
                     case ZoneType.HeavyContainment:
-                        Cassie.Message(plugin.Config.ZoneAnnouncer.HeavyContainmentAnnouncement.Replace("$PLAYERS", playerCount), isNoisy: !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
+                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.HeavyContainmentAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
                         break;
                     case ZoneType.LightContainment:
-                        Cassie.Message(plugin.Config.ZoneAnnouncer.LightContainmentAnnouncement.Replace("$PLAYERS", playerCount), isNoisy: !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
+                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.LightContainmentAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
                         break;
                     case ZoneType.Surface:
-                        Cassie.Message(plugin.Config.ZoneAnnouncer.SurfaceAnnouncement.Replace("$PLAYERS", playerCount), isNoisy: !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
+                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.SurfaceAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
                         break;
                     case ZoneType.Unspecified:
-                        Cassie.Message(plugin.Config.ZoneAnnouncer.UnspecifiedAnnouncement.Replace("$PLAYERS", playerCount), isNoisy: !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
+                        announcementBuilder.Append(plugin.Config.ZoneAnnouncer.UnspecifiedAnnouncement.Replace("$PLAYERS", playerCount.ToString()));
                         break;
                 }
+
+                announcementBuilder.Append(" . ");
             }
+
+            Cassie.Message(StringBuilderPool.Shared.ToStringReturn(announcementBuilder), !plugin.Config.ZoneAnnouncer.SuppressCassieNoise);
         }
 
         private void OnRoundEnded(RoundEndedEventArgs ev)

@@ -9,7 +9,6 @@ namespace ScpDeathmatch
 {
     using System;
     using Exiled.API.Features;
-    using Exiled.CustomItems.API;
     using HarmonyLib;
     using RemoteAdmin;
     using ScpDeathmatch.EventHandlers;
@@ -33,7 +32,7 @@ namespace ScpDeathmatch
         public static Plugin Instance { get; private set; }
 
         /// <summary>
-        /// Gets an instance of the <see cref="Managers.ZoneAnnouncer"/> class.
+        /// Gets an instance of the <see cref="ZoneAnnouncer"/> class.
         /// </summary>
         public ZoneAnnouncer ZoneAnnouncer { get; private set; }
 
@@ -82,7 +81,8 @@ namespace ScpDeathmatch
             serverEvents = new ServerEvents(this);
             serverEvents.Subscribe();
 
-            Config.SecondWind.Register();
+            Config.CustomItems.Register();
+            // Config.CustomRoles.Register();
 
             base.OnEnabled();
         }
@@ -90,7 +90,8 @@ namespace ScpDeathmatch
         /// <inheritdoc/>
         public override void OnDisabled()
         {
-            Config.SecondWind.Unregister();
+            Config.CustomItems.Unregister();
+            // Config.CustomRoles.Unregister();
 
             serverEvents?.Unsubscribe();
             serverEvents = null;

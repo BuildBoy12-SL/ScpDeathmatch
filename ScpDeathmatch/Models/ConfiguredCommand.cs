@@ -27,6 +27,7 @@ namespace ScpDeathmatch.Models
         /// <summary>
         /// Executes the <see cref="Command"/> while respecting the <see cref="Delay"/>.
         /// </summary>
-        public void Execute() => Timing.CallDelayed(Delay, () => GameCore.Console.singleton.TypeCommand(Command));
+        /// <returns>The initialized coroutine.</returns>
+        public CoroutineHandle Execute() => Timing.CallDelayed(Delay, () => GameCore.Console.singleton.TypeCommand(Command));
     }
 }

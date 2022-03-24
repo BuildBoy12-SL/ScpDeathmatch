@@ -13,6 +13,7 @@ namespace ScpDeathmatch.EventHandlers
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using LightContainmentZoneDecontamination;
+    using MEC;
     using ScpDeathmatch.Models;
     using ServerHandlers = Exiled.Events.Handlers.Server;
 
@@ -22,6 +23,7 @@ namespace ScpDeathmatch.EventHandlers
     public class ServerEvents
     {
         private readonly Plugin plugin;
+        private readonly List<CoroutineHandle> commandCoroutines = new List<CoroutineHandle>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerEvents"/> class.
@@ -57,8 +59,15 @@ namespace ScpDeathmatch.EventHandlers
 
         private void OnRoundStarted()
         {
+            foreach (CoroutineHandle coroutineHandle in commandCoroutines)
+            {
+                if (coroutineHandle.IsRunning)
+                    Timing.KillCoroutines(coroutineHandle);
+            }
+
+            commandCoroutines.Clear();
             foreach (ConfiguredCommand command in plugin.Config.CommandList)
-                command.Execute();
+                commandCoroutines.Add(command.Execute());
 
             foreach (KeyValuePair<DoorType, float> kvp in plugin.Config.DoorLocks)
             {

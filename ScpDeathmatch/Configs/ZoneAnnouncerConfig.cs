@@ -5,6 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using ScpDeathmatch.Managers;
+
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
@@ -13,7 +15,7 @@ namespace ScpDeathmatch.Configs
     using ScpDeathmatch.Commands;
 
     /// <summary>
-    /// Handles configs for the <see cref="Managers.ZoneAnnouncer"/>.
+    /// Handles configs for the <see cref="ZoneAnnouncer"/>.
     /// </summary>
     public class ZoneAnnouncerConfig
     {

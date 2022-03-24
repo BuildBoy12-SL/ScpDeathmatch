@@ -5,6 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using ScpDeathmatch.Managers;
+
 namespace ScpDeathmatch
 {
     using System.Collections.Generic;
@@ -12,7 +14,6 @@ namespace ScpDeathmatch
     using Exiled.API.Enums;
     using Exiled.API.Interfaces;
     using ScpDeathmatch.Configs;
-    using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.Models;
 
     /// <inheritdoc />
@@ -50,6 +51,16 @@ namespace ScpDeathmatch
         };
 
         /// <summary>
+        /// Gets or sets the configs for the custom items.
+        /// </summary>
+        public CustomItemsConfig CustomItems { get; set; } = new CustomItemsConfig();
+
+        /// <summary>
+        /// Gets or sets the configs for the custom roles.
+        /// </summary>
+        // public CustomRolesConfig CustomRoles { get; set; } = new CustomRolesConfig();
+
+        /// <summary>
         /// Gets or sets the configs related to the custom decontamination sequence.
         /// </summary>
         public DecontaminationConfig Decontamination { get; set; } = new DecontaminationConfig();
@@ -68,11 +79,6 @@ namespace ScpDeathmatch
         /// Gets or sets the configs for the <see cref="KillRewards.RewardManager"/>.
         /// </summary>
         public RewardsConfig Rewards { get; set; } = new RewardsConfig();
-
-        /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomItems.SecondWind"/> class.
-        /// </summary>
-        public SecondWind SecondWind { get; set; } = new SecondWind();
 
         /// <summary>
         /// Gets or sets the configs for the <see cref="Managers.ZoneAnnouncer"/>.
