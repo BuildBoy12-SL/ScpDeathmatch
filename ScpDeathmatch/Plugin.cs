@@ -22,6 +22,7 @@ namespace ScpDeathmatch
 
         private DecontaminationManager decontaminationManager;
         private DisarmingLivesManager disarmingLivesManager;
+        private MicroHidHealing microHidHealing;
         private RewardManager rewardManager;
 
         private ServerEvents serverEvents;
@@ -70,6 +71,9 @@ namespace ScpDeathmatch
             disarmingLivesManager = new DisarmingLivesManager(this);
             disarmingLivesManager.Subscribe();
 
+            microHidHealing = new MicroHidHealing(this);
+            microHidHealing.Subscribe();
+
             RespawnManager = new RespawnManager();
 
             rewardManager = new RewardManager(this);
@@ -103,6 +107,9 @@ namespace ScpDeathmatch
             rewardManager = null;
 
             RespawnManager = null;
+
+            microHidHealing?.Unsubscribe();
+            microHidHealing = null;
 
             disarmingLivesManager?.Unsubscribe();
             disarmingLivesManager = null;

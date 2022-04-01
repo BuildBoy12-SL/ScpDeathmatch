@@ -61,6 +61,11 @@ namespace ScpDeathmatch
         public ExtraLivesConfig ExtraLives { get; set; } = new ExtraLivesConfig();
 
         /// <summary>
+        /// Gets or sets the configs related to the micro healing.
+        /// </summary>
+        public HealingMicroConfig HealingMicro { get; set; } = new HealingMicroConfig();
+
+        /// <summary>
         /// Gets or sets the configs for the <see cref="KillRewards.RewardManager"/>.
         /// </summary>
         public RewardsConfig Rewards { get; set; } = new RewardsConfig();

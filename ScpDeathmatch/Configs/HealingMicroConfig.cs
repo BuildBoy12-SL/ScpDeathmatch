@@ -12,5 +12,19 @@ namespace ScpDeathmatch.Configs
     /// </summary>
     public class HealingMicroConfig
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether the healing micro is enabled.
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the amount of health per tick that should be healed.
+        /// </summary>
+        public float HealthPerTick { get; set; } = 2;
+
+        /// <summary>
+        /// Gets or sets the amount of time, in seconds, that should pass to be considered a tick.
+        /// </summary>
+        public float SecondsPerTick { get; set; } = 0.2f;
     }
 }
