@@ -31,12 +31,6 @@ namespace ScpDeathmatch
         };
 
         /// <summary>
-        /// Gets or sets the broadcast to display at the end of the round.
-        /// </summary>
-        [Description("The broadcast to display at the end of the round. Variables: $TopKills, $TopKillsAmount, $Winner, $FirstBlood")]
-        public Broadcast RoundEndBroadcast { get; set; } = new Broadcast("Game Over! $Winner has won!\n$TopKills had the most kills at $TopKillsAmount\n$FirstBlood got the first kill");
-
-        /// <summary>
         /// Gets or sets the configs for automated commands.
         /// </summary>
         public CommandConfig Commands { get; set; } = new CommandConfig();
@@ -75,6 +69,11 @@ namespace ScpDeathmatch
         /// Gets or sets the configs for the <see cref="KillRewards.RewardManager"/>.
         /// </summary>
         public RewardsConfig Rewards { get; set; } = new RewardsConfig();
+
+        /// <summary>
+        /// Gets or sets the configs for the stat broadcast.
+        /// </summary>
+        public StatBroadcastConfig StatBroadcast { get; set; } = new StatBroadcastConfig();
 
         /// <summary>
         /// Gets or sets the configs for the <see cref="Managers.ZoneAnnouncer"/>.

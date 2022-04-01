@@ -1,15 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Exiled.API.Features;
-using Exiled.Events.EventArgs;
-using ScpDeathmatch.EventHandlers;
+﻿// -----------------------------------------------------------------------
+// <copyright file="RoundStatsManager.cs" company="Build">
+// Copyright (c) Build. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace ScpDeathmatch.Managers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Exiled.API.Features;
+    using Exiled.Events.EventArgs;
+
+    /// <summary>
+    /// Handles the counting of kills and display of stats at the end of the round.
+    /// </summary>
     public class RoundStatsManager
     {
         private readonly Plugin plugin;
-        private readonly Dictionary<Player, int> kills = new Dictionary<Player, int>();
+        private readonly SortedList<Player, int> kills = new SortedList<Player, int>();
         private Player firstBlood;
 
         /// <summary>
@@ -25,6 +34,7 @@ namespace ScpDeathmatch.Managers
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
         }
 
         /// <summary>
@@ -34,6 +44,7 @@ namespace ScpDeathmatch.Managers
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
         }
 
         private void OnDied(DiedEventArgs ev)
@@ -52,26 +63,37 @@ namespace ScpDeathmatch.Managers
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            List<KeyValuePair<Player, int>> sortedDictionary = kills.OrderBy(entry => entry.Value).ToList();
-            KeyValuePair<Player, int> topKills = sortedDictionary.FirstOrDefault();
-            string topKillsName = sortedDictionary.Count == 0 ? "Unknown" : topKills.Key.DisplayNickname ?? topKills.Key.Nickname;
-            int topKillsAmount = sortedDictionary.Count == 0 ? 0 : topKills.Value;
-
-            Player winner = Player.Get(player => player.IsAlive).FirstOrDefault();
-            string winnerName = winner == null ? "Unknown" : winner.DisplayNickname ?? winner.Nickname;
-
-            Exiled.API.Features.Broadcast broadcast = plugin.Config.RoundEndBroadcast;
-            string content = broadcast.Content
-                .Replace("$TopKillsAmount", topKillsAmount.ToString())
-                .Replace("$TopKills", topKillsName)
-                .Replace("$Winner", winnerName ?? "Unknown")
-                .Replace("$FirstBlood", firstBlood == null ? "Unknown" : firstBlood.DisplayNickname ?? firstBlood.Nickname);
-
-            if (broadcast.Show)
+            Broadcast broadcast = plugin.Config.StatBroadcast.Broadcast;
+            string content = FormatBroadcast();
+            if (broadcast.Show && !string.IsNullOrEmpty(content))
                 Map.Broadcast(broadcast.Duration, content, broadcast.Type, true);
+        }
 
+        private void OnWaitingForPlayers()
+        {
             kills.Clear();
             firstBlood = null;
+        }
+
+        private string FormatBroadcast()
+        {
+            Player winner = Player.Get(player => player.IsAlive).FirstOrDefault();
+            string winnerName = winner?.DisplayNickname ?? winner?.Nickname;
+            string firstBloodName = firstBlood?.DisplayNickname ?? firstBlood?.Nickname;
+
+            int topKillCount = 0;
+            string topKillName = null;
+            if (kills.Count > 0)
+            {
+                KeyValuePair<Player, int> topKills = kills.First();
+                topKillName = topKills.Key?.DisplayNickname ?? topKills.Key?.Nickname;
+                topKillCount = topKills.Value;
+            }
+
+            return plugin.Config.StatBroadcast.Broadcast.Content
+                .Replace("$Winner", string.IsNullOrEmpty(winnerName) ? string.Empty : string.Format(plugin.Config.StatBroadcast.Winner, winnerName))
+                .Replace("$TopKills", string.IsNullOrEmpty(topKillName) || topKillCount == 0 ? string.Empty : string.Format(plugin.Config.StatBroadcast.TopKills, topKillName, topKillCount))
+                .Replace("$FirstBlood", string.IsNullOrEmpty(firstBloodName) ? string.Empty : string.Format(plugin.Config.StatBroadcast.FirstBlood, firstBloodName));
         }
     }
 }
