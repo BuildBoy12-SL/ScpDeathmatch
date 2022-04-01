@@ -10,9 +10,9 @@ namespace ScpDeathmatch
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using ScpDeathmatch.Configs;
-    using ScpDeathmatch.Models;
 
     /// <inheritdoc />
     public class Config : IConfig
@@ -29,6 +29,12 @@ namespace ScpDeathmatch
             { DoorType.GateA, 120f },
             { DoorType.GateB, 120f },
         };
+
+        /// <summary>
+        /// Gets or sets the broadcast to display at the end of the round.
+        /// </summary>
+        [Description("The broadcast to display at the end of the round. Variables: $TopKills, $TopKillsAmount, $Winner, $FirstBlood")]
+        public Broadcast RoundEndBroadcast { get; set; } = new Broadcast("Game Over! $Winner has won!\n$TopKills had the most kills at $TopKillsAmount\n$FirstBlood got the first kill");
 
         /// <summary>
         /// Gets or sets the configs for automated commands.

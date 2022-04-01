@@ -42,6 +42,11 @@ namespace ScpDeathmatch
         /// </summary>
         public RespawnManager RespawnManager { get; private set; }
 
+        /// <summary>
+        /// Gets an instance of the <see cref="EventHandlers.PlayerEvents"/> class.
+        /// </summary>
+        public PlayerEvents PlayerEvents { get; private set; }
+
         /// <inheritdoc/>
         public override string Author => "Build";
 
@@ -82,6 +87,9 @@ namespace ScpDeathmatch
             ZoneAnnouncer = new ZoneAnnouncer(this);
             ZoneAnnouncer.Subscribe();
 
+            PlayerEvents = new PlayerEvents(this);
+            PlayerEvents.Subscribe();
+
             serverEvents = new ServerEvents(this);
             serverEvents.Subscribe();
 
@@ -96,6 +104,9 @@ namespace ScpDeathmatch
         {
             Config.CustomItems.Unregister();
             // Config.CustomRoles.Unregister();
+
+            PlayerEvents?.Unsubscribe();
+            PlayerEvents = null;
 
             serverEvents?.Unsubscribe();
             serverEvents = null;

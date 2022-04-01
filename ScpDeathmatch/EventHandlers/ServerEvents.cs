@@ -24,6 +24,7 @@ namespace ScpDeathmatch.EventHandlers
     {
         private readonly Plugin plugin;
         private readonly List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
+        private string winnerName = "Unknown";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerEvents"/> class.
@@ -57,12 +58,31 @@ namespace ScpDeathmatch.EventHandlers
         {
             ev.IsAllowed = Player.Get(player => player.IsAlive).Count() + plugin.RespawnManager.Count <= 1;
             ev.IsRoundEnded = true;
+            winnerName = Player.Get(player => player.IsAlive).FirstOrDefault()?.Nickname ?? "Unknown";
         }
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             foreach (ConfiguredCommand command in plugin.Config.Commands.RoundEnd)
                 coroutineHandles.Add(command.Execute());
+
+            List<KeyValuePair<Player, int>> sortedDictionary = plugin.PlayerEvents.Kills.OrderBy(entry => entry.Value).ToList();
+            KeyValuePair<Player, int> topKills = sortedDictionary.FirstOrDefault();
+            string topKillsName = sortedDictionary.Count == 0 ? "Unknown" : topKills.Key.DisplayNickname ?? topKills.Key.Nickname;
+            int topKillsAmount = sortedDictionary.Count == 0 ? 0 : topKills.Value;
+
+            Broadcast broadcast = plugin.Config.RoundEndBroadcast;
+            string content = broadcast.Content
+                .Replace("$TopKillsAmount", topKillsAmount.ToString())
+                .Replace("$TopKills", topKillsName)
+                .Replace("$Winner", winnerName ?? "Unknown")
+                .Replace("$FirstBlood", plugin.PlayerEvents.FirstBlood == null ? "Unknown" : plugin.PlayerEvents.FirstBlood.DisplayNickname ?? plugin.PlayerEvents.FirstBlood.Nickname);
+
+            if (broadcast.Show)
+                Map.Broadcast(broadcast.Duration, content, broadcast.Type, true);
+
+            plugin.PlayerEvents.Kills.Clear();
+            plugin.PlayerEvents.FirstBlood = null;
         }
 
         private void OnRoundStarted()
