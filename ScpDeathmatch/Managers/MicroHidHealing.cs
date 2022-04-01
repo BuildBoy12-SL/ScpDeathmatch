@@ -51,11 +51,12 @@ namespace ScpDeathmatch.Managers
             switch (ev.NewState)
             {
                 case HidState.PoweringUp:
-                    healingCoroutines.Add(ev.Player, Timing.RunCoroutine(RunHealing(ev.Player)));
+                    healingCoroutines[ev.Player] = Timing.RunCoroutine(RunHealing(ev.Player));
                     break;
                 case HidState.PoweringDown:
-                    if (healingCoroutines.TryGetValue(ev.Player, out CoroutineHandle coroutineHandle) && coroutineHandle.IsRunning)
+                    if (healingCoroutines.TryGetValue(ev.Player, out CoroutineHandle coroutineHandle))
                         Timing.KillCoroutines(coroutineHandle);
+
                     break;
                 case HidState.Primed:
                 case HidState.Firing:
@@ -66,10 +67,11 @@ namespace ScpDeathmatch.Managers
 
         private IEnumerator<float> RunHealing(Player player)
         {
+            yield return Timing.WaitForSeconds(plugin.Config.HealingMicro.InitialDelay);
             while (Round.IsStarted)
             {
-                player.Heal(plugin.Config.HealingMicro.HealthPerTick);
                 yield return Timing.WaitForSeconds(plugin.Config.HealingMicro.SecondsPerTick);
+                player.Heal(plugin.Config.HealingMicro.HealthPerTick);
             }
         }
     }
