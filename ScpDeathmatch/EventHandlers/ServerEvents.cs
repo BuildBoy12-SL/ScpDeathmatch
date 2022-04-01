@@ -65,24 +65,6 @@ namespace ScpDeathmatch.EventHandlers
         {
             foreach (ConfiguredCommand command in plugin.Config.Commands.RoundEnd)
                 coroutineHandles.Add(command.Execute());
-
-            List<KeyValuePair<Player, int>> sortedDictionary = plugin.PlayerEvents.Kills.OrderBy(entry => entry.Value).ToList();
-            KeyValuePair<Player, int> topKills = sortedDictionary.FirstOrDefault();
-            string topKillsName = sortedDictionary.Count == 0 ? "Unknown" : topKills.Key.DisplayNickname ?? topKills.Key.Nickname;
-            int topKillsAmount = sortedDictionary.Count == 0 ? 0 : topKills.Value;
-
-            Broadcast broadcast = plugin.Config.RoundEndBroadcast;
-            string content = broadcast.Content
-                .Replace("$TopKillsAmount", topKillsAmount.ToString())
-                .Replace("$TopKills", topKillsName)
-                .Replace("$Winner", winnerName ?? "Unknown")
-                .Replace("$FirstBlood", plugin.PlayerEvents.FirstBlood == null ? "Unknown" : plugin.PlayerEvents.FirstBlood.DisplayNickname ?? plugin.PlayerEvents.FirstBlood.Nickname);
-
-            if (broadcast.Show)
-                Map.Broadcast(broadcast.Duration, content, broadcast.Type, true);
-
-            plugin.PlayerEvents.Kills.Clear();
-            plugin.PlayerEvents.FirstBlood = null;
         }
 
         private void OnRoundStarted()

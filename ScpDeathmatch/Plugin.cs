@@ -43,9 +43,9 @@ namespace ScpDeathmatch
         public RespawnManager RespawnManager { get; private set; }
 
         /// <summary>
-        /// Gets an instance of the <see cref="EventHandlers.PlayerEvents"/> class.
+        /// Gets an instance of the <see cref="Managers.RoundStatsManager"/> class.
         /// </summary>
-        public PlayerEvents PlayerEvents { get; private set; }
+        public RoundStatsManager RoundStatsManager { get; private set; }
 
         /// <inheritdoc/>
         public override string Author => "Build";
@@ -84,11 +84,11 @@ namespace ScpDeathmatch
             rewardManager = new RewardManager(this);
             rewardManager.Subscribe();
 
+            RoundStatsManager = new RoundStatsManager(this);
+            RoundStatsManager.Subscribe();
+
             ZoneAnnouncer = new ZoneAnnouncer(this);
             ZoneAnnouncer.Subscribe();
-
-            PlayerEvents = new PlayerEvents(this);
-            PlayerEvents.Subscribe();
 
             serverEvents = new ServerEvents(this);
             serverEvents.Subscribe();
@@ -105,14 +105,14 @@ namespace ScpDeathmatch
             Config.CustomItems.Unregister();
             // Config.CustomRoles.Unregister();
 
-            PlayerEvents?.Unsubscribe();
-            PlayerEvents = null;
-
             serverEvents?.Unsubscribe();
             serverEvents = null;
 
             ZoneAnnouncer?.Unsubscribe();
             ZoneAnnouncer = null;
+
+            RoundStatsManager?.Unsubscribe();
+            RoundStatsManager = null;
 
             rewardManager?.Unsubscribe();
             rewardManager = null;
