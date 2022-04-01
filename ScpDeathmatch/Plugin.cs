@@ -20,6 +20,7 @@ namespace ScpDeathmatch
     {
         private Harmony harmony;
 
+        private ArmoryPitManager armoryPitManager;
         private DecontaminationManager decontaminationManager;
         private DisarmingLivesManager disarmingLivesManager;
         private MicroHidHealing microHidHealing;
@@ -69,6 +70,9 @@ namespace ScpDeathmatch
 
             harmony = new Harmony($"deathMath.{DateTime.UtcNow.Ticks}");
             harmony.PatchAll();
+
+            armoryPitManager = new ArmoryPitManager(this);
+            armoryPitManager.Subscribe();
 
             // decontaminationManager = new DecontaminationManager();
             // decontaminationManager.Subscribe();
@@ -127,6 +131,9 @@ namespace ScpDeathmatch
 
             decontaminationManager?.Unsubscribe();
             decontaminationManager = null;
+
+            armoryPitManager?.Unsubscribe();
+            armoryPitManager = null;
 
             harmony?.UnpatchAll(harmony.Id);
             harmony = null;

@@ -26,12 +26,18 @@ namespace ScpDeathmatch.Configs
         public SecondWind SecondWind { get; set; } = new SecondWind();
 
         /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="CustomItems.WeaponToken"/> class.
+        /// </summary>
+        public WeaponToken WeaponToken { get; set; } = new WeaponToken();
+
+        /// <summary>
         /// Registers all custom items.
         /// </summary>
         public void Register()
         {
             // ReconSwitch.Register();
             SecondWind.Register();
+            WeaponToken.Register();
         }
 
         /// <summary>
@@ -41,6 +47,7 @@ namespace ScpDeathmatch.Configs
         {
             // ReconSwitch.Unregister();
             SecondWind.Unregister();
+            WeaponToken.Unregister();
         }
     }
 }
