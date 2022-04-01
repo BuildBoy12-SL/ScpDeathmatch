@@ -5,8 +5,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using ScpDeathmatch.Managers;
-
 namespace ScpDeathmatch
 {
     using System.Collections.Generic;
@@ -23,24 +21,6 @@ namespace ScpDeathmatch
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the commands to be ran at the start of the round.
-        /// </summary>
-        [Description("The commands to be ran at the start of the round.")]
-        public List<ConfiguredCommand> CommandList { get; set; } = new List<ConfiguredCommand>
-        {
-            new ConfiguredCommand
-            {
-                Command = "/command1",
-                Delay = 0f,
-            },
-            new ConfiguredCommand
-            {
-                Command = "/command2",
-                Delay = 5f,
-            },
-        };
-
-        /// <summary>
         /// Gets or sets pairs of doors and the amount of time they should be locked for at the start of the round.
         /// </summary>
         [Description("Pairs of doors and the amount of time they should be locked for at the start of the round.")]
@@ -49,6 +29,11 @@ namespace ScpDeathmatch
             { DoorType.GateA, 120f },
             { DoorType.GateB, 120f },
         };
+
+        /// <summary>
+        /// Gets or sets the configs for automated commands.
+        /// </summary>
+        public CommandConfig Commands { get; set; } = new CommandConfig();
 
         /// <summary>
         /// Gets or sets the configs for the custom items.

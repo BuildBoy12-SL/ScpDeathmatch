@@ -37,6 +37,7 @@ namespace ScpDeathmatch.EventHandlers
         public void Subscribe()
         {
             ServerHandlers.EndingRound += OnEndingRound;
+            ServerHandlers.RoundEnded += OnRoundEnded;
             ServerHandlers.RoundStarted += OnRoundStarted;
             ServerHandlers.WaitingForPlayers += OnWaitingForPlayers;
         }
@@ -47,6 +48,7 @@ namespace ScpDeathmatch.EventHandlers
         public void Unsubscribe()
         {
             ServerHandlers.EndingRound -= OnEndingRound;
+            ServerHandlers.RoundEnded -= OnRoundEnded;
             ServerHandlers.RoundStarted -= OnRoundStarted;
             ServerHandlers.WaitingForPlayers -= OnWaitingForPlayers;
         }
@@ -57,16 +59,15 @@ namespace ScpDeathmatch.EventHandlers
             ev.IsRoundEnded = true;
         }
 
+        private void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            foreach (ConfiguredCommand command in plugin.Config.Commands.RoundEnd)
+                coroutineHandles.Add(command.Execute());
+        }
+
         private void OnRoundStarted()
         {
-            foreach (CoroutineHandle coroutineHandle in coroutineHandles)
-            {
-                if (coroutineHandle.IsRunning)
-                    Timing.KillCoroutines(coroutineHandle);
-            }
-
-            coroutineHandles.Clear();
-            foreach (ConfiguredCommand command in plugin.Config.CommandList)
+            foreach (ConfiguredCommand command in plugin.Config.Commands.RoundStart)
                 coroutineHandles.Add(command.Execute());
 
             foreach (KeyValuePair<DoorType, float> kvp in plugin.Config.DoorLocks)
@@ -83,6 +84,14 @@ namespace ScpDeathmatch.EventHandlers
                 DecontaminationController.Singleton.NetworkRoundStartTime = -1.0;
                 DecontaminationController.Singleton._stopUpdating = true;
             }
+
+            foreach (CoroutineHandle coroutineHandle in coroutineHandles)
+            {
+                if (coroutineHandle.IsRunning)
+                    Timing.KillCoroutines(coroutineHandle);
+            }
+
+            coroutineHandles.Clear();
         }
     }
 }

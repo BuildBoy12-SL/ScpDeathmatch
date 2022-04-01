@@ -22,27 +22,30 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets a value indicating whether the announcer is enabled.
         /// </summary>
-        [Description("Whether the announcer is enabled.")]
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the initial delay of the announcer.
         /// </summary>
+        [Description("The initial delay of the announcer.")]
         public float AnnouncerFirstDelay { get; set; } = 120f;
 
         /// <summary>
         /// Gets or sets the delay between each announcement.
         /// </summary>
+        [Description("The delay between each announcement.")]
         public float AnnouncerDelay { get; set; } = 60f;
 
         /// <summary>
         /// Gets or sets the message to append to the start of the zone announcement.
         /// </summary>
+        [Description("The message to append to the start of the zone announcement.")]
         public string StartupNoise { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the announcements for each zone.
         /// </summary>
+        [Description("The announcements for each zone. Use $PLAYERS to indicate the number of players.")]
         public Dictionary<ZoneType, string> Announcements { get; set; } = new Dictionary<ZoneType, string>
         {
             [ZoneType.Entrance] = string.Empty,
@@ -55,6 +58,7 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets a value indicating whether the cassie noise will be suppressed.
         /// </summary>
+        [Description("Whether the cassie noise will be suppressed.")]
         public bool SuppressCassieNoise { get; set; } = true;
 
         /// <summary>

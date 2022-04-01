@@ -89,7 +89,7 @@ namespace ScpDeathmatch.CustomItems
         public void Detonate(Player player)
         {
             ExplosiveGrenade explosiveGrenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
-            explosiveGrenade.FuseTime = 0.2f;
+            explosiveGrenade.FuseTime = 0.3f;
             lastDetonator = player;
             explosiveGrenade.SpawnActive(player.Position, player);
         }
