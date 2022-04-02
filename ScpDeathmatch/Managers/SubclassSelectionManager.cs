@@ -9,8 +9,8 @@ namespace ScpDeathmatch.Managers
 {
     using System.Collections.Generic;
     using Exiled.API.Features;
-    using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
+    using MEC;
     using ScpDeathmatch.Models;
 
     /// <summary>
@@ -96,17 +96,16 @@ namespace ScpDeathmatch.Managers
 
         private void OnRoundStarted()
         {
-            foreach (KeyValuePair<Player, ItemType> kvp in selectedItem)
+            Timing.CallDelayed(1f, () =>
             {
-                if (!plugin.Config.ClassSelection.Selections.TryGetValue(kvp.Value, out SubclassSelection selection))
-                    continue;
+                foreach (KeyValuePair<Player, ItemType> kvp in selectedItem)
+                {
+                    if (plugin.Config.ClassSelection.Selections.TryGetValue(kvp.Value, out SubclassSelection selection))
+                        selection.GetSelection()?.AddRole(kvp.Key);
+                }
 
-                CustomRole customRole = selection.GetSelection();
-                if (customRole == null)
-                    continue;
-
-                customRole.AddRole(kvp.Key);
-            }
+                selectedItem.Clear();
+            });
         }
     }
 }
