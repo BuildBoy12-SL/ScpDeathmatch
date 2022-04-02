@@ -7,13 +7,21 @@
 
 namespace ScpDeathmatch.CustomRoles
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
     using Exiled.API.Features.Attributes;
+    using Exiled.API.Features.Spawn;
     using Exiled.CustomRoles.API.Features;
+    using Exiled.Events.EventArgs;
+    using UnityEngine;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
     public class Marksman : CustomRole
     {
+        private float staminaOnKill = 20f;
+
         /// <inheritdoc />
         public override uint Id { get; set; } = 103;
 
@@ -31,5 +39,87 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         public override string CustomInfo { get; set; }
+
+        /// <inheritdoc />
+        public override Vector3 Scale { get; set; } = Vector3.one;
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override List<CustomAbility> CustomAbilities { get; set; }
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override bool RemovalKillsPlayer { get; set; } = false;
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override bool KeepRoleOnDeath { get; set; } = true;
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override List<string> Inventory { get; set; } = new List<string>();
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override bool KeepInventoryOnSpawn { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the amount of health received on kill.
+        /// </summary>
+        [Description("The amount of health received on kill.")]
+        public float HealthOnKill { get; set; } = 20f;
+
+        /// <summary>
+        /// Gets or sets the amount of stamina received on kill as a percentage.
+        /// </summary>
+        [Description("The amount of stamina received on kill as a percentage.")]
+        public float StaminaOnKill
+        {
+            get => staminaOnKill;
+            set => staminaOnKill = Mathf.Clamp(value, 0f, 100f);
+        }
+
+        /// <summary>
+        /// Gets or sets the multiplier for damage dealt with guns.
+        /// </summary>
+        [Description("The multiplier for damage dealt with guns.")]
+        public float DamageMultiplier { get; set; } = 1.25f;
+
+        /// <inheritdoc />
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.Shot += OnShot;
+            base.SubscribeEvents();
+        }
+
+        /// <inheritdoc />
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.Shot -= OnShot;
+            base.UnsubscribeEvents();
+        }
+
+        private void OnShot(ShotEventArgs ev)
+        {
+            if (ev.Shooter == null || !Check(ev.Shooter))
+                return;
+
+            ev.Damage *= DamageMultiplier;
+        }
+
+        private void OnDied(DiedEventArgs ev)
+        {
+            if (ev.Killer == null || !Check(ev.Killer))
+                return;
+
+            ev.Killer.Heal(HealthOnKill);
+            ev.Killer.Stamina.RemainingStamina = Mathf.Clamp(ev.Killer.Stamina.RemainingStamina + (StaminaOnKill / 100f), 0f, 1f);
+        }
     }
 }
