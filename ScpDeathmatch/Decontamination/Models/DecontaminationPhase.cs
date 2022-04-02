@@ -29,6 +29,11 @@ namespace ScpDeathmatch.Decontamination.Models
         public string Cassie { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the cassie noise should be suppressed.
+        /// </summary>
+        public bool SuppressNoise { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the entire facility can hear the announcement.
         /// </summary>
         public bool IsGlobal { get; set; }
@@ -66,7 +71,7 @@ namespace ScpDeathmatch.Decontamination.Models
                     if (Broadcast != null)
                         player.Broadcast(Broadcast);
 
-                    player.PlayCassieAnnouncement(Cassie);
+                    player.PlayCassieAnnouncement(Cassie, makeNoise: !SuppressNoise);
                 }
             }
 

@@ -30,6 +30,7 @@ namespace ScpDeathmatch.Configs
             {
                 Broadcast = new Broadcast("Danger, Light Containment zone overall decontamination in 5 Minutes.", show: false),
                 Cassie = "Danger . Light Containment zone overall decontamination in 5 Minutes",
+                SuppressNoise = true,
                 IsGlobal = false,
                 TriggerTime = 10f,
             },
@@ -37,6 +38,7 @@ namespace ScpDeathmatch.Configs
             {
                 Broadcast = new Broadcast("Danger, Light Containment zone overall decontamination in 1 Minute.", show: false),
                 Cassie = "Danger . Light Containment zone overall decontamination in 1 Minute",
+                SuppressNoise = true,
                 IsGlobal = false,
                 TriggerTime = 240f,
             },
@@ -44,6 +46,7 @@ namespace ScpDeathmatch.Configs
             {
                 Broadcast = new Broadcast("Danger, Light Containment Zone overall decontamination in T-minus 30 seconds. All checkpoint doors have been permanently opened. Please evacuate immediately.", show: false),
                 Cassie = "Danger . Light Containment Zone overall decontamination in 30 seconds",
+                SuppressNoise = true,
                 IsGlobal = false,
                 TriggerTime = 30f,
                 SpecialAction = SpecialAction.Checkpoints,
@@ -52,6 +55,7 @@ namespace ScpDeathmatch.Configs
             {
                 Broadcast = new Broadcast("Light Containment Zone is locked down and ready for decontamination. The removal of organic substances has now begun.", show: false),
                 Cassie = "Light Containment Zone is locked down and ready for decontamination",
+                SuppressNoise = true,
                 IsGlobal = true,
                 TriggerTime = 30f,
                 SpecialAction = SpecialAction.Lockdown,
