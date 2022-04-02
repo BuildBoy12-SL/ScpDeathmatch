@@ -8,13 +8,11 @@
 namespace ScpDeathmatch.CustomRoles
 {
     using System.Collections.Generic;
-    using Exiled.API.Enums;
-    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
     using Exiled.API.Features.Spawn;
     using Exiled.CustomRoles.API.Features;
-    using Exiled.Events.EventArgs;
+    using MEC;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
@@ -22,6 +20,8 @@ namespace ScpDeathmatch.CustomRoles
     [CustomRole(RoleType.ClassD)]
     public class Insurgent : CustomRole
     {
+        private CoroutineHandle respawnCoroutine;
+
         /// <inheritdoc />
         public override uint Id { get; set; } = 102;
 
@@ -80,26 +80,35 @@ namespace ScpDeathmatch.CustomRoles
         /// <inheritdoc />
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             base.SubscribeEvents();
         }
 
         /// <inheritdoc />
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             base.UnsubscribeEvents();
         }
 
-        private void OnDying(DyingEventArgs ev)
+        private void OnRoundStarted()
         {
-            if (!Check(ev.Target) || Round.ElapsedTime.TotalSeconds > RespawnCutoff)
-                return;
+            if (respawnCoroutine.IsRunning)
+                Timing.KillCoroutines(respawnCoroutine);
 
-            ev.IsAllowed = false;
-            ev.Target.SetRole(RespawnRole, SpawnReason.ForceClass, true);
-            ev.Target.Position = RespawnRole.GetRandomSpawnProperties().Item1;
-            RemoveRole(ev.Target);
+            respawnCoroutine = Timing.RunCoroutine(RunRespawn());
+        }
+
+        private IEnumerator<float> RunRespawn()
+        {
+            while (Round.ElapsedTime.TotalSeconds < RespawnCutoff)
+                yield return Timing.WaitForSeconds(1f);
+
+            foreach (Player player in TrackedPlayers)
+            {
+                if (player.IsDead)
+                    player.Role.Type = RespawnRole;
+            }
         }
     }
 }

@@ -93,7 +93,7 @@ namespace ScpDeathmatch.CustomRoles
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
-            Exiled.Events.Handlers.Player.Shot += OnShot;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             base.SubscribeEvents();
         }
 
@@ -101,16 +101,8 @@ namespace ScpDeathmatch.CustomRoles
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
-            Exiled.Events.Handlers.Player.Shot -= OnShot;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             base.UnsubscribeEvents();
-        }
-
-        private void OnShot(ShotEventArgs ev)
-        {
-            if (ev.Shooter == null || !Check(ev.Shooter))
-                return;
-
-            ev.Damage *= DamageMultiplier;
         }
 
         private void OnDied(DiedEventArgs ev)
@@ -120,6 +112,12 @@ namespace ScpDeathmatch.CustomRoles
 
             ev.Killer.Heal(HealthOnKill);
             ev.Killer.Stamina.RemainingStamina = Mathf.Clamp(ev.Killer.Stamina.RemainingStamina + (StaminaOnKill / 100f), 0f, 1f);
+        }
+
+        private void OnHurting(HurtingEventArgs ev)
+        {
+            if (ev.Attacker != null && Check(ev.Attacker))
+                ev.Amount *= DamageMultiplier;
         }
     }
 }

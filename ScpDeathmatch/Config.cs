@@ -30,6 +30,11 @@ namespace ScpDeathmatch
         };
 
         /// <summary>
+        /// Gets or sets the configs for class selection.
+        /// </summary>
+        public ClassSelectionConfig ClassSelection { get; set; } = new ClassSelectionConfig();
+
+        /// <summary>
         /// Gets or sets the configs for automated commands.
         /// </summary>
         public CommandConfig Commands { get; set; } = new CommandConfig();

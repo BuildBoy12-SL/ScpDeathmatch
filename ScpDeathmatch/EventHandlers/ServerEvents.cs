@@ -47,8 +47,8 @@ namespace ScpDeathmatch.EventHandlers
 
         private void OnEndingRound(EndingRoundEventArgs ev)
         {
-            ev.IsAllowed = Player.Get(player => player.IsAlive).Count() + plugin.RespawnManager.Count <= 1;
-            ev.IsRoundEnded = true;
+            ev.IsRoundEnded = Player.Get(player => player.IsAlive).Count() + plugin.RespawnManager.Count <= 1;
+            ev.IsAllowed = true;
         }
 
         private void OnRoundStarted()

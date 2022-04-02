@@ -27,6 +27,7 @@ namespace ScpDeathmatch
         private MicroHidHealing microHidHealing;
         private RewardManager rewardManager;
         private RoundStatsManager roundStatsManager;
+        private SubclassSelectionManager subclassSelectionManager;
         private TimedCommandHandler timedCommandHandler;
 
         private ServerEvents serverEvents;
@@ -37,14 +38,14 @@ namespace ScpDeathmatch
         public static Plugin Instance { get; private set; }
 
         /// <summary>
-        /// Gets an instance of the <see cref="ZoneAnnouncer"/> class.
-        /// </summary>
-        public ZoneAnnouncer ZoneAnnouncer { get; private set; }
-
-        /// <summary>
         /// Gets an instance of the <see cref="Managers.RespawnManager"/> class.
         /// </summary>
         public RespawnManager RespawnManager { get; private set; }
+
+        /// <summary>
+        /// Gets an instance of the <see cref="ZoneAnnouncer"/> class.
+        /// </summary>
+        public ZoneAnnouncer ZoneAnnouncer { get; private set; }
 
         /// <inheritdoc/>
         public override string Author => "Build";
@@ -89,6 +90,9 @@ namespace ScpDeathmatch
             roundStatsManager = new RoundStatsManager(this);
             roundStatsManager.Subscribe();
 
+            subclassSelectionManager = new SubclassSelectionManager(this);
+            subclassSelectionManager.Subscribe();
+
             timedCommandHandler = new TimedCommandHandler(this);
             timedCommandHandler.Subscribe();
 
@@ -118,6 +122,9 @@ namespace ScpDeathmatch
 
             timedCommandHandler?.Unsubscribe();
             timedCommandHandler = null;
+
+            subclassSelectionManager?.Unsubscribe();
+            subclassSelectionManager = null;
 
             roundStatsManager?.Unsubscribe();
             roundStatsManager = null;

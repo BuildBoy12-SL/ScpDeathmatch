@@ -49,7 +49,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnDied(DiedEventArgs ev)
         {
-            if (ev.Killer == null || ev.Killer == ev.Target)
+            if (!Round.IsStarted || ev.Killer == null || ev.Killer == ev.Target)
                 return;
 
             if (firstBlood == null)
