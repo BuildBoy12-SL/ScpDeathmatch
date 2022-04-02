@@ -5,17 +5,19 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Models
+namespace ScpDeathmatch.Decontamination.Models
 {
     using Exiled.API.Extensions;
     using Exiled.API.Features;
-    using Subtitles;
+    using Interactables.Interobjects.DoorUtils;
 
     /// <summary>
     /// Represents a phase in the decontamination sequence.
     /// </summary>
     public class DecontaminationPhase
     {
+        private float triggerTime;
+
         /// <summary>
         /// Gets or sets the broadcast message to display.
         /// </summary>
@@ -27,19 +29,29 @@ namespace ScpDeathmatch.Models
         public string Cassie { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of subtitle to display.
-        /// </summary>
-        public SubtitleType SubtitleType { get; set; }
-
-        /// <summary>
-        /// Gets or sets optional data to send with the subtitle.
-        /// </summary>
-        public string OptionalSubtitleData { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the entire facility can hear the announcement.
         /// </summary>
         public bool IsGlobal { get; set; }
+
+        /// <summary>
+        /// Gets or sets the time, in seconds, to wait before triggering this phase.
+        /// </summary>
+        public float TriggerTime
+        {
+            get => triggerTime;
+            set
+            {
+                if (value < 0)
+                    value = 0;
+
+                triggerTime = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the special action of the phase.
+        /// </summary>
+        public SpecialAction SpecialAction { get; set; } = SpecialAction.None;
 
         /// <summary>
         /// Executes the phase.
@@ -54,10 +66,15 @@ namespace ScpDeathmatch.Models
                     if (Broadcast != null)
                         player.Broadcast(Broadcast);
 
-                    player.Connection.Send(new SubtitleMessage(new[] { new SubtitlePart(SubtitleType, new[] { OptionalSubtitleData }) }));
                     player.PlayCassieAnnouncement(Cassie);
                 }
             }
+
+            if (SpecialAction == SpecialAction.Checkpoints)
+                DoorEventOpenerExtension.TriggerAction(DoorEventOpenerExtension.OpenerEventType.DeconEvac);
+
+            if (SpecialAction == SpecialAction.Lockdown)
+                Map.StartDecontamination();
         }
     }
 }

@@ -11,6 +11,7 @@ namespace ScpDeathmatch
     using Exiled.API.Features;
     using HarmonyLib;
     using RemoteAdmin;
+    using ScpDeathmatch.Decontamination;
     using ScpDeathmatch.EventHandlers;
     using ScpDeathmatch.KillRewards;
     using ScpDeathmatch.Managers;
@@ -74,8 +75,8 @@ namespace ScpDeathmatch
             armoryPitManager = new ArmoryPitManager(this);
             armoryPitManager.Subscribe();
 
-            // decontaminationManager = new DecontaminationManager();
-            // decontaminationManager.Subscribe();
+            decontaminationManager = new DecontaminationManager(this);
+            decontaminationManager.Subscribe();
 
             disarmingLivesManager = new DisarmingLivesManager(this);
             disarmingLivesManager.Subscribe();
@@ -98,7 +99,7 @@ namespace ScpDeathmatch
             serverEvents.Subscribe();
 
             Config.CustomItems.Register();
-            // Config.CustomRoles.Register();
+            Config.CustomRoles.Register();
 
             base.OnEnabled();
         }
@@ -107,7 +108,7 @@ namespace ScpDeathmatch
         public override void OnDisabled()
         {
             Config.CustomItems.Unregister();
-            // Config.CustomRoles.Unregister();
+            Config.CustomRoles.Unregister();
 
             serverEvents?.Unsubscribe();
             serverEvents = null;

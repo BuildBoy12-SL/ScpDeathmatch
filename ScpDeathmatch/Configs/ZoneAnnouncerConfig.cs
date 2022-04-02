@@ -5,14 +5,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using ScpDeathmatch.Managers;
-
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Enums;
     using ScpDeathmatch.Commands;
+    using ScpDeathmatch.Managers;
 
     /// <summary>
     /// Handles configs for the <see cref="ZoneAnnouncer"/>.

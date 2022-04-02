@@ -81,12 +81,6 @@ namespace ScpDeathmatch.EventHandlers
 
         private void OnWaitingForPlayers()
         {
-            if (plugin.Config.Decontamination.IsEnabled)
-            {
-                DecontaminationController.Singleton.NetworkRoundStartTime = -1.0;
-                DecontaminationController.Singleton._stopUpdating = true;
-            }
-
             foreach (CoroutineHandle coroutineHandle in coroutineHandles)
             {
                 if (coroutineHandle.IsRunning)

@@ -10,7 +10,6 @@ namespace ScpDeathmatch
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using ScpDeathmatch.Configs;
 
@@ -43,7 +42,7 @@ namespace ScpDeathmatch
         /// <summary>
         /// Gets or sets the configs for the custom roles.
         /// </summary>
-        // public CustomRolesConfig CustomRoles { get; set; } = new CustomRolesConfig();
+        public CustomRolesConfig CustomRoles { get; set; } = new CustomRolesConfig();
 
         /// <summary>
         /// Gets or sets the configs related to the custom decontamination sequence.

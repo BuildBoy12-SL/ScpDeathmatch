@@ -9,6 +9,9 @@ namespace ScpDeathmatch.Configs
 {
     using System.ComponentModel;
 
+    /// <summary>
+    /// Handles configs related to timers.
+    /// </summary>
     public class TimerConfig
     {
         /// <summary>

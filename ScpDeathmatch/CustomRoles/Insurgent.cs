@@ -7,20 +7,29 @@
 
 namespace ScpDeathmatch.CustomRoles
 {
+    using Exiled.API.Features.Attributes;
     using Exiled.CustomRoles.API.Features;
 
+    /// <inheritdoc />
+    [CustomRole(RoleType.ClassD)]
     public class Insurgent : CustomRole
     {
+        /// <inheritdoc />
         public override uint Id { get; set; } = 102;
 
+        /// <inheritdoc />
         public override RoleType Role { get; set; } = RoleType.ClassD;
 
+        /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
 
+        /// <inheritdoc />
         public override string Name { get; set; } = nameof(Insurgent);
 
+        /// <inheritdoc />
         public override string Description { get; set; }
 
+        /// <inheritdoc />
         public override string CustomInfo { get; set; }
     }
 }
