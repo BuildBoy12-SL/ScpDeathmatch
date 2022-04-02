@@ -7,10 +7,14 @@
 
 namespace ScpDeathmatch.Patches
 {
-#pragma warning disable SA1313
+#pragma warning disable SA1118
+    using System.Collections.Generic;
+    using System.Reflection.Emit;
     using HarmonyLib;
-    using InventorySystem;
     using InventorySystem.Disarming;
+    using NorthwoodLib.Pools;
+    using ScpDeathmatch.Configs;
+    using static HarmonyLib.AccessTools;
 
     /// <summary>
     /// Patches <see cref="DisarmedPlayers.ValidateEntry"/> to implement configs from <see cref="Config"/>.
@@ -18,29 +22,44 @@ namespace ScpDeathmatch.Patches
     [HarmonyPatch(typeof(DisarmedPlayers), nameof(DisarmedPlayers.ValidateEntry))]
     internal static class ValidateDisarmPatch
     {
-        private static bool Prefix(DisarmedPlayers.DisarmedEntry entry, ref bool __result)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
-            if (entry.Disarmer == 0U)
+            List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
+
+            Label returnFalseLabel = generator.DefineLabel();
+            Label returnTrueLabel = generator.DefineLabel();
+
+            const int offset = 3;
+            int index = newInstructions.FindIndex(i => i.opcode == OpCodes.Bne_Un_S) + offset;
+            newInstructions.InsertRange(index, new[]
             {
-                __result = true;
-                return false;
-            }
+                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Disarming))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(DisarmingConfig), nameof(DisarmingConfig.DisarmAtDistance))),
+                new CodeInstruction(OpCodes.Brfalse_S, returnFalseLabel),
+            });
 
-            if (!ReferenceHub.TryGetHubNetID(entry.DisarmedPlayer, out ReferenceHub disarmedHub) ||
-                !ReferenceHub.TryGetHubNetID(entry.Disarmer, out ReferenceHub disarmerHub) ||
-                !disarmedHub.characterClassManager.IsHuman() || !disarmerHub.characterClassManager.IsHuman() ||
-                disarmedHub.characterClassManager.Faction == disarmerHub.characterClassManager.Faction ||
-                (Plugin.Instance.Config.Disarming.DisarmAtDistance && (disarmedHub.transform.position - disarmerHub.transform.position).sqrMagnitude > 8100.0))
+            index = newInstructions.FindLastIndex(i => i.opcode == OpCodes.Ldloc_0);
+            newInstructions.InsertRange(index, new[]
             {
-                __result = false;
-                return false;
-            }
+                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Disarming))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(DisarmingConfig), nameof(DisarmingConfig.DropItems))),
+                new CodeInstruction(OpCodes.Brfalse_S, returnTrueLabel),
+            });
 
-            if (Plugin.Instance.Config.Disarming.DropItems)
-                disarmedHub.inventory.ServerDropEverything();
+            index = newInstructions.FindLastIndex(i => i.opcode == OpCodes.Ldc_I4_0);
+            newInstructions[index].labels.Add(returnFalseLabel);
 
-            __result = true;
-            return false;
+            index = newInstructions.FindLastIndex(i => i.opcode == OpCodes.Ldc_I4_1);
+            newInstructions[index].labels.Add(returnTrueLabel);
+
+            for (int z = 0; z < newInstructions.Count; z++)
+                yield return newInstructions[z];
+
+            ListPool<CodeInstruction>.Shared.Return(newInstructions);
         }
     }
 }

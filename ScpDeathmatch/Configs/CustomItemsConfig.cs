@@ -18,7 +18,7 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.ReconSwitch"/> class.
         /// </summary>
-        // public ReconSwitch ReconSwitch { get; set; } = new ReconSwitch();
+        public ReconSwitch ReconSwitch { get; set; } = new ReconSwitch();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.SecondWind"/> class.
@@ -35,7 +35,7 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public void Register()
         {
-            // ReconSwitch.Register();
+            ReconSwitch.Register();
             SecondWind.Register();
             WeaponToken.Register();
         }
@@ -45,7 +45,7 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public void Unregister()
         {
-            // ReconSwitch.Unregister();
+            ReconSwitch.Unregister();
             SecondWind.Unregister();
             WeaponToken.Unregister();
         }
