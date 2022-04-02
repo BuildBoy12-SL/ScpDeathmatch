@@ -77,6 +77,12 @@ namespace ScpDeathmatch.CustomItems
         };
 
         /// <summary>
+        /// Gets or sets the message to send a player when they receive their item.
+        /// </summary>
+        [Description("The message to send a player when they receive their item.")]
+        public string GaveItem { get; set; } = "Gave you a {0} in exchange for your weapon token.";
+
+        /// <summary>
         /// Gives a player a random reward from the <see cref="PossibleRewards"/> collection.
         /// </summary>
         /// <param name="player">The player to give the item to.</param>
@@ -88,14 +94,14 @@ namespace ScpDeathmatch.CustomItems
             string name = PossibleRewards[UnityEngine.Random.Range(0, PossibleRewards.Count)];
             if (TryGive(player, name, false))
             {
-                player.ShowHint($"Gave you a {name} in exchange for your weapon token.");
+                player.ShowHint(string.Format(GaveItem, name));
                 return;
             }
 
             if (Enum.TryParse(name, true, out ItemType itemType))
             {
                 player.AddItem(itemType);
-                player.ShowHint($"Gave you a {name} in exchange for your weapon token.");
+                player.ShowHint(string.Format(GaveItem, name));
                 return;
             }
 

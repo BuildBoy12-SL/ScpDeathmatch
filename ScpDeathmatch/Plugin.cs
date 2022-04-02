@@ -26,6 +26,7 @@ namespace ScpDeathmatch
         private DisarmingLivesManager disarmingLivesManager;
         private MicroHidHealing microHidHealing;
         private RewardManager rewardManager;
+        private RoundStatsManager roundStatsManager;
 
         private ServerEvents serverEvents;
 
@@ -43,11 +44,6 @@ namespace ScpDeathmatch
         /// Gets an instance of the <see cref="Managers.RespawnManager"/> class.
         /// </summary>
         public RespawnManager RespawnManager { get; private set; }
-
-        /// <summary>
-        /// Gets an instance of the <see cref="Managers.RoundStatsManager"/> class.
-        /// </summary>
-        public RoundStatsManager RoundStatsManager { get; private set; }
 
         /// <inheritdoc/>
         public override string Author => "Build";
@@ -89,8 +85,8 @@ namespace ScpDeathmatch
             rewardManager = new RewardManager(this);
             rewardManager.Subscribe();
 
-            RoundStatsManager = new RoundStatsManager(this);
-            RoundStatsManager.Subscribe();
+            roundStatsManager = new RoundStatsManager(this);
+            roundStatsManager.Subscribe();
 
             ZoneAnnouncer = new ZoneAnnouncer(this);
             ZoneAnnouncer.Subscribe();
@@ -116,8 +112,8 @@ namespace ScpDeathmatch
             ZoneAnnouncer?.Unsubscribe();
             ZoneAnnouncer = null;
 
-            RoundStatsManager?.Unsubscribe();
-            RoundStatsManager = null;
+            roundStatsManager?.Unsubscribe();
+            roundStatsManager = null;
 
             rewardManager?.Unsubscribe();
             rewardManager = null;
