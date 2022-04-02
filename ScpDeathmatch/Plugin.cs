@@ -27,6 +27,7 @@ namespace ScpDeathmatch
         private MicroHidHealing microHidHealing;
         private RewardManager rewardManager;
         private RoundStatsManager roundStatsManager;
+        private TimedCommandHandler timedCommandHandler;
 
         private ServerEvents serverEvents;
 
@@ -88,6 +89,9 @@ namespace ScpDeathmatch
             roundStatsManager = new RoundStatsManager(this);
             roundStatsManager.Subscribe();
 
+            timedCommandHandler = new TimedCommandHandler(this);
+            timedCommandHandler.Subscribe();
+
             ZoneAnnouncer = new ZoneAnnouncer(this);
             ZoneAnnouncer.Subscribe();
 
@@ -111,6 +115,9 @@ namespace ScpDeathmatch
 
             ZoneAnnouncer?.Unsubscribe();
             ZoneAnnouncer = null;
+
+            timedCommandHandler?.Unsubscribe();
+            timedCommandHandler = null;
 
             roundStatsManager?.Unsubscribe();
             roundStatsManager = null;

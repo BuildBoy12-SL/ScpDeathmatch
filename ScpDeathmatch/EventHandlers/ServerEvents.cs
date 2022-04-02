@@ -12,9 +12,6 @@ namespace ScpDeathmatch.EventHandlers
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
-    using LightContainmentZoneDecontamination;
-    using MEC;
-    using ScpDeathmatch.Models;
     using ServerHandlers = Exiled.Events.Handlers.Server;
 
     /// <summary>
@@ -23,8 +20,6 @@ namespace ScpDeathmatch.EventHandlers
     public class ServerEvents
     {
         private readonly Plugin plugin;
-        private readonly List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
-        private string winnerName = "Unknown";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerEvents"/> class.
@@ -38,9 +33,7 @@ namespace ScpDeathmatch.EventHandlers
         public void Subscribe()
         {
             ServerHandlers.EndingRound += OnEndingRound;
-            ServerHandlers.RoundEnded += OnRoundEnded;
             ServerHandlers.RoundStarted += OnRoundStarted;
-            ServerHandlers.WaitingForPlayers += OnWaitingForPlayers;
         }
 
         /// <summary>
@@ -49,45 +42,22 @@ namespace ScpDeathmatch.EventHandlers
         public void Unsubscribe()
         {
             ServerHandlers.EndingRound -= OnEndingRound;
-            ServerHandlers.RoundEnded -= OnRoundEnded;
             ServerHandlers.RoundStarted -= OnRoundStarted;
-            ServerHandlers.WaitingForPlayers -= OnWaitingForPlayers;
         }
 
         private void OnEndingRound(EndingRoundEventArgs ev)
         {
             ev.IsAllowed = Player.Get(player => player.IsAlive).Count() + plugin.RespawnManager.Count <= 1;
             ev.IsRoundEnded = true;
-            winnerName = Player.Get(player => player.IsAlive).FirstOrDefault()?.Nickname ?? "Unknown";
-        }
-
-        private void OnRoundEnded(RoundEndedEventArgs ev)
-        {
-            foreach (ConfiguredCommand command in plugin.Config.Commands.RoundEnd)
-                coroutineHandles.Add(command.Execute());
         }
 
         private void OnRoundStarted()
         {
-            foreach (ConfiguredCommand command in plugin.Config.Commands.RoundStart)
-                coroutineHandles.Add(command.Execute());
-
             foreach (KeyValuePair<DoorType, float> kvp in plugin.Config.DoorLocks)
             {
                 foreach (Door door in Door.Get(kvp.Key))
                     door.Lock(kvp.Value, DoorLockType.AdminCommand);
             }
-        }
-
-        private void OnWaitingForPlayers()
-        {
-            foreach (CoroutineHandle coroutineHandle in coroutineHandles)
-            {
-                if (coroutineHandle.IsRunning)
-                    Timing.KillCoroutines(coroutineHandle);
-            }
-
-            coroutineHandles.Clear();
         }
     }
 }
