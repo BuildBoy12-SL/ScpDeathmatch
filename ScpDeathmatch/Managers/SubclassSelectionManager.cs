@@ -57,8 +57,18 @@ namespace ScpDeathmatch.Managers
 
         private void OnChangingItem(ChangingItemEventArgs ev)
         {
-            if (Round.IsLobby && ev.NewItem != null)
+            if (Round.IsLobby && ev.NewItem != null &&
+                plugin.Config.ClassSelection.Selections.TryGetValue(ev.NewItem.Type, out SubclassSelection selection))
+            {
                 selectedItem[ev.Player] = ev.NewItem.Type;
+                if (string.IsNullOrEmpty(selection.Message))
+                    return;
+
+                if (selection.IsBroadcast)
+                    ev.Player.Broadcast(3, selection.Message, shouldClearPrevious: true);
+                else
+                    ev.Player.ShowHint(selection.Message);
+            }
         }
 
         private void OnChangingRole(ChangingRoleEventArgs ev)
@@ -66,8 +76,11 @@ namespace ScpDeathmatch.Managers
             if (!Round.IsLobby || ev.NewRole == RoleType.None)
                 return;
 
-            ev.Items.Clear();
-            ev.Items.AddRange(plugin.Config.ClassSelection.Selections.Keys);
+            Timing.CallDelayed(0.5f, () =>
+            {
+                if (ev.Player.Role == ev.NewRole)
+                    ev.Player.ResetInventory(plugin.Config.ClassSelection.Selections.Keys);
+            });
         }
 
         private void OnDroppingItem(DroppingItemEventArgs ev)

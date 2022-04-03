@@ -43,6 +43,11 @@ namespace ScpDeathmatch.Models
         public string Message { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="Message"/> will be displayed as a broadcast. Otherwise, it will be displayed as a hint.
+        /// </summary>
+        public bool IsBroadcast { get; set; } = true;
+
+        /// <summary>
         /// Gets the selected custom role from the <see cref="Name"/>.
         /// </summary>
         /// <returns>The custom role or null if it does not exist.</returns>

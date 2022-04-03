@@ -74,7 +74,7 @@ namespace ScpDeathmatch.KillRewards.Models
             for (float i = 0; i < Config.HpRegenDuration; i++)
             {
                 yield return Timing.WaitForSeconds(1f);
-                if (player == null)
+                if (player is null)
                     yield break;
 
                 player.Heal(Config.HpRegenAmount / Config.HpRegenDuration);

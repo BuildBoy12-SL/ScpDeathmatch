@@ -107,7 +107,7 @@ namespace ScpDeathmatch.CustomRoles
 
         private void OnDied(DiedEventArgs ev)
         {
-            if (ev.Killer == null || !Check(ev.Killer))
+            if (ev.Killer is null || !Check(ev.Killer))
                 return;
 
             ev.Killer.Heal(HealthOnKill);

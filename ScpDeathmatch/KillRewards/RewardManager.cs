@@ -67,9 +67,9 @@ namespace ScpDeathmatch.KillRewards
         private void OnDied(DiedEventArgs ev)
         {
             if (!plugin.Config.Rewards.IsEnabled ||
-                ev.Killer == null ||
+                ev.Killer is null ||
                 !cachedHitboxes.TryGetValue(ev.Killer, out var tuple) ||
-                plugin.Config.Rewards == null ||
+                plugin.Config.Rewards is null ||
                 plugin.Config.Rewards.Rewards.Count == 0)
                 return;
 

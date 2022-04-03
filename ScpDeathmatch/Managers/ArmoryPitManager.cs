@@ -47,7 +47,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if (!ev.IsAllowed || ev.Player.CurrentRoom == null || ev.Player.CurrentRoom.Type != RoomType.HczArmory)
+            if (!ev.IsAllowed || ev.Player.CurrentRoom is null || ev.Player.CurrentRoom.Type != RoomType.HczArmory)
                 return;
 
             ev.IsAllowed = false;
@@ -73,7 +73,7 @@ namespace ScpDeathmatch.Managers
 
                 yield return Timing.WaitForSeconds(1f);
                 Room room = Map.FindParentRoom(pickup.GameObject);
-                if (room == null || room.Type != RoomType.HczArmory || pickup.Position.y > -1002f)
+                if (room is null || room.Type != RoomType.HczArmory || pickup.Position.y > -1002f)
                     continue;
 
                 pickup.Destroy();

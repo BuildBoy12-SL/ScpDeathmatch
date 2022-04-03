@@ -117,6 +117,7 @@ namespace ScpDeathmatch.CustomItems
             if (ev.Thrower != lastDetonator || ev.GrenadeType != GrenadeType.FragGrenade)
                 return;
 
+            lastDetonator = null;
             Plugin.Instance.RespawnManager.Add(new Respawner(ev.Thrower, () => !KillRequired || ev.TargetsToAffect.Count > 1, TeleportType));
             foreach (Player player in ev.TargetsToAffect)
                 player.Hurt(new UniversalDamageHandler(-1f, DeathTranslations.Explosion, DamageHandlerBase.CassieAnnouncement.Default));
@@ -148,7 +149,7 @@ namespace ScpDeathmatch.CustomItems
 
         private void UpgradeItem(Item item, Scp914KnobSetting setting, Player player, Vector3 outputPosition)
         {
-            if (item == null ||
+            if (item is null ||
                 TryGet(item, out _) ||
                 !UpgradeSettings.TryGetValue(item.Type, out UpgradeSetting chance) ||
                 !chance.Check(setting))

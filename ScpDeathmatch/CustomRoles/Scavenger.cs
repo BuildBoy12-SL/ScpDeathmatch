@@ -12,7 +12,9 @@ namespace ScpDeathmatch.CustomRoles
     using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
+    using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
+    using Exiled.API.Features.Items;
     using Exiled.API.Features.Spawn;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
@@ -118,32 +120,41 @@ namespace ScpDeathmatch.CustomRoles
             base.UnsubscribeEvents();
         }
 
+        /// <inheritdoc />
+        protected override void RoleAdded(Player player)
+        {
+            ApplyItems(player);
+            base.RoleAdded(player);
+        }
+
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
             if (!Check(ev.Player) || ev.NewRole == RoleType.None || ev.NewRole == RoleType.Spectator)
                 return;
 
-            for (int i = 0; i < ev.Ammo.Count; i++)
+            Timing.CallDelayed(0.5f, () => ApplyItems(ev.Player));
+        }
+
+        private void ApplyItems(Player player)
+        {
+            for (int i = 0; i < player.Ammo.Count; i++)
             {
-                ItemType key = ev.Ammo.ElementAt(i).Key;
+                ItemType key = player.Ammo.ElementAt(i).Key;
                 if (AdditionalStartingAmmo.TryGetValue(key.GetAmmoType(), out ushort ammo))
-                    ev.Ammo[key] += ammo;
+                    player.Ammo[key] += ammo;
             }
 
             if (!ReplaceJanitorKeycards)
                 return;
 
-            Timing.CallDelayed(0.2f, () =>
+            foreach (Item item in player.Items.ToList())
             {
-                foreach (var item in ev.Player.Items.ToList())
+                if (item.Type == ItemType.KeycardJanitor)
                 {
-                    if (item.Type == ItemType.KeycardJanitor)
-                    {
-                        ev.Player.RemoveItem(item);
-                        ev.Player.AddItem(ItemType.KeycardScientist);
-                    }
+                    player.RemoveItem(item);
+                    player.AddItem(ItemType.KeycardScientist);
                 }
-            });
+            }
         }
     }
 }

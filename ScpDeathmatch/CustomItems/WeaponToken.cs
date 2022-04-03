@@ -88,7 +88,7 @@ namespace ScpDeathmatch.CustomItems
         /// <param name="player">The player to give the item to.</param>
         public void GiveRandom(Player player)
         {
-            if (PossibleRewards == null || PossibleRewards.Count == 0)
+            if (PossibleRewards is null || PossibleRewards.Count == 0)
                 return;
 
             string name = PossibleRewards[UnityEngine.Random.Range(0, PossibleRewards.Count)];
@@ -150,7 +150,7 @@ namespace ScpDeathmatch.CustomItems
 
         private void UpgradeItem(Item item, Scp914KnobSetting setting, Player player, Vector3 outputPosition)
         {
-            if (item == null ||
+            if (item is null ||
                 TryGet(item, out _) ||
                 !UpgradeSettings.TryGetValue(item.Type, out UpgradeSetting chance) ||
                 !chance.Check(setting))

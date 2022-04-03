@@ -53,7 +53,7 @@ namespace ScpDeathmatch.Managers
             if (!plugin.Config.ExtraLives.IsEnabled || !ev.IsAllowed)
                 return;
 
-            if (!plugin.Config.ExtraLives.RespawnOnSuicide && (ev.Killer == null || ev.Killer == ev.Target))
+            if (!plugin.Config.ExtraLives.RespawnOnSuicide && (ev.Killer is null || ev.Killer == ev.Target))
                 return;
 
             List<DisarmedPlayers.DisarmedEntry> disarmedEntries = DisarmedPlayers.Entries.Where(entry => entry.Disarmer == ev.Target.NetworkIdentity.netId).ToList();
@@ -81,7 +81,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnHandcuffing(HandcuffingEventArgs ev)
         {
-            if (!ev.IsAllowed || ev.Cuffer == null)
+            if (!ev.IsAllowed || ev.Cuffer is null)
                 return;
 
             int disarmedEntries = DisarmedPlayers.Entries.Count(entry => entry.Disarmer == ev.Cuffer.NetworkIdentity.netId);
@@ -90,7 +90,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (plugin.Config.Disarming.DisarmedDamage || ev.Attacker == null || ev.Attacker == ev.Target)
+            if (plugin.Config.Disarming.DisarmedDamage || ev.Attacker is null || ev.Attacker == ev.Target)
                 return;
 
             if (ev.Target.Inventory.IsDisarmed())

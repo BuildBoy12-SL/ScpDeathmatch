@@ -8,6 +8,7 @@
 namespace ScpDeathmatch
 {
     using System;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using HarmonyLib;
     using RemoteAdmin;
@@ -56,11 +57,14 @@ namespace ScpDeathmatch
         /// <inheritdoc/>
         public override string Prefix => "ScpDeathmatch";
 
-        /// <inheritdoc/>
-        public override Version Version { get; } = new Version(1, 0, 0);
+        /// <inheritdoc />
+        public override PluginPriority Priority => PluginPriority.Lowest;
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion { get; } = new Version(5, 0, 0);
+
+        /// <inheritdoc/>
+        public override Version Version { get; } = new Version(1, 0, 0);
 
         /// <inheritdoc/>
         public override void OnEnabled()
