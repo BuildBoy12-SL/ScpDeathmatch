@@ -7,13 +7,15 @@
 
 namespace ScpDeathmatch.CustomRoles
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
+    using Exiled.CustomRoles.API.Features;
     using GameCore;
     using MEC;
-    using UnityEngine;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
@@ -21,9 +23,6 @@ namespace ScpDeathmatch.CustomRoles
     {
         /// <inheritdoc />
         public override uint Id { get; set; } = 105;
-
-        /// <inheritdoc />
-        public override RoleType Role { get; set; } = RoleType.ClassD;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -54,6 +53,10 @@ namespace ScpDeathmatch.CustomRoles
         /// </summary>
         [Description("The multiplier for stamina capacity.")]
         public float StaminaMultiplier { get; set; } = 1.2f;
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)

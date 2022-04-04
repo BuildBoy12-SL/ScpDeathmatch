@@ -44,10 +44,6 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
-
-        /// <inheritdoc />
-        [YamlIgnore]
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
 
         /// <inheritdoc />

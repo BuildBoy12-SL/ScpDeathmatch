@@ -11,6 +11,7 @@ namespace ScpDeathmatch.CustomRoles
     using System.ComponentModel;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
+    using Exiled.CustomRoles.API.Features;
     using MEC;
     using YamlDotNet.Serialization;
 
@@ -22,10 +23,6 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         public override uint Id { get; set; } = 101;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override RoleType Role { get; set; } = RoleType.ClassD;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 135;
@@ -56,6 +53,10 @@ namespace ScpDeathmatch.CustomRoles
         /// </summary>
         [Description("The amount of time, in seconds, that should pass to be considered a tick.")]
         public float SecondsPerTick { get; set; } = 1f;
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)

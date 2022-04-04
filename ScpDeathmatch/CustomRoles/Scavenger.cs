@@ -16,9 +16,12 @@ namespace ScpDeathmatch.CustomRoles
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
     using Exiled.API.Features.Items;
+    using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
     using Mirror;
+    using ScpDeathmatch.Abilities;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
@@ -96,6 +99,12 @@ namespace ScpDeathmatch.CustomRoles
                 }
             }
         }
+
+        /// <inheritdoc />
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>
+        {
+            new ScavengerAura(),
+        };
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)

@@ -7,10 +7,13 @@
 
 namespace ScpDeathmatch.CustomRoles
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Features.Attributes;
+    using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using UnityEngine;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
@@ -20,9 +23,6 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         public override uint Id { get; set; } = 103;
-
-        /// <inheritdoc />
-        public override RoleType Role { get; set; } = RoleType.ClassD;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -63,6 +63,10 @@ namespace ScpDeathmatch.CustomRoles
         /// </summary>
         [Description("The multiplier for damage dealt with guns.")]
         public float DamageMultiplier { get; set; } = 1.25f;
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
 
         /// <inheritdoc />
         protected override void SubscribeEvents()

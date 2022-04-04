@@ -10,7 +10,9 @@ namespace ScpDeathmatch.CustomRoles
     using System.Collections.Generic;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
+    using Exiled.CustomRoles.API.Features;
     using MEC;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
@@ -20,9 +22,6 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         public override uint Id { get; set; } = 102;
-
-        /// <inheritdoc />
-        public override RoleType Role { get; set; } = RoleType.ClassD;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -57,6 +56,10 @@ namespace ScpDeathmatch.CustomRoles
         /// Gets or sets the role for players to respawn as.
         /// </summary>
         public RoleType RespawnRole { get; set; } = RoleType.ChaosRifleman;
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
 
         /// <inheritdoc />
         protected override void SubscribeEvents()

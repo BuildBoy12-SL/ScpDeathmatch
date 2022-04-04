@@ -11,7 +11,9 @@ namespace ScpDeathmatch.CustomRoles
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
+    using Exiled.CustomRoles.API.Features;
     using MEC;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
@@ -22,9 +24,6 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         public override uint Id { get; set; } = 104;
-
-        /// <inheritdoc />
-        public override RoleType Role { get; set; } = RoleType.ClassD;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -59,6 +58,10 @@ namespace ScpDeathmatch.CustomRoles
         /// Gets or sets the alert to send to recons when a player leaves their zone.
         /// </summary>
         public string AlertLeft { get; set; } = "{0} has left your current zone";
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
 
         /// <inheritdoc />
         protected override void SubscribeEvents()
