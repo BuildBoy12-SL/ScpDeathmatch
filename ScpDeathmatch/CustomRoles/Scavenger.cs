@@ -7,6 +7,7 @@
 
 namespace ScpDeathmatch.CustomRoles
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
@@ -17,11 +18,25 @@ namespace ScpDeathmatch.CustomRoles
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
     using MEC;
+    using Mirror;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
     public class Scavenger : Subclass
     {
+        private readonly SyncList<sbyte> categoryLimits = new SyncList<sbyte>();
+        private Dictionary<ItemCategory, sbyte> rawCategoryLimits = new Dictionary<ItemCategory, sbyte>
+        {
+            [ItemCategory.Armor] = -1,
+            [ItemCategory.Grenade] = 2,
+            [ItemCategory.Keycard] = 3,
+            [ItemCategory.Medical] = 3,
+            [ItemCategory.MicroHID] = -1,
+            [ItemCategory.Radio] = -1,
+            [ItemCategory.SCPItem] = 3,
+            [ItemCategory.Firearm] = 1,
+        };
+
         /// <inheritdoc />
         public override uint Id { get; set; } = 106;
 
@@ -66,23 +81,35 @@ namespace ScpDeathmatch.CustomRoles
         /// Gets or sets the item limits for each category.
         /// </summary>
         [Description("The item limits for each category.")]
-        public Dictionary<ItemCategory, sbyte> ItemLimits { get; set; } = new Dictionary<ItemCategory, sbyte>
+        public Dictionary<ItemCategory, sbyte> ItemLimits
         {
-            [ItemCategory.Armor] = -1,
-            [ItemCategory.Grenade] = 2,
-            [ItemCategory.Keycard] = 3,
-            [ItemCategory.Medical] = 3,
-            [ItemCategory.MicroHID] = -1,
-            [ItemCategory.Radio] = -1,
-            [ItemCategory.SCPItem] = 3,
-            [ItemCategory.Firearm] = 1,
-        };
+            get => rawCategoryLimits;
+            set
+            {
+                rawCategoryLimits = value;
+                categoryLimits.Clear();
+                for (int index = 0; Enum.IsDefined(typeof(ItemCategory), (ItemCategory)index); ++index)
+                {
+                    ItemCategory key = (ItemCategory)index;
+                    if (rawCategoryLimits.TryGetValue(key, out sbyte def) && def >= 0)
+                        categoryLimits.Add(def);
+                }
+            }
+        }
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)
         {
+            SyncCategoryLimits(player, categoryLimits);
             ApplyItems(player);
             base.RoleAdded(player);
+        }
+
+        /// <inheritdoc />
+        protected override void RoleRemoved(Player player)
+        {
+            SyncCategoryLimits(player, ServerConfigSynchronizer.Singleton.CategoryLimits);
+            base.RoleRemoved(player);
         }
 
         /// <inheritdoc />
@@ -115,6 +142,21 @@ namespace ScpDeathmatch.CustomRoles
                     player.AddItem(ItemType.KeycardScientist);
                 }
             }
+        }
+
+        private void SyncCategoryLimits(Player player, SyncList<sbyte> limits)
+        {
+            MirrorExtensions.SendFakeSyncObject(player, ServerConfigSynchronizer.Singleton.netIdentity, typeof(ServerConfigSynchronizer), (writer) =>
+            {
+                writer.WriteUInt64(1ul);
+                writer.WriteUInt32((uint)limits.Count);
+                for (int i = 0; i < limits.Count; i++)
+                {
+                    writer.WriteByte((byte)SyncList<byte>.Operation.OP_SET);
+                    writer.WriteUInt32((uint)i);
+                    writer.WriteSByte(limits[i]);
+                }
+            });
         }
     }
 }

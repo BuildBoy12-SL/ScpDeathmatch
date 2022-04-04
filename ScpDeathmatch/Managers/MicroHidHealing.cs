@@ -12,6 +12,7 @@ namespace ScpDeathmatch.Managers
     using Exiled.Events.EventArgs;
     using InventorySystem.Items.MicroHID;
     using MEC;
+    using UnityEngine;
 
     /// <summary>
     /// Manages the <see cref="ItemType.MicroHID"/> healing.
@@ -68,10 +69,21 @@ namespace ScpDeathmatch.Managers
         private IEnumerator<float> RunHealing(Player player)
         {
             yield return Timing.WaitForSeconds(plugin.Config.HealingMicro.InitialDelay);
+            if (player.MaxArtificialHealth == 0f)
+                player.AddAhp(0f, plugin.Config.HealingMicro.MaximumAhp, plugin.Config.HealingMicro.AhpDecayRate, plugin.Config.HealingMicro.AhpEfficacy, 0f, true);
+
             while (Round.IsStarted)
             {
                 yield return Timing.WaitForSeconds(plugin.Config.HealingMicro.SecondsPerTick);
-                player.Heal(plugin.Config.HealingMicro.HealthPerTick);
+                float newHealth = player.Health + plugin.Config.HealingMicro.HealthPerTick;
+                if (newHealth > player.MaxHealth)
+                {
+                    player.Health = player.MaxHealth;
+                    player.ArtificialHealth = Mathf.Clamp((newHealth - player.MaxHealth) + player.ArtificialHealth, 0f, player.MaxArtificialHealth);
+                    continue;
+                }
+
+                player.Health = newHealth;
             }
         }
     }

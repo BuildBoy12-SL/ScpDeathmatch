@@ -85,7 +85,7 @@ namespace ScpDeathmatch.CustomRoles
             if (Check(ev.Player))
                 ev.Player.ReferenceHub.serverRoles.RefreshPermissions();
 
-            Timing.CallDelayed(0.3f, () =>
+            Timing.CallDelayed(1f, () =>
             {
                 if (Check(ev.Player))
                 {

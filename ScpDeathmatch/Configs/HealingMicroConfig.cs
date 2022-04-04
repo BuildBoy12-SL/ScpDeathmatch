@@ -36,5 +36,23 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         [Description("The amount of time, in seconds, that should pass to be considered a tick.")]
         public float SecondsPerTick { get; set; } = 0.2f;
+
+        /// <summary>
+        /// Gets or sets the maximum ahp a player can receive from healing.
+        /// </summary>
+        [Description("The maximum ahp a player can receive from healing.")]
+        public float MaximumAhp { get; set; } = 100f;
+
+        /// <summary>
+        /// Gets or sets the decay rate of the ahp process.
+        /// </summary>
+        [Description("The decay rate of the ahp process.")]
+        public float AhpDecayRate { get; set; } = 1.2f;
+
+        /// <summary>
+        /// Gets or sets the efficacy of the ahp process.
+        /// </summary>
+        [Description("The efficacy of the ahp process.")]
+        public float AhpEfficacy { get; set; } = 0.7f;
     }
 }
