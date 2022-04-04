@@ -7,21 +7,17 @@
 
 namespace ScpDeathmatch.CustomRoles
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
-    using Exiled.API.Features.Spawn;
-    using Exiled.CustomRoles.API.Features;
     using GameCore;
     using MEC;
     using UnityEngine;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
-    public class Runner : CustomRole
+    public class Runner : Subclass
     {
         /// <inheritdoc />
         public override uint Id { get; set; } = 105;
@@ -42,31 +38,10 @@ namespace ScpDeathmatch.CustomRoles
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override Vector3 Scale { get; set; } = Vector3.one;
+        public override string Badge { get; set; } = nameof(Runner);
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; }
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepRoleOnDeath { get; set; } = true;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override List<string> Inventory { get; set; } = new List<string>();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepInventoryOnSpawn { get; set; } = true;
+        public override string BadgeColor { get; set; } = "yellow";
 
         /// <summary>
         /// Gets or sets the multiplier for movement speed.

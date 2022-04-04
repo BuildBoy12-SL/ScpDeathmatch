@@ -7,18 +7,14 @@
 
 namespace ScpDeathmatch.CustomRoles
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Features.Attributes;
-    using Exiled.API.Features.Spawn;
-    using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using UnityEngine;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
-    public class Marksman : CustomRole
+    public class Marksman : Subclass
     {
         private float staminaOnKill = 20f;
 
@@ -41,31 +37,10 @@ namespace ScpDeathmatch.CustomRoles
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override Vector3 Scale { get; set; } = Vector3.one;
+        public override string Badge { get; set; } = nameof(Marksman);
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; }
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepRoleOnDeath { get; set; } = true;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override List<string> Inventory { get; set; } = new List<string>();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepInventoryOnSpawn { get; set; } = true;
+        public override string BadgeColor { get; set; } = "army_green";
 
         /// <summary>
         /// Gets or sets the amount of health received on kill.

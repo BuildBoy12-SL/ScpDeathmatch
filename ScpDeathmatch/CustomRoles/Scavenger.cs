@@ -15,22 +15,15 @@ namespace ScpDeathmatch.CustomRoles
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
     using Exiled.API.Features.Items;
-    using Exiled.API.Features.Spawn;
-    using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
-    using UnityEngine;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
-    public class Scavenger : CustomRole
+    public class Scavenger : Subclass
     {
         /// <inheritdoc />
         public override uint Id { get; set; } = 106;
-
-        /// <inheritdoc />
-        public override RoleType Role { get; set; } = RoleType.ClassD;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -45,31 +38,10 @@ namespace ScpDeathmatch.CustomRoles
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override Vector3 Scale { get; set; } = Vector3.one;
+        public override string Badge { get; set; } = nameof(Scavenger);
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; }
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepRoleOnDeath { get; set; } = true;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override List<string> Inventory { get; set; } = new List<string>();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepInventoryOnSpawn { get; set; } = true;
+        public override string BadgeColor { get; set; } = "tomato";
 
         /// <summary>
         /// Gets or sets a value indicating whether janitor keycards will be replaced with scientist keycards during spawning.
@@ -107,28 +79,16 @@ namespace ScpDeathmatch.CustomRoles
         };
 
         /// <inheritdoc />
-        protected override void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
-            base.SubscribeEvents();
-        }
-
-        /// <inheritdoc />
-        protected override void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
-            base.UnsubscribeEvents();
-        }
-
-        /// <inheritdoc />
         protected override void RoleAdded(Player player)
         {
             ApplyItems(player);
             base.RoleAdded(player);
         }
 
-        private void OnChangingRole(ChangingRoleEventArgs ev)
+        /// <inheritdoc />
+        protected override void OnChangingRole(ChangingRoleEventArgs ev)
         {
+            base.OnChangingRole(ev);
             if (!Check(ev.Player) || ev.NewRole == RoleType.None || ev.NewRole == RoleType.Spectator)
                 return;
 

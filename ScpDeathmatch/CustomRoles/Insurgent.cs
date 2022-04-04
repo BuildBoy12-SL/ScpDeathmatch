@@ -10,15 +10,11 @@ namespace ScpDeathmatch.CustomRoles
     using System.Collections.Generic;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
-    using Exiled.API.Features.Spawn;
-    using Exiled.CustomRoles.API.Features;
     using MEC;
-    using UnityEngine;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
-    public class Insurgent : CustomRole
+    public class Insurgent : Subclass
     {
         private CoroutineHandle respawnCoroutine;
 
@@ -41,31 +37,16 @@ namespace ScpDeathmatch.CustomRoles
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override Vector3 Scale { get; set; } = Vector3.one;
+        public override string Badge { get; set; } = nameof(Insurgent);
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; }
+        public override string BadgeColor { get; set; } = "emerald";
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
+        public override string DeadBadge { get; set; } = "Dead Insurgent";
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepRoleOnDeath { get; set; } = true;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override List<string> Inventory { get; set; } = new List<string>();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepInventoryOnSpawn { get; set; } = true;
+        public override string DeadBadgeColor { get; set; } = "nickel";
 
         /// <summary>
         /// Gets or sets the amount of time, in seconds, before this subclass can no longer respawn.

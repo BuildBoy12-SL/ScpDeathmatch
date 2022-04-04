@@ -11,15 +11,11 @@ namespace ScpDeathmatch.CustomRoles
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
-    using Exiled.API.Features.Spawn;
-    using Exiled.CustomRoles.API.Features;
     using MEC;
-    using UnityEngine;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomRole(RoleType.ClassD)]
-    public class Recon : CustomRole
+    public class Recon : Subclass
     {
         private readonly Dictionary<Player, ZoneType> previousZones = new Dictionary<Player, ZoneType>();
         private CoroutineHandle coroutineHandle;
@@ -43,27 +39,10 @@ namespace ScpDeathmatch.CustomRoles
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override Vector3 Scale { get; set; } = Vector3.one;
+        public override string Badge { get; set; } = nameof(Recon);
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; }
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool RemovalKillsPlayer { get; set; } = false;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepRoleOnDeath { get; set; } = true;
-
-        /// <inheritdoc />
-        [YamlIgnore]
-        public override bool KeepInventoryOnSpawn { get; set; } = true;
+        public override string BadgeColor { get; set; } = "mint";
 
         /// <inheritdoc />
         public override List<string> Inventory { get; set; } = new List<string>
