@@ -62,6 +62,15 @@ namespace ScpDeathmatch.CustomRoles
         public override Vector3 Scale { get; set; } = Vector3.one;
 
         /// <inheritdoc />
+        public override void Init()
+        {
+            foreach (var ability in CustomAbilities)
+                ability.Init();
+
+            base.Init();
+        }
+
+        /// <inheritdoc />
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;

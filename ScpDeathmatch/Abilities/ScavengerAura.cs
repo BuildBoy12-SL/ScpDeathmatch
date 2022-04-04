@@ -15,6 +15,8 @@ namespace ScpDeathmatch.Abilities
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomRoles.API.Features;
+    using Exiled.Events.EventArgs;
+    using InventorySystem.Items;
     using InventorySystem.Items.Pickups;
     using MEC;
     using ScpDeathmatch.Models;
@@ -24,7 +26,8 @@ namespace ScpDeathmatch.Abilities
     public class ScavengerAura : PassiveAbility
     {
         private static readonly int PickupMask = LayerMask.GetMask("Pickup");
-        private readonly Dictionary<Player, CoroutineHandle> coroutines = new Dictionary<Player, CoroutineHandle>();
+        private readonly Dictionary<int, CoroutineHandle> coroutines = new Dictionary<int, CoroutineHandle>();
+        private readonly List<ushort> onCooldown = new List<ushort>();
 
         /// <summary>
         /// Gets or sets a value indicating whether the ability is currently enabled.
@@ -48,6 +51,12 @@ namespace ScpDeathmatch.Abilities
         public float RefreshRate { get; set; } = 1f;
 
         /// <summary>
+        /// Gets or sets the amount of time, in seconds, to wait before an item can be automatically picked up after being dropped.
+        /// </summary>
+        [Description("The amount of time, in seconds, to wait before an item can be automatically picked up after being dropped.")]
+        public float DropCooldown { get; set; } = 2f;
+
+        /// <summary>
         /// Gets or sets a value indicating whether keycards that have all of the same permissions as the player's current keycards should be picked up.
         /// </summary>
         [Description("Whether keycards that have all of the same permissions as the player's current keycards should be picked up")]
@@ -68,20 +77,51 @@ namespace ScpDeathmatch.Abilities
             if (!IsEnabled)
                 return;
 
-            coroutines.Add(player, Timing.RunCoroutine(RunAbility(player)));
+            coroutines.Add(player.Id, Timing.RunCoroutine(RunAbility(player)));
             base.AbilityAdded(player);
         }
 
         /// <inheritdoc />
         protected override void AbilityRemoved(Player player)
         {
-            if (coroutines.TryGetValue(player, out CoroutineHandle coroutine))
+            if (coroutines.TryGetValue(player.Id, out CoroutineHandle coroutine))
             {
                 Timing.KillCoroutines(coroutine);
-                coroutines.Remove(player);
+                coroutines.Remove(player.Id);
             }
 
             base.AbilityRemoved(player);
+        }
+
+        /// <inheritdoc />
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
+            base.SubscribeEvents();
+        }
+
+        /// <inheritdoc />
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+            base.UnsubscribeEvents();
+        }
+
+        private void OnDroppingItem(DroppingItemEventArgs ev)
+        {
+            onCooldown.Add(ev.Item.Serial);
+            Timing.CallDelayed(DropCooldown, () => onCooldown.Remove(ev.Item.Serial));
+        }
+
+        private void OnWaitingForPlayers()
+        {
+            foreach (CoroutineHandle coroutine in coroutines.Values)
+                Timing.KillCoroutines(coroutine);
+
+            coroutines.Clear();
+            onCooldown.Clear();
         }
 
         private IEnumerator<float> RunAbility(Player player)
@@ -97,35 +137,38 @@ namespace ScpDeathmatch.Abilities
                 for (int i = 0; i < colliderCount; i++)
                 {
                     ItemPickupBase pickupBase = colliders[i].GetComponentInParent<ItemPickupBase>();
-                    if (!IsValidPickup(player, pickupBase, out Pickup pickup))
+                    if (!IsValidPickup(player, pickupBase, out Item item))
                         continue;
 
-                    player.AddItem(pickup);
-                    pickup.Destroy();
+                    player.AddItem(item);
+                    pickupBase.DestroySelf();
                 }
             }
         }
 
-        private bool IsValidPickup(Player player, ItemPickupBase pickupBase, out Pickup pickup)
+        private bool IsValidPickup(Player player, ItemPickupBase pickupBase, out Item item)
         {
-            pickup = null;
+            item = null;
             if (pickupBase is null)
                 return false;
 
-            pickup = Pickup.Get(pickupBase);
-            if (!AllowDuplicateKeycards && !HasUniquePermissions(player, pickup.Type))
+            if (onCooldown.Contains(pickupBase.Info.Serial))
                 return false;
 
-            if (!ItemLimits.TryGetValue(pickup.Type, out Limit limit) ||
-                !limit.WithinLimit(GetItemCount(player, pickup.Type)))
+            ItemBase itemBase = player.Inventory.CreateItemInstance(pickupBase.Info.ItemId, false);
+            item = Item.Get(itemBase);
+            if (!AllowDuplicateKeycards && !HasUniquePermissions(player, item))
+                return false;
+
+            if (!ItemLimits.TryGetValue(item.Type, out Limit limit) ||
+                !limit.WithinLimit(GetItemCount(player, item.Type)))
                 return false;
 
             return true;
         }
 
-        private bool HasUniquePermissions(Player player, ItemType itemType)
+        private bool HasUniquePermissions(Player player, Item item)
         {
-            Item item = Item.Create(itemType);
             if (!(item is Keycard keycard))
                 return true;
 
