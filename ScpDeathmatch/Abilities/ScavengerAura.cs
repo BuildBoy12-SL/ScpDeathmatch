@@ -87,7 +87,7 @@ namespace ScpDeathmatch.Abilities
         private IEnumerator<float> RunAbility(Player player)
         {
             Collider[] colliders = new Collider[50];
-            while (Round.IsStarted)
+            while (IsEnabled && Round.IsStarted)
             {
                 yield return Timing.WaitForSeconds(RefreshRate);
                 if (player.IsDead)
