@@ -15,7 +15,6 @@ namespace ScpDeathmatch.Abilities
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomRoles.API.Features;
-    using InventorySystem;
     using InventorySystem.Items.Pickups;
     using MEC;
     using ScpDeathmatch.Models;
@@ -26,6 +25,11 @@ namespace ScpDeathmatch.Abilities
     {
         private static readonly int PickupMask = LayerMask.GetMask("Pickup");
         private readonly Dictionary<Player, CoroutineHandle> coroutines = new Dictionary<Player, CoroutineHandle>();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the ability is currently enabled.
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
         public override string Name { get; set; } = "Scavenger Aura";
@@ -61,6 +65,9 @@ namespace ScpDeathmatch.Abilities
         /// <inheritdoc />
         protected override void AbilityAdded(Player player)
         {
+            if (!IsEnabled)
+                return;
+
             coroutines.Add(player, Timing.RunCoroutine(RunAbility(player)));
             base.AbilityAdded(player);
         }
