@@ -11,6 +11,7 @@ namespace ScpDeathmatch.KillRewards.Models
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using MEC;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Defines requirements and the rewards for meeting them.
@@ -54,10 +55,7 @@ namespace ScpDeathmatch.KillRewards.Models
         {
             killer.ArtificialHealth += Config.AhpAmount;
             foreach (ConfiguredEffect effect in Config.Effects)
-            {
-                killer.EnableEffect(effect.Type, effect.Duration);
-                killer.ChangeEffectIntensity(effect.Type, effect.Intensity, effect.Duration);
-            }
+                effect.Apply(killer);
 
             Map.Broadcast(
                 Config.Broadcast.Duration,

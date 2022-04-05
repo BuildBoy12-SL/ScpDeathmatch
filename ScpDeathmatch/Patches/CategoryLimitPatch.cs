@@ -16,7 +16,7 @@ namespace ScpDeathmatch.Patches
     /// <summary>
     /// Patches <see cref="InventoryLimits.GetCategoryLimit(ItemCategory,ReferenceHub)"/> to implement <see cref="Scavenger.ItemLimits"/>.
     /// </summary>
-    [HarmonyPatch(typeof(InventoryLimits), nameof(InventoryLimits.GetCategoryLimit), new[] { typeof(ItemCategory), typeof(ReferenceHub) })]
+    [HarmonyPatch(typeof(InventoryLimits), nameof(InventoryLimits.GetCategoryLimit), typeof(ItemCategory), typeof(ReferenceHub))]
     internal static class CategoryLimitPatch
     {
         private static bool Prefix(ItemCategory category, ReferenceHub player, ref sbyte __result)

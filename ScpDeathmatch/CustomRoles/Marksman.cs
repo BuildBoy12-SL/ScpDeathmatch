@@ -9,9 +9,11 @@ namespace ScpDeathmatch.CustomRoles
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using Exiled.API.Enums;
     using Exiled.API.Features.Attributes;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.Models;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
@@ -59,6 +61,16 @@ namespace ScpDeathmatch.CustomRoles
         }
 
         /// <summary>
+        /// Gets or sets the effects to apply on kill.
+        /// </summary>
+        [Description("The effects to apply on kill.")]
+        public List<ConfiguredEffect> EffectsOnKill { get; set; } = new List<ConfiguredEffect>
+        {
+            new ConfiguredEffect(EffectType.Invigorated, 1, 5f),
+            new ConfiguredEffect(EffectType.MovementBoost, 20, 5f),
+        };
+
+        /// <summary>
         /// Gets or sets the multiplier for damage dealt with guns.
         /// </summary>
         [Description("The multiplier for damage dealt with guns.")]
@@ -91,6 +103,8 @@ namespace ScpDeathmatch.CustomRoles
 
             ev.Killer.Heal(HealthOnKill);
             ev.Killer.Stamina.RemainingStamina = Mathf.Clamp(ev.Killer.Stamina.RemainingStamina + (StaminaOnKill / 100f), 0f, 1f);
+            foreach (ConfiguredEffect effect in EffectsOnKill)
+                effect.Apply(ev.Killer);
         }
 
         private void OnHurting(HurtingEventArgs ev)

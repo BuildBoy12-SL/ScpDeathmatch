@@ -5,10 +5,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.KillRewards.Models
+namespace ScpDeathmatch.Models
 {
     using System;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
 
     /// <summary>
     /// Represents an effect with a configured duration and intensity.
@@ -26,43 +27,39 @@ namespace ScpDeathmatch.KillRewards.Models
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfiguredEffect"/> class.
         /// </summary>
-        /// <param name="type"><inheritdoc cref="Type"/></param>
-        /// <param name="duration"><inheritdoc cref="Duration"/></param>
+        /// <param name="effectType"><inheritdoc cref="EffectType"/></param>
         /// <param name="intensity"><inheritdoc cref="Intensity"/></param>
-        public ConfiguredEffect(EffectType type, float duration, byte intensity)
+        /// <param name="duration"><inheritdoc cref="Duration"/></param>
+        public ConfiguredEffect(EffectType effectType, byte intensity, float duration)
         {
-            Type = type;
-            Duration = duration;
+            Type = effectType;
             Intensity = intensity;
+            Duration = duration;
         }
 
         /// <summary>
-        /// Gets or sets the effect.
+        /// Gets or sets the type of effect.
         /// </summary>
         public EffectType Type { get; set; }
 
         /// <summary>
-        /// Gets or sets the effects duration.
-        /// </summary>
-        public float Duration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the effects intensity.
+        /// Gets or sets the intensity of the effect.
         /// </summary>
         public byte Intensity { get; set; }
 
         /// <summary>
-        /// Adds two effects together.
+        /// Gets or sets the duration of the effect.
         /// </summary>
-        /// <param name="a">The first effect.</param>
-        /// <param name="b">The second effect.</param>
-        /// <returns>An effect with the added duration and intensities, or null if they are not of the same type.</returns>
-        public static ConfiguredEffect operator +(ConfiguredEffect a, ConfiguredEffect b)
-        {
-            if (a.Type != b.Type)
-                return null;
+        public float Duration { get; set; }
 
-            return new ConfiguredEffect(a.Type, a.Duration + b.Duration, (byte)(a.Intensity + b.Intensity));
+        /// <summary>
+        /// Applies the configured effect to the player.
+        /// </summary>
+        /// <param name="player">The player to apply the effect to.</param>
+        public void Apply(Player player)
+        {
+            player.EnableEffect(Type, Duration);
+            player.ChangeEffectIntensity(Type, Intensity, Duration);
         }
     }
 }

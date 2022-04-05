@@ -11,6 +11,7 @@ namespace ScpDeathmatch.KillRewards.Models
     using System.ComponentModel;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles configs related to granting rewards for specific actions.
@@ -47,18 +48,8 @@ namespace ScpDeathmatch.KillRewards.Models
         [Description("The effects to reward a player with.")]
         public List<ConfiguredEffect> Effects { get; set; } = new List<ConfiguredEffect>
         {
-            new ConfiguredEffect
-            {
-                Type = EffectType.MovementBoost,
-                Duration = 15f,
-                Intensity = 1,
-            },
-            new ConfiguredEffect
-            {
-                Type = EffectType.DamageReduction,
-                Duration = 15f,
-                Intensity = 1,
-            },
+            new ConfiguredEffect(EffectType.MovementBoost, 1, 15f),
+            new ConfiguredEffect(EffectType.DamageReduction, 1, 15f),
         };
     }
 }
