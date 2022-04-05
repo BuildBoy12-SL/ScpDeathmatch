@@ -48,6 +48,11 @@ namespace ScpDeathmatch.CustomItems
         [Description("The type of 939 visuals.")]
         public byte Intensity { get; set; } = 1;
 
+        /// <summary>
+        /// Gets or sets the maximum distance that other players can be seen.
+        /// </summary>
+        public float MaximumDistance { get; set; } = 40f;
+
         /// <inheritdoc />
         protected override void SubscribeEvents()
         {
