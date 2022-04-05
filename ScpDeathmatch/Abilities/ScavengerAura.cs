@@ -137,24 +137,24 @@ namespace ScpDeathmatch.Abilities
                 for (int i = 0; i < colliderCount; i++)
                 {
                     ItemPickupBase pickupBase = colliders[i].GetComponentInParent<ItemPickupBase>();
+
+                    if (pickupBase is null || onCooldown.Contains(pickupBase.Info.Serial))
+                        continue;
+
                     if (!IsValidPickup(player, pickupBase, out Item item))
                         continue;
 
                     player.AddItem(item);
                     pickupBase.DestroySelf();
+
+                    onCooldown.Add(pickupBase.Info.Serial);
+                    Timing.CallDelayed(DropCooldown, () => onCooldown.Remove(pickupBase.Info.Serial));
                 }
             }
         }
 
         private bool IsValidPickup(Player player, ItemPickupBase pickupBase, out Item item)
         {
-            item = null;
-            if (pickupBase is null)
-                return false;
-
-            if (onCooldown.Contains(pickupBase.Info.Serial))
-                return false;
-
             ItemBase itemBase = player.Inventory.CreateItemInstance(pickupBase.Info.ItemId, false);
             item = Item.Get(itemBase);
             if (!AllowDuplicateKeycards && !HasUniquePermissions(player, item))
