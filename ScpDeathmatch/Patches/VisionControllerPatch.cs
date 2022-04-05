@@ -22,7 +22,7 @@ namespace ScpDeathmatch.Patches
         private static bool Prefix(Scp939_VisionController __instance)
         {
             Player player = Player.Get(__instance._myVisuals939.Hub);
-            if (player == null || player.IsScp)
+            if (player == null || !Plugin.Instance.Config.CustomRoles.Recon.Check(player))
                 return true;
 
             foreach (Visuals939 enabledEffect in Visuals939.EnabledEffects)
