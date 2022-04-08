@@ -26,6 +26,7 @@ namespace ScpDeathmatch
         private DecontaminationManager decontaminationManager;
         private DisarmingLivesManager disarmingLivesManager;
         private MicroHidHealing microHidHealing;
+        private OmegaWarhead omegaWarhead;
         private RewardManager rewardManager;
         private RoundStatsManager roundStatsManager;
         private SubclassSelectionManager subclassSelectionManager;
@@ -86,6 +87,9 @@ namespace ScpDeathmatch
             microHidHealing = new MicroHidHealing(this);
             microHidHealing.Subscribe();
 
+            omegaWarhead = new OmegaWarhead(this);
+            omegaWarhead.Subscribe();
+
             RespawnManager = new RespawnManager();
 
             rewardManager = new RewardManager(this);
@@ -137,6 +141,9 @@ namespace ScpDeathmatch
             rewardManager = null;
 
             RespawnManager = null;
+
+            omegaWarhead?.Unsubscribe();
+            omegaWarhead = null;
 
             microHidHealing?.Unsubscribe();
             microHidHealing = null;

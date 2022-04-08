@@ -70,6 +70,11 @@ namespace ScpDeathmatch
         public HealingMicroConfig HealingMicro { get; set; } = new HealingMicroConfig();
 
         /// <summary>
+        /// Gets or sets the configs related to the omega warhead.
+        /// </summary>
+        public OmegaWarheadConfig OmegaWarhead { get; set; } = new OmegaWarheadConfig();
+
+        /// <summary>
         /// Gets or sets the configs for the <see cref="KillRewards.RewardManager"/>.
         /// </summary>
         public RewardsConfig Rewards { get; set; } = new RewardsConfig();
