@@ -17,10 +17,10 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     public class PowerOutage : IRandomEvent
     {
         /// <inheritdoc />
-        public bool IsEnabled { get; set; } = true;
+        public string Name { get; set; } = nameof(PowerOutage);
 
         /// <inheritdoc />
-        public string Name { get; set; } = nameof(PowerOutage);
+        public bool IsEnabled { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether the outage should occur in the current room rather than by zones.
@@ -46,9 +46,8 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public float Duration { get; set; } = 10f;
 
         /// <inheritdoc />
-        public void Action(ExplodingGrenadeEventArgs ev)
+        public void OnExploding(ExplodingGrenadeEventArgs ev)
         {
-            ev.TargetsToAffect.Clear();
             if (CurrentRoomOnly)
             {
                 Map.FindParentRoom(ev.Grenade.gameObject)?.TurnOffLights(Duration);

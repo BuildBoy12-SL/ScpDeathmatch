@@ -15,19 +15,19 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     public interface IRandomEvent
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the event can be activated.
-        /// </summary>
-        bool IsEnabled { get; set; }
-
-        /// <summary>
         /// Gets or sets the name of the event.
         /// </summary>
         string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the event can be activated.
+        /// </summary>
+        bool IsEnabled { get; set; }
+
+        /// <summary>
         /// The action to run when the event is activated.
         /// </summary>
         /// <param name="ev">The <see cref="ExplodingGrenadeEventArgs"/> instance.</param>
-        void Action(ExplodingGrenadeEventArgs ev);
+        void OnExploding(ExplodingGrenadeEventArgs ev);
     }
 }

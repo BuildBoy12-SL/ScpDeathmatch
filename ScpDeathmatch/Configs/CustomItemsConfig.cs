@@ -9,12 +9,18 @@ namespace ScpDeathmatch.Configs
 {
     using Exiled.CustomItems.API;
     using ScpDeathmatch.CustomItems;
+    using ScpDeathmatch.CustomItems.Qed;
 
     /// <summary>
     /// Handles configs related to custom items.
     /// </summary>
     public class CustomItemsConfig
     {
+        /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="CustomItems.Qed.Qed"/> class.
+        /// </summary>
+        public Qed Qed { get; set; } = new Qed();
+
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.ReconSwitch"/> class.
         /// </summary>
@@ -35,6 +41,7 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public void Register()
         {
+            Qed.Register();
             ReconSwitch.Register();
             SecondWind.Register();
             WeaponToken.Register();
@@ -45,6 +52,7 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public void Unregister()
         {
+            Qed.Unregister();
             ReconSwitch.Unregister();
             SecondWind.Unregister();
             WeaponToken.Unregister();
