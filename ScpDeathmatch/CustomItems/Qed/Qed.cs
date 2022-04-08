@@ -88,7 +88,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         {
             ev.TargetsToAffect.Clear();
             IRandomEvent randomEvent = RandomEvents?.FindRandom();
-            if (randomEvent == null)
+            if (randomEvent is null)
                 return;
 
             Log.Debug("Executing random event: " + randomEvent.Name, ShowDebug);

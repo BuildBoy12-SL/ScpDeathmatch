@@ -30,7 +30,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)
         {
-            if (PossibleItems == null || PossibleItems.IsEmpty())
+            if (PossibleItems is null || PossibleItems.IsEmpty())
                 return;
 
             ItemPair pair = PossibleItems[Random.Range(0, PossibleItems.Count)];
