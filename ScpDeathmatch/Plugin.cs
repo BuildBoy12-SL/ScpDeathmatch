@@ -30,6 +30,7 @@ namespace ScpDeathmatch
         private OmegaWarhead omegaWarhead;
         private RewardManager rewardManager;
         private RoundStatsManager roundStatsManager;
+        private StatTracker statTracker;
         private SubclassSelectionManager subclassSelectionManager;
         private TimedCommandHandler timedCommandHandler;
 
@@ -109,6 +110,9 @@ namespace ScpDeathmatch
             StatDatabase = new StatDatabase(this);
             StatDatabase.Open();
 
+            statTracker = new StatTracker(this);
+            statTracker.Subscribe();
+
             subclassSelectionManager = new SubclassSelectionManager(this);
             subclassSelectionManager.Subscribe();
 
@@ -144,6 +148,9 @@ namespace ScpDeathmatch
 
             subclassSelectionManager?.Unsubscribe();
             subclassSelectionManager = null;
+
+            statTracker?.Unsubscribe();
+            statTracker = null;
 
             StatDatabase?.Close();
             StatDatabase = null;
