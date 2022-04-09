@@ -7,11 +7,17 @@
 
 namespace ScpDeathmatch
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
+    using System.Reflection;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using Exiled.API.Interfaces;
+    using Exiled.Loader;
     using ScpDeathmatch.Configs;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     public class Config : IConfig
@@ -30,68 +36,113 @@ namespace ScpDeathmatch
         };
 
         /// <summary>
+        /// Gets or sets the folder containing miscellaneous config files.
+        /// </summary>
+        public string Folder { get; set; } = Path.Combine(Paths.Configs, "ScpDeathmatch");
+
+        /// <summary>
         /// Gets or sets the configs for class selection.
         /// </summary>
-        public ClassSelectionConfig ClassSelection { get; set; } = new();
+        [YamlIgnore]
+        public ClassSelectionConfig ClassSelection { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for automated commands.
         /// </summary>
-        public CommandConfig Commands { get; set; } = new();
+        [YamlIgnore]
+        public CommandConfig Commands { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the custom items.
         /// </summary>
-        public CustomItemsConfig CustomItems { get; set; } = new();
+        [YamlIgnore]
+        public CustomItemsConfig CustomItems { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the custom roles.
         /// </summary>
-        public CustomRolesConfig CustomRoles { get; set; } = new();
+        [YamlIgnore]
+        public CustomRolesConfig CustomRoles { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to the custom decontamination sequence.
         /// </summary>
-        public DecontaminationConfig Decontamination { get; set; } = new();
+        [YamlIgnore]
+        public DecontaminationConfig Decontamination { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to disarming.
         /// </summary>
-        public DisarmingConfig Disarming { get; set; } = new();
+        [YamlIgnore]
+        public DisarmingConfig Disarming { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to obtaining extra lives.
         /// </summary>
-        public ExtraLivesConfig ExtraLives { get; set; } = new();
+        [YamlIgnore]
+        public ExtraLivesConfig ExtraLives { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to the micro healing.
         /// </summary>
-        public HealingMicroConfig HealingMicro { get; set; } = new();
+        [YamlIgnore]
+        public HealingMicroConfig HealingMicro { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to the omega warhead.
         /// </summary>
-        public OmegaWarheadConfig OmegaWarhead { get; set; } = new();
+        [YamlIgnore]
+        public OmegaWarheadConfig OmegaWarhead { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the <see cref="KillRewards.RewardManager"/>.
         /// </summary>
-        public RewardsConfig Rewards { get; set; } = new();
+        [YamlIgnore]
+        public RewardsConfig Rewards { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the stat broadcast.
         /// </summary>
-        public StatBroadcastConfig StatBroadcast { get; set; } = new();
+        [YamlIgnore]
+        public StatBroadcastConfig StatBroadcast { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the stats database.
         /// </summary>
-        public StatsDatabaseConfig StatsDatabase { get; set; } = new();
+        [YamlIgnore]
+        public StatsDatabaseConfig StatsDatabase { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the <see cref="Managers.ZoneAnnouncer"/>.
         /// </summary>
-        public ZoneAnnouncerConfig ZoneAnnouncer { get; set; } = new();
+        [YamlIgnore]
+        public ZoneAnnouncerConfig ZoneAnnouncer { get; set; }
+
+        /// <summary>
+        /// Reloads all config files.
+        /// </summary>
+        public void Reload()
+        {
+            if (!Directory.Exists(Folder))
+                Directory.CreateDirectory(Folder);
+
+            foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
+                    continue;
+
+                string path = Path.Combine(Folder, property.Name + ".yml");
+                if (!File.Exists(path))
+                {
+                    object value = Activator.CreateInstance(property.PropertyType);
+                    property.SetValue(this, value);
+                    File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
+                    continue;
+                }
+
+                property.SetValue(this, Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType));
+                File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
+            }
+        }
     }
 }

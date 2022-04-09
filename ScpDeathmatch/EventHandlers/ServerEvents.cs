@@ -33,6 +33,7 @@ namespace ScpDeathmatch.EventHandlers
         public void Subscribe()
         {
             ServerHandlers.EndingRound += OnEndingRound;
+            ServerHandlers.ReloadedConfigs += OnReloadedConfigs;
             ServerHandlers.RoundStarted += OnRoundStarted;
         }
 
@@ -42,6 +43,7 @@ namespace ScpDeathmatch.EventHandlers
         public void Unsubscribe()
         {
             ServerHandlers.EndingRound -= OnEndingRound;
+            ServerHandlers.ReloadedConfigs -= OnReloadedConfigs;
             ServerHandlers.RoundStarted -= OnRoundStarted;
         }
 
@@ -49,6 +51,11 @@ namespace ScpDeathmatch.EventHandlers
         {
             ev.IsRoundEnded = Player.Get(player => player.IsAlive).Count() + plugin.RespawnManager.Count <= 1;
             ev.IsAllowed = true;
+        }
+
+        private void OnReloadedConfigs()
+        {
+            plugin.Config.Reload();
         }
 
         private void OnRoundStarted()

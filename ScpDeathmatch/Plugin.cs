@@ -78,6 +78,8 @@ namespace ScpDeathmatch
         {
             Instance = this;
 
+            Config.Reload();
+
             harmony = new Harmony($"deathMath.{DateTime.UtcNow.Ticks}");
             harmony.PatchAll();
 
