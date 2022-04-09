@@ -16,6 +16,7 @@ namespace ScpDeathmatch
     using ScpDeathmatch.EventHandlers;
     using ScpDeathmatch.KillRewards;
     using ScpDeathmatch.Managers;
+    using ScpDeathmatch.Stats;
 
     /// <inheritdoc />
     public class Plugin : Plugin<Config>
@@ -43,6 +44,11 @@ namespace ScpDeathmatch
         /// Gets an instance of the <see cref="Managers.RespawnManager"/> class.
         /// </summary>
         public RespawnManager RespawnManager { get; private set; }
+
+        /// <summary>
+        /// Gets an instance of the <see cref="Stats.StatDatabase"/> class.
+        /// </summary>
+        public StatDatabase StatDatabase { get; private set; }
 
         /// <summary>
         /// Gets an instance of the <see cref="ZoneAnnouncer"/> class.
@@ -98,6 +104,9 @@ namespace ScpDeathmatch
             roundStatsManager = new RoundStatsManager(this);
             roundStatsManager.Subscribe();
 
+            StatDatabase = new StatDatabase(this);
+            StatDatabase.Open();
+
             subclassSelectionManager = new SubclassSelectionManager(this);
             subclassSelectionManager.Subscribe();
 
@@ -133,6 +142,9 @@ namespace ScpDeathmatch
 
             subclassSelectionManager?.Unsubscribe();
             subclassSelectionManager = null;
+
+            StatDatabase?.Close();
+            StatDatabase = null;
 
             roundStatsManager?.Unsubscribe();
             roundStatsManager = null;

@@ -85,6 +85,11 @@ namespace ScpDeathmatch
         public StatBroadcastConfig StatBroadcast { get; set; } = new StatBroadcastConfig();
 
         /// <summary>
+        /// Gets or sets the configs for the stats database.
+        /// </summary>
+        public StatsDatabaseConfig StatsDatabase { get; set; } = new StatsDatabaseConfig();
+
+        /// <summary>
         /// Gets or sets the configs for the <see cref="Managers.ZoneAnnouncer"/>.
         /// </summary>
         public ZoneAnnouncerConfig ZoneAnnouncer { get; set; } = new ZoneAnnouncerConfig();
