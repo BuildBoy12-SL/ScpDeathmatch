@@ -69,10 +69,10 @@ namespace ScpDeathmatch
         public override PluginPriority Priority => PluginPriority.Lowest;
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion { get; } = new Version(5, 0, 0);
+        public override Version RequiredExiledVersion { get; } = new(5, 0, 0);
 
         /// <inheritdoc/>
-        public override Version Version { get; } = new Version(1, 0, 0);
+        public override Version Version { get; } = new(1, 0, 0);
 
         /// <inheritdoc/>
         public override void OnEnabled()
@@ -81,7 +81,7 @@ namespace ScpDeathmatch
 
             Config.Reload();
 
-            harmony = new Harmony($"deathMath.{DateTime.UtcNow.Ticks}");
+            harmony = new Harmony($"deathMatch.{DateTime.UtcNow.Ticks}");
             harmony.PatchAll();
 
             armoryPitManager = new ArmoryPitManager(this);
