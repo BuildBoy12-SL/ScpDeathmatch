@@ -57,7 +57,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnChangingItem(ChangingItemEventArgs ev)
         {
-            if (Round.IsLobby && ev.NewItem != null &&
+            if (Round.IsLobby && ev.NewItem is not null &&
                 plugin.Config.ClassSelection.Selections.TryGetValue(ev.NewItem.Type, out SubclassSelection selection))
             {
                 selectedItem[ev.Player] = ev.NewItem.Type;

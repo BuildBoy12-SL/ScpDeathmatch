@@ -93,7 +93,7 @@ namespace ScpDeathmatch.Managers
 
         private void ThrowItem(DroppingItemEventArgs ev, Pickup pickup)
         {
-            if (pickup.Base.Rb != null && ev.IsThrown)
+            if (pickup.Base.Rb is not null && ev.IsThrown)
             {
                 Vector3 vector = (ev.Player.ReferenceHub.playerMovementSync.PlayerVelocity / 3f) + (ev.Player.ReferenceHub.PlayerCameraReference.forward * 6f * (Mathf.Clamp01(Mathf.InverseLerp(7f, 0.1f, pickup.Base.Rb.mass)) + 0.3f));
                 vector.x = Mathf.Max(Mathf.Abs(ev.Player.ReferenceHub.playerMovementSync.PlayerVelocity.x), Mathf.Abs(vector.x)) * ((vector.x < 0f) ? -1 : 1);

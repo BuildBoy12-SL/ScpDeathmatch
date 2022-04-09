@@ -82,13 +82,13 @@ namespace ScpDeathmatch.KillRewards
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Attacker != null && !ev.Handler.Type.IsWeapon())
+            if (ev.Attacker is not null && !ev.Handler.Type.IsWeapon())
                 cachedHitboxes[ev.Attacker] = (ev.Handler.Type, null);
         }
 
         private void OnShot(ShotEventArgs ev)
         {
-            if (ev.Target != null && ev.Shooter.CurrentItem != null)
+            if (ev.Target is not null && ev.Shooter.CurrentItem is not null)
                 cachedHitboxes[ev.Shooter] = (ItemConversion[ev.Shooter.CurrentItem.Type], ev.Hitbox._dmgMultiplier);
         }
 

@@ -68,7 +68,7 @@ namespace ScpDeathmatch.Decontamination.Models
                 float y = player.Position.y;
                 if (IsGlobal || (y < 200f && y > -200.0f))
                 {
-                    if (Broadcast != null)
+                    if (Broadcast is not null)
                         player.Broadcast(Broadcast);
 
                     player.PlayCassieAnnouncement(Cassie, makeNoise: !SuppressNoise);

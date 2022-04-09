@@ -27,7 +27,7 @@ namespace ScpDeathmatch.Patches
 
             foreach (Visuals939 enabledEffect in Visuals939.EnabledEffects)
             {
-                if (enabledEffect != null && (enabledEffect.Hub.characterClassManager.CurClass == RoleType.Spectator || Vector3.Distance(__instance.transform.position, enabledEffect.transform.position) < Plugin.Instance.Config.CustomItems.ReconSwitch.MaximumDistance))
+                if (enabledEffect is not null && (enabledEffect.Hub.characterClassManager.CurClass == RoleType.Spectator || Vector3.Distance(__instance.transform.position, enabledEffect.transform.position) < Plugin.Instance.Config.CustomItems.ReconSwitch.MaximumDistance))
                     __instance.AddVision(enabledEffect);
             }
 

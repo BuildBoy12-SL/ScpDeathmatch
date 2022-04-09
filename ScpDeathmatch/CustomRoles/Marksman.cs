@@ -109,7 +109,7 @@ namespace ScpDeathmatch.CustomRoles
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Attacker != null && Check(ev.Attacker))
+            if (ev.Attacker is not null && Check(ev.Attacker))
                 ev.Amount *= DamageMultiplier;
         }
     }
