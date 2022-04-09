@@ -39,7 +39,7 @@ namespace ScpDeathmatch.CustomItems
         public override float Weight { get; set; } = 0f;
 
         /// <inheritdoc />
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
+        public override SpawnProperties SpawnProperties { get; set; } = new();
 
         /// <inheritdoc />
         [YamlIgnore]
@@ -49,7 +49,7 @@ namespace ScpDeathmatch.CustomItems
         /// Gets or sets a collection of item-chance pairs that can upgrade into the second wind item.
         /// </summary>
         [Description("A collection of item-chance pairs that can upgrade into a weapon token.")]
-        public Dictionary<ItemType, UpgradeSetting> UpgradeSettings { get; set; } = new Dictionary<ItemType, UpgradeSetting>()
+        public Dictionary<ItemType, UpgradeSetting> UpgradeSettings { get; set; } = new()
         {
             {
                 ItemType.KeycardJanitor, new UpgradeSetting
@@ -70,7 +70,7 @@ namespace ScpDeathmatch.CustomItems
         /// Gets or sets the list of possible rewards.
         /// </summary>
         [Description("The list of possible rewards. Accepts custom item names.")]
-        public List<string> PossibleRewards { get; set; } = new List<string>
+        public List<string> PossibleRewards { get; set; } = new()
         {
             $"{ItemType.GunRevolver}",
             $"{ItemType.MicroHID}",

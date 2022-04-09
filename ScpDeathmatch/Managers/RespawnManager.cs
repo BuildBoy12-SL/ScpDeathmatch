@@ -17,7 +17,7 @@ namespace ScpDeathmatch.Managers
     /// </summary>
     public class RespawnManager
     {
-        private readonly List<Respawner> toRespawn = new List<Respawner>();
+        private readonly List<Respawner> toRespawn = new();
 
         /// <summary>
         /// Gets the amount of players that are considered to be respawning.

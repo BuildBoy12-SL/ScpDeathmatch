@@ -19,7 +19,7 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets the broadcast to be sent at the end of the round.
         /// </summary>
         [Description("The broadcast to be sent at the end of the round. Variables: $Winner, $TopKills, $FirstBlood")]
-        public Broadcast Broadcast { get; set; } = new Broadcast("$Winner\n$TopKills\n$FirstBlood");
+        public Broadcast Broadcast { get; set; } = new("$Winner\n$TopKills\n$FirstBlood");
 
         /// <summary>
         /// Gets or sets the translation for the $FirstBlood variable in <see cref="Broadcast"/>.

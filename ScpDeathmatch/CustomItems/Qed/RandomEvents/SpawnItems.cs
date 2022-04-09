@@ -25,7 +25,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <summary>
         /// Gets or sets the items that can spawn with the amount to spawn.
         /// </summary>
-        public List<ItemPair> PossibleItems { get; set; } = new List<ItemPair>();
+        public List<ItemPair> PossibleItems { get; set; } = new();
 
         /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)

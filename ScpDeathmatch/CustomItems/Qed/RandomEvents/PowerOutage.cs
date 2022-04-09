@@ -32,7 +32,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// Gets or sets the zones where the outage should occur.
         /// </summary>
         [Description("The zones where the outage should occur.")]
-        public HashSet<ZoneType> Zones { get; set; } = new HashSet<ZoneType>
+        public HashSet<ZoneType> Zones { get; set; } = new()
         {
             ZoneType.LightContainment,
             ZoneType.HeavyContainment,

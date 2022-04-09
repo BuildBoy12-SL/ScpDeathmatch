@@ -64,7 +64,7 @@ namespace ScpDeathmatch.CustomRoles
         /// Gets or sets the effects to apply on kill.
         /// </summary>
         [Description("The effects to apply on kill.")]
-        public List<ConfiguredEffect> EffectsOnKill { get; set; } = new List<ConfiguredEffect>
+        public List<ConfiguredEffect> EffectsOnKill { get; set; } = new()
         {
             new ConfiguredEffect(EffectType.Invigorated, 1, 5f),
             new ConfiguredEffect(EffectType.MovementBoost, 20, 5f),
@@ -78,7 +78,7 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new();
 
         /// <inheritdoc />
         protected override void SubscribeEvents()

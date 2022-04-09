@@ -36,13 +36,13 @@ namespace ScpDeathmatch.CustomItems.Qed
         public override float Weight { get; set; } = 0f;
 
         /// <inheritdoc />
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties
+        public override SpawnProperties SpawnProperties { get; set; } = new()
         {
             DynamicSpawnPoints = new List<DynamicSpawnPoint>
             {
-                new DynamicSpawnPoint { Chance = 100f, Location = SpawnLocation.InsideGr18, },
-                new DynamicSpawnPoint { Chance = 100f, Location = SpawnLocation.Inside049Armory, },
-                new DynamicSpawnPoint { Chance = 100f, Location = SpawnLocation.InsideGateA, },
+                new() { Chance = 100f, Location = SpawnLocation.InsideGr18, },
+                new() { Chance = 100f, Location = SpawnLocation.Inside049Armory, },
+                new() { Chance = 100f, Location = SpawnLocation.InsideGateA, },
             },
         };
 
@@ -60,7 +60,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         /// <summary>
         /// Gets or sets the events to pick from.
         /// </summary>
-        public RandomEventsConfig RandomEvents { get; set; } = new RandomEventsConfig();
+        public RandomEventsConfig RandomEvents { get; set; } = new();
 
         /// <inheritdoc />
         public override void Init()

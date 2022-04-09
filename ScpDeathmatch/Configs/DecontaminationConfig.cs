@@ -24,7 +24,7 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets the phases of decontamination.
         /// </summary>
-        public List<DecontaminationPhase> Phases { get; set; } = new List<DecontaminationPhase>
+        public List<DecontaminationPhase> Phases { get; set; } = new()
         {
             new DecontaminationPhase
             {

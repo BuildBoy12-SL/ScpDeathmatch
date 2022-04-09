@@ -43,6 +43,6 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets the broadcast to send a player when they receive an extra life.
         /// </summary>
         [Description("The broadcast to send a player when they receive an extra life.")]
-        public Broadcast ExtraLifeBroadcast { get; set; } = new Broadcast("You have received an extra life at the cost of those you had detained!");
+        public Broadcast ExtraLifeBroadcast { get; set; } = new("You have received an extra life at the cost of those you had detained!");
     }
 }

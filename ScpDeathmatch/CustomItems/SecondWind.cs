@@ -62,7 +62,7 @@ namespace ScpDeathmatch.CustomItems
         /// Gets or sets a collection of item-chance pairs that can upgrade into the second wind item.
         /// </summary>
         [Description("A collection of item-chance pairs that can upgrade into the second wind item.")]
-        public Dictionary<ItemType, UpgradeSetting> UpgradeSettings { get; set; } = new Dictionary<ItemType, UpgradeSetting>()
+        public Dictionary<ItemType, UpgradeSetting> UpgradeSettings { get; set; } = new()
         {
             {
                 ItemType.Coin, new UpgradeSetting
@@ -80,7 +80,7 @@ namespace ScpDeathmatch.CustomItems
         };
 
         /// <inheritdoc />
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
+        public override SpawnProperties SpawnProperties { get; set; } = new();
 
         /// <summary>
         /// Detonates the second wind.

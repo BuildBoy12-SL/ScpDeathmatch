@@ -20,36 +20,20 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets the commands to be ran at the start of the round.
         /// </summary>
         [Description("The commands to be ran at the start of the round.")]
-        public List<ConfiguredCommand> RoundStart { get; set; } = new List<ConfiguredCommand>
+        public List<ConfiguredCommand> RoundStart { get; set; } = new()
         {
-            new ConfiguredCommand
-            {
-                Command = "/command1",
-                Delay = 0f,
-            },
-            new ConfiguredCommand
-            {
-                Command = "/command2",
-                Delay = 5f,
-            },
+            new ConfiguredCommand("/command1", 0f),
+            new ConfiguredCommand("/command2", 5f),
         };
 
         /// <summary>
         /// Gets or sets the commands to be ran when the round ends.
         /// </summary>
         [Description("The commands to be ran when the round ends.")]
-        public List<ConfiguredCommand> RoundEnd { get; set; } = new List<ConfiguredCommand>
+        public List<ConfiguredCommand> RoundEnd { get; set; } = new()
         {
-            new ConfiguredCommand
-            {
-                Command = "/command1",
-                Delay = 0f,
-            },
-            new ConfiguredCommand
-            {
-                Command = "/command2",
-                Delay = 5f,
-            },
+            new ConfiguredCommand("/command1", 0f),
+            new ConfiguredCommand("/command2", 5f),
         };
     }
 }

@@ -22,7 +22,7 @@ namespace ScpDeathmatch.KillRewards.Models
         /// Gets or sets the broadcast to send when someone performs a kill with a headshot.
         /// </summary>
         [Description("The broadcast to send when someone performs the reward action. Variables: %killer, %victim")]
-        public Broadcast Broadcast { get; set; } = new Broadcast("<color=red>%killer just big ironed %victim!</color>", 5);
+        public Broadcast Broadcast { get; set; } = new("<color=red>%killer just big ironed %victim!</color>", 5);
 
         /// <summary>
         /// Gets or sets the amount of ahp to reward a player with.
@@ -46,10 +46,10 @@ namespace ScpDeathmatch.KillRewards.Models
         /// Gets or sets the effects to reward a player with.
         /// </summary>
         [Description("The effects to reward a player with.")]
-        public List<ConfiguredEffect> Effects { get; set; } = new List<ConfiguredEffect>
+        public List<ConfiguredEffect> Effects { get; set; } = new()
         {
-            new ConfiguredEffect(EffectType.MovementBoost, 1, 15f),
-            new ConfiguredEffect(EffectType.DamageReduction, 1, 15f),
+            new(EffectType.MovementBoost, 1, 15f),
+            new(EffectType.DamageReduction, 1, 15f),
         };
     }
 }

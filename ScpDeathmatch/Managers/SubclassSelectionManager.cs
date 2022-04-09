@@ -19,7 +19,7 @@ namespace ScpDeathmatch.Managers
     public class SubclassSelectionManager
     {
         private readonly Plugin plugin;
-        private readonly Dictionary<Player, ItemType> selectedItem = new Dictionary<Player, ItemType>();
+        private readonly Dictionary<Player, ItemType> selectedItem = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubclassSelectionManager"/> class.

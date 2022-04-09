@@ -20,7 +20,7 @@ namespace ScpDeathmatch.CustomItems
     [CustomItem(ItemType.Flashlight)]
     public class ReconSwitch : CustomItem
     {
-        private readonly List<int> activeList = new List<int>();
+        private readonly List<int> activeList = new();
 
         /// <inheritdoc />
         public override uint Id { get; set; } = 122;
@@ -36,7 +36,7 @@ namespace ScpDeathmatch.CustomItems
 
         /// <inheritdoc />
         [YamlIgnore]
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties();
+        public override SpawnProperties SpawnProperties { get; set; } = new();
 
         /// <inheritdoc />
         [YamlIgnore]

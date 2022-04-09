@@ -15,6 +15,24 @@ namespace ScpDeathmatch.Models
     public class ConfiguredCommand
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="ConfiguredCommand"/> class.
+        /// </summary>
+        public ConfiguredCommand()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfiguredCommand"/> class.
+        /// </summary>
+        /// <param name="command"><inheritdoc cref="Command"/></param>
+        /// <param name="delay"><inheritdoc cref="Delay"/></param>
+        public ConfiguredCommand(string command, float delay)
+        {
+            Command = command;
+            Delay = delay;
+        }
+
+        /// <summary>
         /// Gets or sets the command to execute.
         /// </summary>
         public string Command { get; set; }

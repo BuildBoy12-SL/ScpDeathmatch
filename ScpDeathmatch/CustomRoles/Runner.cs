@@ -56,7 +56,7 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new();
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)

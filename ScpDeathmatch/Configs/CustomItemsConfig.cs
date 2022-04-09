@@ -19,22 +19,22 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.Qed.Qed"/> class.
         /// </summary>
-        public Qed Qed { get; set; } = new Qed();
+        public Qed Qed { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.ReconSwitch"/> class.
         /// </summary>
-        public ReconSwitch ReconSwitch { get; set; } = new ReconSwitch();
+        public ReconSwitch ReconSwitch { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.SecondWind"/> class.
         /// </summary>
-        public SecondWind SecondWind { get; set; } = new SecondWind();
+        public SecondWind SecondWind { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.WeaponToken"/> class.
         /// </summary>
-        public WeaponToken WeaponToken { get; set; } = new WeaponToken();
+        public WeaponToken WeaponToken { get; set; } = new();
 
         /// <summary>
         /// Registers all custom items.

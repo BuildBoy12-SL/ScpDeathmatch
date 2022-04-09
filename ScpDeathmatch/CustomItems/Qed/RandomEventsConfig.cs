@@ -18,12 +18,12 @@ namespace ScpDeathmatch.CustomItems.Qed
     /// </summary>
     public class RandomEventsConfig
     {
-        private readonly List<IRandomEvent> selectableEvents = new List<IRandomEvent>();
+        private readonly List<IRandomEvent> selectableEvents = new();
 
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.LockRoom"/> event.
         /// </summary>
-        public List<LockRoom> LockRoom { get; set; } = new List<LockRoom>
+        public List<LockRoom> LockRoom { get; set; } = new()
         {
             new LockRoom(),
         };
@@ -31,7 +31,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.PowerOutage"/> event.
         /// </summary>
-        public List<PowerOutage> PowerOutage { get; set; } = new List<PowerOutage>
+        public List<PowerOutage> PowerOutage { get; set; } = new()
         {
             new PowerOutage(),
         };
@@ -39,7 +39,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.SpawnGrenade"/> event.
         /// </summary>
-        public List<SpawnGrenade> SpawnGrenade { get; set; } = new List<SpawnGrenade>
+        public List<SpawnGrenade> SpawnGrenade { get; set; } = new()
         {
             new SpawnGrenade(),
         };
@@ -47,16 +47,16 @@ namespace ScpDeathmatch.CustomItems.Qed
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.SpawnItems"/> event.
         /// </summary>
-        public List<SpawnItems> SpawnItems { get; set; } = new List<SpawnItems>
+        public List<SpawnItems> SpawnItems { get; set; } = new()
         {
             new SpawnItems
             {
                 Name = "Spawn Scp Items",
                 PossibleItems = new List<ItemPair>
                 {
-                    new ItemPair(ItemType.SCP207, 1),
-                    new ItemPair(ItemType.SCP268, 1),
-                    new ItemPair(ItemType.SCP500, 2),
+                    new(ItemType.SCP207, 1),
+                    new(ItemType.SCP268, 1),
+                    new(ItemType.SCP500, 2),
                 },
             },
             new SpawnItems
@@ -64,9 +64,9 @@ namespace ScpDeathmatch.CustomItems.Qed
                 Name = "Spawn Weapons",
                 PossibleItems = new List<ItemPair>
                 {
-                    new ItemPair(ItemType.GunRevolver, 1),
-                    new ItemPair(ItemType.GunRevolver, 2),
-                    new ItemPair(ItemType.GunE11SR, 1),
+                    new(ItemType.GunRevolver, 1),
+                    new(ItemType.GunRevolver, 2),
+                    new(ItemType.GunE11SR, 1),
                 },
             },
             new SpawnItems
@@ -74,9 +74,9 @@ namespace ScpDeathmatch.CustomItems.Qed
                 Name = "Spawn Medical Items",
                 PossibleItems = new List<ItemPair>
                 {
-                    new ItemPair(ItemType.Adrenaline, 2),
-                    new ItemPair(ItemType.Medkit, 4),
-                    new ItemPair(ItemType.Painkillers, 6),
+                    new(ItemType.Adrenaline, 2),
+                    new(ItemType.Medkit, 4),
+                    new(ItemType.Painkillers, 6),
                 },
             },
         };
@@ -84,7 +84,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.SpawnScp018"/> event.
         /// </summary>
-        public List<SpawnScp018> Scp018 { get; set; } = new List<SpawnScp018>
+        public List<SpawnScp018> Scp018 { get; set; } = new()
         {
             new SpawnScp018(),
         };
@@ -92,7 +92,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.UpgradeItems"/> event.
         /// </summary>
-        public List<UpgradeItems> UpgradeItems { get; set; } = new List<UpgradeItems>
+        public List<UpgradeItems> UpgradeItems { get; set; } = new()
         {
             new UpgradeItems(),
         };

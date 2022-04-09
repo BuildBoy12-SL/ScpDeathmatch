@@ -45,7 +45,7 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets the announcements for each zone.
         /// </summary>
         [Description("The announcements for each zone. Use $PLAYERS to indicate the number of players.")]
-        public Dictionary<ZoneType, string> Announcements { get; set; } = new Dictionary<ZoneType, string>
+        public Dictionary<ZoneType, string> Announcements { get; set; } = new()
         {
             [ZoneType.Entrance] = string.Empty,
             [ZoneType.HeavyContainment] = string.Empty,
@@ -63,6 +63,6 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Commands.ForceAnnouncerCommand"/> class.
         /// </summary>
-        public ForceAnnouncerCommand ForceAnnouncerCommand { get; set; } = new ForceAnnouncerCommand();
+        public ForceAnnouncerCommand ForceAnnouncerCommand { get; set; } = new();
     }
 }

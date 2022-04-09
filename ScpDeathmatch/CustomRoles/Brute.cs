@@ -19,7 +19,7 @@ namespace ScpDeathmatch.CustomRoles
     [CustomRole(RoleType.ClassD)]
     public class Brute : Subclass
     {
-        private readonly Dictionary<Player, CoroutineHandle> healthCoroutines = new Dictionary<Player, CoroutineHandle>();
+        private readonly Dictionary<Player, CoroutineHandle> healthCoroutines = new();
 
         /// <inheritdoc />
         public override uint Id { get; set; } = 101;
@@ -56,7 +56,7 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new();
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)

@@ -18,7 +18,7 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets a collection of items and their corresponding selection definition.
         /// </summary>
-        public Dictionary<ItemType, SubclassSelection> Selections { get; set; } = new Dictionary<ItemType, SubclassSelection>
+        public Dictionary<ItemType, SubclassSelection> Selections { get; set; } = new()
         {
             { ItemType.Medkit, new SubclassSelection("Brute", "You've selected the Brute subclass") },
             { ItemType.KeycardChaosInsurgency, new SubclassSelection("Insurgent", "You've selected the Insurgent subclass") },

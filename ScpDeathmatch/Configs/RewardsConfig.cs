@@ -27,7 +27,7 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets a collection of reward configs.
         /// </summary>
         [Description("A collection of reward configs.")]
-        public List<RewardRequirement> Rewards { get; set; } = new List<RewardRequirement>
+        public List<RewardRequirement> Rewards { get; set; } = new()
         {
             new RewardRequirement
             {

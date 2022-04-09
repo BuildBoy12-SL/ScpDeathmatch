@@ -30,7 +30,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// Gets or sets the items that should be upgraded.
         /// </summary>
         [Description("The items that should be upgraded.")]
-        public HashSet<ItemType> ToUpgrade { get; set; } = new HashSet<ItemType>
+        public HashSet<ItemType> ToUpgrade { get; set; } = new()
         {
             ItemType.KeycardGuard,
             ItemType.KeycardJanitor,

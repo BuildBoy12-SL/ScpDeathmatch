@@ -19,7 +19,7 @@ namespace ScpDeathmatch.CustomRoles
     [CustomRole(RoleType.ClassD)]
     public class Recon : Subclass
     {
-        private readonly Dictionary<Player, ZoneType> previousZones = new Dictionary<Player, ZoneType>();
+        private readonly Dictionary<Player, ZoneType> previousZones = new();
         private CoroutineHandle coroutineHandle;
 
         /// <inheritdoc />
@@ -44,7 +44,7 @@ namespace ScpDeathmatch.CustomRoles
         public override string BadgeColor { get; set; } = "mint";
 
         /// <inheritdoc />
-        public override List<string> Inventory { get; set; } = new List<string>
+        public override List<string> Inventory { get; set; } = new()
         {
             "Goggle Toggle",
         };
@@ -61,7 +61,7 @@ namespace ScpDeathmatch.CustomRoles
 
         /// <inheritdoc />
         [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new();
 
         /// <inheritdoc />
         protected override void SubscribeEvents()

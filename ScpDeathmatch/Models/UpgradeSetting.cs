@@ -18,7 +18,7 @@ namespace ScpDeathmatch.Models
         /// <summary>
         /// Gets or sets the chances for each knob setting to succeed.
         /// </summary>
-        public Dictionary<Scp914KnobSetting, int> Chances { get; set; } = new Dictionary<Scp914KnobSetting, int>
+        public Dictionary<Scp914KnobSetting, int> Chances { get; set; } = new()
         {
             { Scp914KnobSetting.Rough, 0 },
             { Scp914KnobSetting.Coarse, 0 },

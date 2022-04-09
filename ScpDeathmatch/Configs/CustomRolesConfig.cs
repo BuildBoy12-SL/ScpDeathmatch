@@ -18,32 +18,32 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomRoles.Brute"/> class.
         /// </summary>
-        public Brute Brute { get; set; } = new Brute();
+        public Brute Brute { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomRoles.Insurgent"/> class.
         /// </summary>
-        public Insurgent Insurgent { get; set; } = new Insurgent();
+        public Insurgent Insurgent { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomRoles.Marksman"/> class.
         /// </summary>
-        public Marksman Marksman { get; set; } = new Marksman();
+        public Marksman Marksman { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomRoles.Recon"/> class.
         /// </summary>
-        public Recon Recon { get; set; } = new Recon();
+        public Recon Recon { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomRoles.Runner"/> class.
         /// </summary>
-        public Runner Runner { get; set; } = new Runner();
+        public Runner Runner { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomRoles.Scavenger"/> class.
         /// </summary>
-        public Scavenger Scavenger { get; set; } = new Scavenger();
+        public Scavenger Scavenger { get; set; } = new();
 
         /// <summary>
         /// Registers all custom items.

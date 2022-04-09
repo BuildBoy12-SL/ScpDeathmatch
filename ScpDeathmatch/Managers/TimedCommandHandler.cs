@@ -18,7 +18,7 @@ namespace ScpDeathmatch.Managers
     public class TimedCommandHandler
     {
         private readonly Plugin plugin;
-        private readonly List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
+        private readonly List<CoroutineHandle> coroutineHandles = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimedCommandHandler"/> class.

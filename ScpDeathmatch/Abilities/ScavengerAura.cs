@@ -26,8 +26,8 @@ namespace ScpDeathmatch.Abilities
     public class ScavengerAura : PassiveAbility
     {
         private static readonly int PickupMask = LayerMask.GetMask("Pickup");
-        private readonly Dictionary<int, CoroutineHandle> coroutines = new Dictionary<int, CoroutineHandle>();
-        private readonly List<ushort> onCooldown = new List<ushort>();
+        private readonly Dictionary<int, CoroutineHandle> coroutines = new();
+        private readonly List<ushort> onCooldown = new();
 
         /// <summary>
         /// Gets or sets a value indicating whether the ability is currently enabled.
@@ -66,7 +66,7 @@ namespace ScpDeathmatch.Abilities
         /// Gets or sets the individual limits of items.
         /// </summary>
         [Description("The individual limits of items. If an item is not in the collection, it will not be picked up.")]
-        public Dictionary<ItemType, Limit> ItemLimits { get; set; } = new Dictionary<ItemType, Limit>
+        public Dictionary<ItemType, Limit> ItemLimits { get; set; } = new()
         {
             { ItemType.KeycardScientist, new Limit(0, 2) },
         };

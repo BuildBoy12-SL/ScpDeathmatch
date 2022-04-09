@@ -18,7 +18,7 @@ namespace ScpDeathmatch.Managers
     public class RoundStatsManager
     {
         private readonly Plugin plugin;
-        private readonly SortedList<Player, int> kills = new SortedList<Player, int>();
+        private readonly SortedList<Player, int> kills = new();
         private Player firstBlood;
 
         /// <summary>

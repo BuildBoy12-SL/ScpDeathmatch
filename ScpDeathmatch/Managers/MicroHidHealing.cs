@@ -20,7 +20,7 @@ namespace ScpDeathmatch.Managers
     public class MicroHidHealing
     {
         private readonly Plugin plugin;
-        private readonly Dictionary<Player, CoroutineHandle> healingCoroutines = new Dictionary<Player, CoroutineHandle>();
+        private readonly Dictionary<Player, CoroutineHandle> healingCoroutines = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MicroHidHealing"/> class.

@@ -27,8 +27,8 @@ namespace ScpDeathmatch.CustomRoles
     [CustomRole(RoleType.ClassD)]
     public class Scavenger : Subclass
     {
-        private readonly SyncList<sbyte> categoryLimits = new SyncList<sbyte>();
-        private Dictionary<ItemCategory, sbyte> rawCategoryLimits = new Dictionary<ItemCategory, sbyte>
+        private readonly SyncList<sbyte> categoryLimits = new();
+        private Dictionary<ItemCategory, sbyte> rawCategoryLimits = new()
         {
             [ItemCategory.Armor] = -1,
             [ItemCategory.Grenade] = 2,
@@ -71,7 +71,7 @@ namespace ScpDeathmatch.CustomRoles
         /// Gets or sets the additional ammo the player will spawn with.
         /// </summary>
         [Description("The additional ammo the player will spawn with.")]
-        public Dictionary<AmmoType, ushort> AdditionalStartingAmmo { get; set; } = new Dictionary<AmmoType, ushort>()
+        public Dictionary<AmmoType, ushort> AdditionalStartingAmmo { get; set; } = new()
         {
             { AmmoType.Nato556, 0 },
             { AmmoType.Nato762, 0 },
@@ -101,7 +101,7 @@ namespace ScpDeathmatch.CustomRoles
         }
 
         /// <inheritdoc />
-        public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
         {
             new ScavengerAura(),
         };
