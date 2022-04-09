@@ -128,20 +128,27 @@ namespace ScpDeathmatch
 
             foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
-                    continue;
-
-                string path = Path.Combine(Folder, property.Name + ".yml");
-                if (!File.Exists(path))
+                try
                 {
-                    object value = Activator.CreateInstance(property.PropertyType);
-                    property.SetValue(this, value);
-                    File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
-                    continue;
-                }
+                    if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
+                        continue;
 
-                property.SetValue(this, Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType));
-                File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
+                    string path = Path.Combine(Folder, property.Name + ".yml");
+                    if (!File.Exists(path))
+                    {
+                        object value = Activator.CreateInstance(property.PropertyType);
+                        property.SetValue(this, value);
+                        File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
+                        continue;
+                    }
+
+                    property.SetValue(this, Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType));
+                    File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Error while attempting to reload config file '{property.Name}':\n{e.Message}");
+                }
             }
         }
     }
