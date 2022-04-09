@@ -136,8 +136,7 @@ namespace ScpDeathmatch
                     string path = Path.Combine(Folder, property.Name + ".yml");
                     if (!File.Exists(path))
                     {
-                        object value = Activator.CreateInstance(property.PropertyType);
-                        property.SetValue(this, value);
+                        property.SetValue(this, Activator.CreateInstance(property.PropertyType));
                         File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
                         continue;
                     }
