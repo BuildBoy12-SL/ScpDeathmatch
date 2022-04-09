@@ -38,6 +38,7 @@ namespace ScpDeathmatch
         /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
+        [Description("The folder containing miscellaneous config files.")]
         public string Folder { get; set; } = Path.Combine(Paths.Configs, "ScpDeathmatch");
 
         /// <summary>
@@ -134,14 +135,11 @@ namespace ScpDeathmatch
                         continue;
 
                     string path = Path.Combine(Folder, property.Name + ".yml");
-                    if (!File.Exists(path))
-                    {
-                        property.SetValue(this, Activator.CreateInstance(property.PropertyType));
-                        File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
-                        continue;
-                    }
+                    object value = File.Exists(path)
+                        ? Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType)
+                        : Activator.CreateInstance(property.PropertyType);
 
-                    property.SetValue(this, Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType));
+                    property.SetValue(this, value);
                     File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
                 }
                 catch (Exception e)
