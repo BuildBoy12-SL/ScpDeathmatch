@@ -54,7 +54,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnDetonated()
         {
-            if (isOmega)
+            if (!plugin.Config.OmegaWarhead.IsEnabled || isOmega)
                 return;
 
             warheadCoroutine = Timing.RunCoroutine(RunWarhead());
