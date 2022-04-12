@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.Models
 {
     using Exiled.CustomRoles.API.Features;
+    using ScpDeathmatch.CustomRoles;
 
     /// <summary>
     /// Represents a selection of a subclass.
@@ -51,6 +52,6 @@ namespace ScpDeathmatch.Models
         /// Gets the selected custom role from the <see cref="Name"/>.
         /// </summary>
         /// <returns>The custom role or null if it does not exist.</returns>
-        public CustomRole GetSelection() => CustomRole.Get(Name);
+        public Subclass GetSelection() => Subclass.Get(Name);
     }
 }

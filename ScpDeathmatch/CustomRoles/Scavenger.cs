@@ -14,17 +14,14 @@ namespace ScpDeathmatch.CustomRoles
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
-    using Exiled.API.Features.Attributes;
     using Exiled.API.Features.Items;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
     using Mirror;
     using ScpDeathmatch.Abilities;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
-    [CustomRole(RoleType.ClassD)]
     public class Scavenger : Subclass
     {
         private readonly SyncList<sbyte> categoryLimits = new();
@@ -39,9 +36,6 @@ namespace ScpDeathmatch.CustomRoles
             [ItemCategory.SCPItem] = 3,
             [ItemCategory.Firearm] = 1,
         };
-
-        /// <inheritdoc />
-        public override uint Id { get; set; } = 106;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -125,7 +119,7 @@ namespace ScpDeathmatch.CustomRoles
         protected override void OnChangingRole(ChangingRoleEventArgs ev)
         {
             base.OnChangingRole(ev);
-            if (!Check(ev.Player) || ev.NewRole == RoleType.None || ev.NewRole == RoleType.Spectator)
+            if (!Check(ev.Player) || ev.NewRole is RoleType.None or RoleType.Spectator)
                 return;
 
             Timing.CallDelayed(0.5f, () => ApplyItems(ev.Player));

@@ -10,20 +10,15 @@ namespace ScpDeathmatch.CustomRoles
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.API.Features.Attributes;
     using Exiled.CustomRoles.API.Features;
     using MEC;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
-    [CustomRole(RoleType.ClassD)]
     public class Recon : Subclass
     {
         private readonly Dictionary<Player, ZoneType> previousZones = new();
         private CoroutineHandle coroutineHandle;
-
-        /// <inheritdoc />
-        public override uint Id { get; set; } = 104;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;

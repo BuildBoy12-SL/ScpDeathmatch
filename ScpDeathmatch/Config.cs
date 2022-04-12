@@ -60,12 +60,6 @@ namespace ScpDeathmatch
         public CustomItemsConfig CustomItems { get; set; }
 
         /// <summary>
-        /// Gets or sets the configs for the custom roles.
-        /// </summary>
-        [YamlIgnore]
-        public CustomRolesConfig CustomRoles { get; set; }
-
-        /// <summary>
         /// Gets or sets the configs related to the custom decontamination sequence.
         /// </summary>
         [YamlIgnore]
@@ -112,6 +106,12 @@ namespace ScpDeathmatch
         /// </summary>
         [YamlIgnore]
         public StatsDatabaseConfig StatsDatabase { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configs for the custom roles.
+        /// </summary>
+        [YamlIgnore]
+        public SubclassesConfig Subclasses { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the <see cref="Managers.ZoneAnnouncer"/>.

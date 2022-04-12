@@ -7,7 +7,7 @@
 
 namespace ScpDeathmatch.Configs
 {
-    using Exiled.CustomItems.API;
+    using Exiled.CustomItems.API.Features;
     using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.CustomItems.Qed;
 
@@ -39,23 +39,11 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Registers all custom items.
         /// </summary>
-        public void Register()
-        {
-            Qed.Register();
-            ReconSwitch.Register();
-            SecondWind.Register();
-            WeaponToken.Register();
-        }
+        public void Register() => CustomItem.RegisterItems(overrideClass: this);
 
         /// <summary>
         /// Unregisters all custom items.
         /// </summary>
-        public void Unregister()
-        {
-            Qed.Unregister();
-            ReconSwitch.Unregister();
-            SecondWind.Unregister();
-            WeaponToken.Unregister();
-        }
+        public void Unregister() => CustomItem.UnregisterItems();
     }
 }

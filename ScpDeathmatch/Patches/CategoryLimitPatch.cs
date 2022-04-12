@@ -21,7 +21,7 @@ namespace ScpDeathmatch.Patches
     {
         private static bool Prefix(ItemCategory category, ReferenceHub player, ref sbyte __result)
         {
-            Scavenger scavenger = Plugin.Instance.Config.CustomRoles.Scavenger;
+            Scavenger scavenger = Plugin.Instance.Config.Subclasses.Scavenger;
             if (!scavenger.Check(Player.Get(player)))
                 return true;
 

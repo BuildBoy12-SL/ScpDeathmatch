@@ -16,13 +16,9 @@ namespace ScpDeathmatch.CustomRoles
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
-    [CustomRole(RoleType.ClassD)]
     public class Brute : Subclass
     {
         private readonly Dictionary<Player, CoroutineHandle> healthCoroutines = new();
-
-        /// <inheritdoc />
-        public override uint Id { get; set; } = 101;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 135;

@@ -15,13 +15,9 @@ namespace ScpDeathmatch.CustomRoles
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
-    [CustomRole(RoleType.ClassD)]
     public class Insurgent : Subclass
     {
         private CoroutineHandle respawnCoroutine;
-
-        /// <inheritdoc />
-        public override uint Id { get; set; } = 102;
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -56,6 +52,11 @@ namespace ScpDeathmatch.CustomRoles
         /// Gets or sets the role for players to respawn as.
         /// </summary>
         public RoleType RespawnRole { get; set; } = RoleType.ChaosRifleman;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether players of this subclass will be counted as alive when in Scp079 mode.
+        /// </summary>
+        public bool Count079Alive { get; set; } = false;
 
         /// <inheritdoc />
         [YamlIgnore]

@@ -11,19 +11,14 @@ namespace ScpDeathmatch.CustomRoles
     using System.ComponentModel;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
-    using Exiled.API.Features.Attributes;
     using Exiled.CustomRoles.API.Features;
     using GameCore;
     using MEC;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
-    [CustomRole(RoleType.ClassD)]
     public class Runner : Subclass
     {
-        /// <inheritdoc />
-        public override uint Id { get; set; } = 105;
-
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
 

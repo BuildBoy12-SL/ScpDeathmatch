@@ -29,6 +29,7 @@ namespace ScpDeathmatch
         private MicroHidHealing microHidHealing;
         private OmegaWarhead omegaWarhead;
         private RewardManager rewardManager;
+        private RoundManager roundManager;
         private RoundStatsManager roundStatsManager;
         private StatTracker statTracker;
         private SubclassSelectionManager subclassSelectionManager;
@@ -104,14 +105,17 @@ namespace ScpDeathmatch
             rewardManager = new RewardManager(this);
             rewardManager.Subscribe();
 
+            roundManager = new RoundManager(this);
+            roundManager.Subscribe();
+
             roundStatsManager = new RoundStatsManager(this);
             roundStatsManager.Subscribe();
 
             StatDatabase = new StatDatabase(this);
             StatDatabase.Open();
 
-            statTracker = new StatTracker(this);
-            statTracker.Subscribe();
+            // statTracker = new StatTracker(this);
+            // statTracker.Subscribe();
 
             subclassSelectionManager = new SubclassSelectionManager(this);
             subclassSelectionManager.Subscribe();
@@ -126,7 +130,7 @@ namespace ScpDeathmatch
             serverEvents.Subscribe();
 
             Config.CustomItems.Register();
-            Config.CustomRoles.Register();
+            Config.Subclasses.Register();
 
             base.OnEnabled();
         }
@@ -135,7 +139,7 @@ namespace ScpDeathmatch
         public override void OnDisabled()
         {
             Config.CustomItems.Unregister();
-            Config.CustomRoles.Unregister();
+            Config.Subclasses.Unregister();
 
             serverEvents?.Unsubscribe();
             serverEvents = null;
@@ -157,6 +161,9 @@ namespace ScpDeathmatch
 
             roundStatsManager?.Unsubscribe();
             roundStatsManager = null;
+
+            roundManager?.Unsubscribe();
+            roundManager = null;
 
             rewardManager?.Unsubscribe();
             rewardManager = null;

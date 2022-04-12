@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="CustomRolesConfig.cs" company="Build">
+// <copyright file="SubclassesConfig.cs" company="Build">
 // Copyright (c) Build. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
@@ -7,13 +7,12 @@
 
 namespace ScpDeathmatch.Configs
 {
-    using Exiled.CustomRoles.API;
     using ScpDeathmatch.CustomRoles;
 
     /// <summary>
     /// Handles configs related to custom roles.
     /// </summary>
-    public class CustomRolesConfig
+    public class SubclassesConfig
     {
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomRoles.Brute"/> class.
@@ -48,27 +47,11 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Registers all custom items.
         /// </summary>
-        public void Register()
-        {
-            Brute.Register();
-            Insurgent.Register();
-            Marksman.Register();
-            Recon.Register();
-            Runner.Register();
-            Scavenger.Register();
-        }
+        public void Register() => Subclass.RegisterSubclasses(this);
 
         /// <summary>
         /// Unregisters all custom items.
         /// </summary>
-        public void Unregister()
-        {
-            Brute.Unregister();
-            Insurgent.Unregister();
-            Marksman.Unregister();
-            Recon.Unregister();
-            Runner.Unregister();
-            Scavenger.Unregister();
-        }
+        public void Unregister() => Subclass.UnregisterSubclasses();
     }
 }
