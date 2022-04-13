@@ -9,6 +9,7 @@ namespace ScpDeathmatch.CustomItems.Qed
 {
     using System.Collections.Generic;
     using Exiled.API.Features;
+    using Exiled.API.Features.Attributes;
     using Exiled.API.Features.Spawn;
     using Exiled.CustomItems.API;
     using Exiled.CustomItems.API.Features;
@@ -17,6 +18,7 @@ namespace ScpDeathmatch.CustomItems.Qed
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
+    [CustomItem(ItemType.GrenadeFlash)]
     public class Qed : CustomGrenade
     {
         /// <inheritdoc />
