@@ -88,7 +88,7 @@ namespace ScpDeathmatch.CustomItems
             if (!Check(ev.Player.CurrentItem) || !ev.Door.IsOpen)
                 return;
 
-            if (cooldowns.TryGetValue(ev.Player, out float cooldown) && Time.time > cooldown)
+            if (cooldowns.TryGetValue(ev.Player, out float cooldown) && Time.time < cooldown)
                 return;
 
             ev.Door.Lock(GetDuration(ev.Door), DoorLockType.AdminCommand);
