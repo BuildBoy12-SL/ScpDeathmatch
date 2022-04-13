@@ -109,16 +109,13 @@ namespace ScpDeathmatch.Managers
 
         private void OnRoundStarted()
         {
-            Timing.CallDelayed(1f, () =>
+            foreach (KeyValuePair<Player, ItemType> kvp in selectedItem)
             {
-                foreach (KeyValuePair<Player, ItemType> kvp in selectedItem)
-                {
-                    if (plugin.Config.ClassSelection.Selections.TryGetValue(kvp.Value, out SubclassSelection selection))
-                        selection.GetSelection()?.AddRole(kvp.Key);
-                }
+                if (plugin.Config.ClassSelection.Selections.TryGetValue(kvp.Value, out SubclassSelection selection))
+                    selection.GetSelection()?.AddRole(kvp.Key);
+            }
 
-                selectedItem.Clear();
-            });
+            selectedItem.Clear();
         }
     }
 }

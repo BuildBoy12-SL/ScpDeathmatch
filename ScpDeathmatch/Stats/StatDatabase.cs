@@ -37,7 +37,7 @@ namespace ScpDeathmatch.Stats
 
             database = new LiteDatabase(Path.Combine(plugin.Config.StatsDatabase.DirectoryPath, plugin.Config.StatsDatabase.FileName));
             playerInfoCollection = database.GetCollection<PlayerInfo>();
-            playerInfoCollection.EnsureIndex(playerInfo => playerInfo.UserId, true);
+            playerInfoCollection.EnsureIndex(playerInfo => playerInfo.Id, true);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ScpDeathmatch.Stats
         /// <returns>Whether a matching <see cref="PlayerInfo"/> was successfully found.</returns>
         public bool TryGet(string userId, out PlayerInfo playerInfo)
         {
-            playerInfo = playerInfoCollection.FindOne(x => x.UserId == userId);
+            playerInfo = playerInfoCollection.FindOne(x => x.Id == userId);
             return playerInfo is not null;
         }
 

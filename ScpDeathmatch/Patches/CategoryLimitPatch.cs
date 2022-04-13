@@ -11,7 +11,7 @@ namespace ScpDeathmatch.Patches
     using Exiled.API.Features;
     using HarmonyLib;
     using InventorySystem.Configs;
-    using ScpDeathmatch.CustomRoles;
+    using ScpDeathmatch.Subclasses;
 
     /// <summary>
     /// Patches <see cref="InventoryLimits.GetCategoryLimit(ItemCategory,ReferenceHub)"/> to implement <see cref="Scavenger.ItemLimits"/>.

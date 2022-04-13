@@ -7,6 +7,8 @@
 
 namespace ScpDeathmatch.Stats.Models
 {
+    using LiteDB;
+
     /// <summary>
     /// Represents a player's information.
     /// </summary>
@@ -22,16 +24,21 @@ namespace ScpDeathmatch.Stats.Models
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerInfo"/> class.
         /// </summary>
-        /// <param name="userId"><inheritdoc cref="UserId"/></param>
-        public PlayerInfo(string userId)
+        /// <param name="id"><inheritdoc cref="Id"/></param>
+        /// <param name="roundKills"><inheritdoc cref="RoundKills"/></param>
+        /// <param name="kills"><inheritdoc cref="Kills"/></param>
+        [BsonCtor]
+        public PlayerInfo(string id, int roundKills = 0, int kills = 0)
         {
-            UserId = userId;
+            Id = id;
+            RoundKills = roundKills;
+            Kills = kills;
         }
 
         /// <summary>
-        /// Gets or sets the user id of the player.
+        /// Gets the id of the player.
         /// </summary>
-        public string UserId { get; set; }
+        public string Id { get; }
 
         /// <summary>
         /// Gets or sets the amount of kills the player has gotten in the current round.

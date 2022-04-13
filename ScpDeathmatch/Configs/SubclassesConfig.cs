@@ -7,7 +7,7 @@
 
 namespace ScpDeathmatch.Configs
 {
-    using ScpDeathmatch.CustomRoles;
+    using ScpDeathmatch.Subclasses;
 
     /// <summary>
     /// Handles configs related to custom roles.
@@ -15,32 +15,32 @@ namespace ScpDeathmatch.Configs
     public class SubclassesConfig
     {
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomRoles.Brute"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Brute"/> class.
         /// </summary>
         public Brute Brute { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomRoles.Insurgent"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Insurgent"/> class.
         /// </summary>
         public Insurgent Insurgent { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomRoles.Marksman"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Marksman"/> class.
         /// </summary>
         public Marksman Marksman { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomRoles.Recon"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Recon"/> class.
         /// </summary>
         public Recon Recon { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomRoles.Runner"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Runner"/> class.
         /// </summary>
         public Runner Runner { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomRoles.Scavenger"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Scavenger"/> class.
         /// </summary>
         public Scavenger Scavenger { get; set; } = new();
 

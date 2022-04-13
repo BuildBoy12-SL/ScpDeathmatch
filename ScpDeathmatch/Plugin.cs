@@ -114,8 +114,8 @@ namespace ScpDeathmatch
             StatDatabase = new StatDatabase(this);
             StatDatabase.Open();
 
-            // statTracker = new StatTracker(this);
-            // statTracker.Subscribe();
+            statTracker = new StatTracker(this);
+            statTracker.Subscribe();
 
             subclassSelectionManager = new SubclassSelectionManager(this);
             subclassSelectionManager.Subscribe();

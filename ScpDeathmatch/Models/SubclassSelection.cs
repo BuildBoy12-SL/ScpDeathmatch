@@ -7,8 +7,7 @@
 
 namespace ScpDeathmatch.Models
 {
-    using Exiled.CustomRoles.API.Features;
-    using ScpDeathmatch.CustomRoles;
+    using ScpDeathmatch.Subclasses;
 
     /// <summary>
     /// Represents a selection of a subclass.

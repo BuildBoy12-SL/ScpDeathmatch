@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.CustomRoles
+namespace ScpDeathmatch.Subclasses
 {
     using System;
     using System.Collections.Generic;
@@ -14,10 +14,8 @@ namespace ScpDeathmatch.CustomRoles
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
-    using Exiled.API.Features.Items;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
-    using MEC;
     using Mirror;
     using ScpDeathmatch.Abilities;
 
@@ -104,7 +102,6 @@ namespace ScpDeathmatch.CustomRoles
         protected override void RoleAdded(Player player)
         {
             SyncCategoryLimits(player, categoryLimits);
-            ApplyItems(player);
             base.RoleAdded(player);
         }
 
@@ -122,28 +119,20 @@ namespace ScpDeathmatch.CustomRoles
             if (!Check(ev.Player) || ev.NewRole is RoleType.None or RoleType.Spectator)
                 return;
 
-            Timing.CallDelayed(0.5f, () => ApplyItems(ev.Player));
-        }
-
-        private void ApplyItems(Player player)
-        {
-            for (int i = 0; i < player.Ammo.Count; i++)
+            for (int i = 0; i < ev.Ammo.Count; i++)
             {
-                ItemType key = player.Ammo.ElementAt(i).Key;
+                ItemType key = ev.Ammo.ElementAt(i).Key;
                 if (AdditionalStartingAmmo.TryGetValue(key.GetAmmoType(), out ushort ammo))
-                    player.Ammo[key] += ammo;
+                    ev.Ammo[key] += ammo;
             }
 
             if (!ReplaceJanitorKeycards)
                 return;
 
-            foreach (Item item in player.Items.ToList())
+            for (int i = 0; i < ev.Items.Count; i++)
             {
-                if (item.Type == ItemType.KeycardJanitor)
-                {
-                    player.RemoveItem(item);
-                    player.AddItem(ItemType.KeycardScientist);
-                }
+                if (ev.Items[i] == ItemType.KeycardJanitor)
+                    ev.Items[i] = ItemType.KeycardScientist;
             }
         }
 

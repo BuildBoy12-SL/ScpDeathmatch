@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.CustomRoles
+namespace ScpDeathmatch.Subclasses
 {
     using System.Collections.Generic;
     using Exiled.API.Enums;
