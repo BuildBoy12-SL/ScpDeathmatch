@@ -20,7 +20,7 @@ namespace ScpDeathmatch.KillRewards
     public class RewardManager
     {
         private readonly Plugin plugin;
-        private readonly Dictionary<Player, (DamageType, HitboxType?)> cachedHitboxes = new Dictionary<Player, (DamageType, HitboxType?)>();
+        private readonly Dictionary<Player, (DamageType, HitboxType?)> cachedHitboxes = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RewardManager"/> class.
@@ -28,7 +28,7 @@ namespace ScpDeathmatch.KillRewards
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
         public RewardManager(Plugin plugin) => this.plugin = plugin;
 
-        private static Dictionary<ItemType, DamageType> ItemConversion { get; } = new Dictionary<ItemType, DamageType>
+        private static Dictionary<ItemType, DamageType> ItemConversion { get; } = new()
         {
             { ItemType.GunCrossvec, DamageType.Crossvec },
             { ItemType.GunLogicer, DamageType.Logicer },
@@ -69,7 +69,6 @@ namespace ScpDeathmatch.KillRewards
             if (!plugin.Config.Rewards.IsEnabled ||
                 ev.Killer is null ||
                 !cachedHitboxes.TryGetValue(ev.Killer, out var tuple) ||
-                plugin.Config.Rewards is null ||
                 plugin.Config.Rewards.Rewards.Count == 0)
                 return;
 
