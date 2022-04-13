@@ -309,7 +309,6 @@ namespace ScpDeathmatch.CustomRoles
             if (CustomItem.TryGet(itemName, out CustomItem customItem))
             {
                 customItem.Give(player);
-
                 return true;
             }
 

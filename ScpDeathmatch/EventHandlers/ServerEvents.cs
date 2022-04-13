@@ -8,10 +8,8 @@
 namespace ScpDeathmatch.EventHandlers
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.Events.EventArgs;
     using ServerHandlers = Exiled.Events.Handlers.Server;
 
     /// <summary>
@@ -57,6 +55,9 @@ namespace ScpDeathmatch.EventHandlers
                 foreach (Door door in Door.Get(kvp.Key))
                     door.Lock(kvp.Value, DoorLockType.AdminCommand);
             }
+
+            foreach (Generator generator in Generator.List)
+                generator.CurrentTime = plugin.Config.DefaultGeneratorTime;
         }
     }
 }

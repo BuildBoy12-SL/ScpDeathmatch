@@ -36,6 +36,12 @@ namespace ScpDeathmatch
         };
 
         /// <summary>
+        /// Gets or sets the amount of time a generator will take to activate.
+        /// </summary>
+        [Description("The amount of time a generator will take to activate.")]
+        public short DefaultGeneratorTime { get; set; } = 60;
+
+        /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]

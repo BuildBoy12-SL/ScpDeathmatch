@@ -8,17 +8,15 @@
 namespace ScpDeathmatch.CustomRoles
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using Exiled.API.Features;
-    using Exiled.API.Features.Attributes;
     using Exiled.CustomRoles.API.Features;
-    using MEC;
+    using Exiled.Events.EventArgs;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     public class Insurgent : Subclass
     {
-        private CoroutineHandle respawnCoroutine;
-
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
 
@@ -44,8 +42,9 @@ namespace ScpDeathmatch.CustomRoles
         public override string DeadBadgeColor { get; set; } = "nickel";
 
         /// <summary>
-        /// Gets or sets the amount of time, in seconds, before this subclass can no longer respawn.
+        /// Gets or sets the amount of time, in seconds, before this subclass can no longer respawn as an Scp079.
         /// </summary>
+        [Description("The amount of time, in seconds, before this subclass can no longer respawn as an Scp079.")]
         public double RespawnCutoff { get; set; } = 450;
 
         /// <summary>
@@ -59,41 +58,45 @@ namespace ScpDeathmatch.CustomRoles
         public bool Count079Alive { get; set; } = false;
 
         /// <inheritdoc />
+        public override List<string> Inventory { get; set; } = new()
+        {
+            "Jamming Coin",
+        };
+
+        /// <inheritdoc />
         [YamlIgnore]
         public override List<CustomAbility> CustomAbilities { get; set; } = new();
 
         /// <inheritdoc />
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Scp079.GainingExperience += OnGainingExperience;
             base.SubscribeEvents();
         }
 
         /// <inheritdoc />
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Scp079.GainingExperience -= OnGainingExperience;
             base.UnsubscribeEvents();
         }
 
-        private void OnRoundStarted()
+        private void OnDied(DiedEventArgs ev)
         {
-            if (respawnCoroutine.IsRunning)
-                Timing.KillCoroutines(respawnCoroutine);
-
-            respawnCoroutine = Timing.RunCoroutine(RunRespawn());
+            if (Check(ev.Target) && Round.ElapsedTime.TotalSeconds < RespawnCutoff && !Warhead.IsDetonated && !Recontainer.Base._alreadyRecontained)
+                ev.Target.Role.Type = RoleType.Scp079;
         }
 
-        private IEnumerator<float> RunRespawn()
+        private void OnGainingExperience(GainingExperienceEventArgs ev)
         {
-            while (Round.ElapsedTime.TotalSeconds < RespawnCutoff)
-                yield return Timing.WaitForSeconds(1f);
+            if (!Check(ev.Player))
+                return;
 
-            foreach (Player player in TrackedPlayers)
-            {
-                if (player.IsDead)
-                    player.Role.Type = RespawnRole;
-            }
+            ev.IsAllowed = false;
+            if (ev.GainType is ExpGainType.DirectKill or ExpGainType.KillAssist or ExpGainType.PocketAssist)
+                ev.Player.Role.Type = RespawnRole;
         }
     }
 }
