@@ -8,7 +8,7 @@
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
-    using ScpDeathmatch.Models;
+    using ScpDeathmatch.Subclasses;
 
     /// <summary>
     /// Handles configs related to class selection in lobby.

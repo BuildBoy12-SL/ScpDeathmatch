@@ -17,6 +17,7 @@ namespace ScpDeathmatch
     using ScpDeathmatch.KillRewards;
     using ScpDeathmatch.Managers;
     using ScpDeathmatch.Stats;
+    using ScpDeathmatch.Subclasses;
 
     /// <inheritdoc />
     public class Plugin : Plugin<Config>

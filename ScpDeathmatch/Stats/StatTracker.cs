@@ -72,7 +72,7 @@ namespace ScpDeathmatch.Stats
                 plugin.StatDatabase.Upsert(targetInfo);
             }
 
-            if (ev.Killer == null || ev.Killer == ev.Target)
+            if (ev.Killer is null || ev.Killer == ev.Target)
                 return;
 
             if (plugin.StatDatabase.TryGet(ev.Killer, out PlayerInfo killerInfo))

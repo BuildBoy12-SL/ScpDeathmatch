@@ -5,10 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Models
+namespace ScpDeathmatch.Subclasses
 {
-    using ScpDeathmatch.Subclasses;
-
     /// <summary>
     /// Represents a selection of a subclass.
     /// </summary>

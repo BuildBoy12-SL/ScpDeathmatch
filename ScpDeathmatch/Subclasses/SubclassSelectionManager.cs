@@ -5,13 +5,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Managers
+namespace ScpDeathmatch.Subclasses
 {
     using System.Collections.Generic;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
-    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Manages the selection of subclasses at round start.

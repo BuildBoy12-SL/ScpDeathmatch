@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Abilities
+namespace ScpDeathmatch.Subclasses.Abilities
 {
     using System.Collections.Generic;
     using System.ComponentModel;

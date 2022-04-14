@@ -17,7 +17,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using Mirror;
-    using ScpDeathmatch.Abilities;
+    using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
     public class Scavenger : Subclass
