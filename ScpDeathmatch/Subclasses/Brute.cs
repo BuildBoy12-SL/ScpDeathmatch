@@ -10,9 +10,10 @@ namespace ScpDeathmatch.Subclasses
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Features;
-    using Exiled.API.Features.Attributes;
     using Exiled.CustomRoles.API.Features;
+    using Exiled.Events.EventArgs;
     using MEC;
+    using ScpDeathmatch.Models;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
@@ -21,7 +22,7 @@ namespace ScpDeathmatch.Subclasses
         private readonly Dictionary<Player, CoroutineHandle> healthCoroutines = new();
 
         /// <inheritdoc />
-        public override int MaxHealth { get; set; } = 135;
+        public override int MaxHealth { get; set; } = 100;
 
         /// <inheritdoc/>
         public override string Name { get; set; } = nameof(Brute);
@@ -50,6 +51,11 @@ namespace ScpDeathmatch.Subclasses
         [Description("The amount of time, in seconds, that should pass to be considered a tick.")]
         public float SecondsPerTick { get; set; } = 1f;
 
+        /// <summary>
+        /// Gets or sets the ahp settings.
+        /// </summary>
+        public ConfiguredAhp Ahp { get; set; } = new(50f, -2f, 0.7f);
+
         /// <inheritdoc />
         [YamlIgnore]
         public override List<CustomAbility> CustomAbilities { get; set; } = new();
@@ -69,6 +75,15 @@ namespace ScpDeathmatch.Subclasses
 
             healthCoroutines.Remove(player);
             base.RoleRemoved(player);
+        }
+
+        /// <inheritdoc />
+        protected override void OnChangingRole(ChangingRoleEventArgs ev)
+        {
+            if (Check(ev.Player))
+                Timing.CallDelayed(1f, () => ev.Player.AddAhp(Ahp.Limit, Ahp.Limit, Ahp.DecayRate, Ahp.Efficacy, 0f, true));
+
+            base.OnChangingRole(ev);
         }
 
         private IEnumerator<float> RunRegeneration(Player player)
