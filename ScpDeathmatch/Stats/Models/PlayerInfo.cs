@@ -54,5 +54,11 @@ namespace ScpDeathmatch.Stats.Models
         /// Gets or sets the total deaths of the player.
         /// </summary>
         public int Deaths { get; set; }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return "Round Kills: " + RoundKills + "\nTotal Kills: " + Kills + "\nDeaths: " + Deaths;
+        }
     }
 }

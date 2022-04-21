@@ -9,7 +9,9 @@ namespace ScpDeathmatch.Stats
 {
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.Stats.Components;
     using ScpDeathmatch.Stats.Models;
+    using UnityEngine;
 
     /// <summary>
     /// Tracks the stats of players.
@@ -59,6 +61,8 @@ namespace ScpDeathmatch.Stats
         private void OnDestroying(DestroyingEventArgs ev)
         {
             AddRoundKills(ev.Player);
+            if (ev.Player.GameObject.TryGetComponent(out StatComponent statComponent))
+                Object.Destroy(statComponent);
         }
 
         private void OnDied(DiedEventArgs ev)
@@ -86,6 +90,8 @@ namespace ScpDeathmatch.Stats
         {
             if (!plugin.StatDatabase.TryGet(ev.Player, out _))
                 plugin.StatDatabase.Upsert(new PlayerInfo(ev.Player.UserId));
+
+            ev.Player.GameObject.AddComponent<StatComponent>();
         }
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
