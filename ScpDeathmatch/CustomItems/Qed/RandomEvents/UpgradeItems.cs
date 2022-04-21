@@ -60,8 +60,6 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
                 if (ToUpgrade.Contains(itemPair.Value.ItemTypeId) &&
                     Scp914Upgrader.TryGetProcessor(itemPair.Value.ItemTypeId, out Scp914ItemProcessor processor))
                 {
-                    Action<ItemBase, Scp914KnobSetting> inventoryItemUpgraded = Scp914Upgrader.OnInventoryItemUpgraded;
-                    inventoryItemUpgraded?.Invoke(itemPair.Value, UpgradeSetting);
                     processor.OnInventoryItemUpgraded(UpgradeSetting, ev.Thrower.ReferenceHub, itemPair.Key);
                 }
             }
