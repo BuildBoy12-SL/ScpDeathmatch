@@ -54,7 +54,7 @@ namespace ScpDeathmatch.Subclasses
         /// <summary>
         /// Gets or sets the ahp settings.
         /// </summary>
-        public ConfiguredAhp Ahp { get; set; } = new(50f, -2f, 0.7f);
+        public ConfiguredAhp Ahp { get; set; } = new(0f, 50f, -2f, 0.7f, 0f, true);
 
         /// <inheritdoc />
         [YamlIgnore]
@@ -81,7 +81,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void OnChangingRole(ChangingRoleEventArgs ev)
         {
             if (Check(ev.Player))
-                Timing.CallDelayed(1f, () => ev.Player.AddAhp(Ahp.Limit, Ahp.Limit, Ahp.DecayRate, Ahp.Efficacy, 0f, true));
+                Timing.CallDelayed(1f, () => Ahp.AddTo(ev.Player));
 
             base.OnChangingRole(ev);
         }
