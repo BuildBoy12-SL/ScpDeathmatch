@@ -46,7 +46,8 @@ namespace ScpDeathmatch.HealthSystem
                 return;
 
             lastHurt = Time.time;
-            ev.Target.MaxHealth = (int)ev.Handler.DealtHealthDamage * (config.MaxHealthPercentage / 100);
+            ev.Target.MaxHealth -= (int)(ev.Amount * (config.MaxHealthPercentage / 100f));
+            Log.Warn(ev.Target.MaxHealth);
         }
 
         private IEnumerator<float> RunAttemptRegeneration()
@@ -58,7 +59,7 @@ namespace ScpDeathmatch.HealthSystem
                     continue;
 
                 if (player.GetEffectActive<Invigorated>() || lastHurt + config.RegenDelay < Time.time)
-                    player.Heal(player.MaxHealth * (config.RegenPercentage / 100));
+                    player.Heal(player.MaxHealth * (config.RegenPercentage / 100f));
             }
         }
     }
