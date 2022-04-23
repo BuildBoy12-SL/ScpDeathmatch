@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.HealthSystem
 {
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.HealthSystem.Components;
     using UnityEngine;
 
     /// <summary>
@@ -35,13 +36,13 @@ namespace ScpDeathmatch.HealthSystem
 
         private void OnDestroying(DestroyingEventArgs ev)
         {
-            if (ev.Player.GameObject.TryGetComponent(out RegenComponent regenComponent))
+            if (ev.Player.GameObject.TryGetComponent(out HealthComponent regenComponent))
                 Object.Destroy(regenComponent);
         }
 
         private void OnVerified(VerifiedEventArgs ev)
         {
-            ev.Player.GameObject.AddComponent<RegenComponent>();
+            ev.Player.GameObject.AddComponent<HealthComponent>();
         }
     }
 }

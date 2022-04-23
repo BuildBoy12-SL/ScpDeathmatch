@@ -33,8 +33,10 @@ namespace ScpDeathmatch.Stats.Components
             if (globalTimer > 2f)
             {
                 globalTimer = 0f;
+
+                string healthString = player.IsAlive ? "Max Health: " + player.MaxHealth : string.Empty;
                 if (ScpDeathmatch.Plugin.Instance.StatDatabase.TryGet(player, out PlayerInfo playerInfo))
-                    player.ShowManagedHint("<align=right>" + playerInfo + "</align>", 2.2f, true, DisplayLocation.Bottom);
+                    player.ShowManagedHint("<align=left>" + healthString + "</align>                                                                               <align=right>" + playerInfo + "</align>", 2.2f, true, DisplayLocation.Bottom);
             }
         }
     }

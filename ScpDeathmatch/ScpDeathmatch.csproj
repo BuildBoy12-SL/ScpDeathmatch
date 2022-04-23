@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="AdvancedHints, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="AdvancedHints">
           <HintPath>..\..\AdvancedHints\AdvancedHints\bin\Release\AdvancedHints.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" Private="false" />

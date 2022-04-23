@@ -1,11 +1,11 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegenComponent.cs" company="Build">
+// <copyright file="HealthComponent.cs" company="Build">
 // Copyright (c) Build. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.HealthSystem
+namespace ScpDeathmatch.HealthSystem.Components
 {
     using System.Collections.Generic;
     using CustomPlayerEffects;
@@ -18,7 +18,7 @@ namespace ScpDeathmatch.HealthSystem
     /// <summary>
     /// Handles the regeneration of players.
     /// </summary>
-    public class RegenComponent : MonoBehaviour
+    public class HealthComponent : MonoBehaviour
     {
         private CoroutineHandle coroutineHandle;
         private HealthConfig config;
