@@ -97,7 +97,7 @@ namespace ScpDeathmatch
             disarmingLivesManager = new DisarmingLivesManager(this);
             disarmingLivesManager.Subscribe();
 
-            healthManager = new HealthManager(this);
+            healthManager = new HealthManager();
             healthManager.Subscribe();
 
             microHidHealing = new MicroHidHealing(this);

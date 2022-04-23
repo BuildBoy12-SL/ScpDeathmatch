@@ -15,14 +15,6 @@ namespace ScpDeathmatch.HealthSystem
     /// </summary>
     public class HealthManager
     {
-        private readonly Plugin plugin;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HealthManager"/> class.
-        /// </summary>
-        /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public HealthManager(Plugin plugin) => this.plugin = plugin;
-
         /// <summary>
         /// Subscribes to all required events.
         /// </summary>
