@@ -10,8 +10,8 @@ namespace ScpDeathmatch.HealthSystem
     using System.Collections.Generic;
     using CustomPlayerEffects;
     using Exiled.API.Features;
-    using Exiled.Events.EventArgs;
     using MEC;
+    using PlayerStatsSystem;
     using ScpDeathmatch.Configs;
     using UnityEngine;
 
@@ -30,23 +30,23 @@ namespace ScpDeathmatch.HealthSystem
             player = Player.Get(gameObject);
             config = Plugin.Instance.Config.Health;
             coroutineHandle = Timing.RunCoroutine(RunAttemptRegeneration());
-
-            Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            PlayerStats.OnAnyPlayerDamaged += OnAnyPlayerDamaged;
         }
 
         private void OnDestroy()
         {
-            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            PlayerStats.OnAnyPlayerDamaged -= OnAnyPlayerDamaged;
             Timing.KillCoroutines(coroutineHandle);
         }
 
-        private void OnHurting(HurtingEventArgs ev)
+        private void OnAnyPlayerDamaged(ReferenceHub target, DamageHandlerBase damageHandler)
         {
-            if (ev.Target != player)
+            if (target != player.ReferenceHub || damageHandler is not StandardDamageHandler standardDamageHandler)
                 return;
 
+            float amount = standardDamageHandler.DealtHealthDamage != 0 ? standardDamageHandler.DealtHealthDamage : standardDamageHandler.Damage;
             lastHurt = Time.time;
-            ev.Target.MaxHealth -= (int)(ev.Amount * (config.MaxHealthPercentage / 100f));
+            player.MaxHealth -= (int)(amount * (config.MaxHealthPercentage / 100f));
         }
 
         private IEnumerator<float> RunAttemptRegeneration()
