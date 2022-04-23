@@ -33,11 +33,16 @@ namespace ScpDeathmatch.HealthSystem.Patches
             int offset = -1;
             int index = newInstructions.FindIndex(instruction => instruction.OperandIs(Method(typeof(HealthStat), nameof(HealthStat.ServerHeal), new[] { typeof(float) }))) + offset;
 
+            LocalBuilder player = generator.DeclareLocal(typeof(Player));
+
             newInstructions.InsertRange(index, new[]
             {
-                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldarg_0).MoveLabelsFrom(newInstructions[index]),
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ItemBase), nameof(ItemBase.Owner))),
                 new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
+                new CodeInstruction(OpCodes.Stloc_S, player.LocalIndex),
+                new CodeInstruction(OpCodes.Ldloc_S, player.LocalIndex),
+
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ItemBase), nameof(ItemBase.Owner))),
                 new CodeInstruction(OpCodes.Ldfld, Field(typeof(ReferenceHub), nameof(ReferenceHub.characterClassManager))),
@@ -49,9 +54,7 @@ namespace ScpDeathmatch.HealthSystem.Patches
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp500Ahp))),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ItemBase), nameof(ItemBase.Owner))),
-                new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
+                new CodeInstruction(OpCodes.Ldloc_S, player.LocalIndex),
                 new CodeInstruction(OpCodes.Callvirt, Method(typeof(ConfiguredAhp), nameof(ConfiguredAhp.AddTo), new[] { typeof(Player) })),
             });
 
