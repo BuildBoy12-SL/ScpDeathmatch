@@ -47,7 +47,6 @@ namespace ScpDeathmatch.HealthSystem
 
             lastHurt = Time.time;
             ev.Target.MaxHealth -= (int)(ev.Amount * (config.MaxHealthPercentage / 100f));
-            Log.Warn(ev.Target.MaxHealth);
         }
 
         private IEnumerator<float> RunAttemptRegeneration()
