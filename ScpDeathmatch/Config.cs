@@ -90,6 +90,18 @@ namespace ScpDeathmatch
         public HealingMicroConfig HealingMicro { get; set; }
 
         /// <summary>
+        /// Gets or sets the configs related to the health system.
+        /// </summary>
+        [YamlIgnore]
+        public HealthConfig Health { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configs related to medical items.
+        /// </summary>
+        [YamlIgnore]
+        public MedicalItemsConfig MedicalItems { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs related to the omega warhead.
         /// </summary>
         [YamlIgnore]

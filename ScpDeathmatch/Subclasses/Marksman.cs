@@ -69,7 +69,13 @@ namespace ScpDeathmatch.Subclasses
         /// Gets or sets the multiplier for damage dealt with guns.
         /// </summary>
         [Description("The multiplier for damage dealt with guns.")]
-        public float DamageMultiplier { get; set; } = 1.25f;
+        public float DamageMultiplier { get; set; } = 1f;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Scp1853's stamina penalty will be ignored.
+        /// </summary>
+        [Description("Whether Scp1853's stamina penalty will be ignored.")]
+        public bool Scp1853StaminaImmune { get; set; } = true;
 
         /// <inheritdoc />
         [YamlIgnore]

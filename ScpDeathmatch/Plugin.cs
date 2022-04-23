@@ -14,6 +14,7 @@ namespace ScpDeathmatch
     using RemoteAdmin;
     using ScpDeathmatch.Decontamination;
     using ScpDeathmatch.EventHandlers;
+    using ScpDeathmatch.HealthSystem;
     using ScpDeathmatch.KillRewards;
     using ScpDeathmatch.Managers;
     using ScpDeathmatch.Stats;
@@ -27,6 +28,7 @@ namespace ScpDeathmatch
         private ArmoryPitManager armoryPitManager;
         private DecontaminationManager decontaminationManager;
         private DisarmingLivesManager disarmingLivesManager;
+        private HealthManager healthManager;
         private MicroHidHealing microHidHealing;
         private OmegaWarhead omegaWarhead;
         private RewardManager rewardManager;
@@ -94,6 +96,9 @@ namespace ScpDeathmatch
 
             disarmingLivesManager = new DisarmingLivesManager(this);
             disarmingLivesManager.Subscribe();
+
+            healthManager = new HealthManager(this);
+            healthManager.Subscribe();
 
             microHidHealing = new MicroHidHealing(this);
             microHidHealing.Subscribe();
@@ -176,6 +181,9 @@ namespace ScpDeathmatch
 
             microHidHealing?.Unsubscribe();
             microHidHealing = null;
+
+            healthManager?.Unsubscribe();
+            healthManager = null;
 
             disarmingLivesManager?.Unsubscribe();
             disarmingLivesManager = null;
