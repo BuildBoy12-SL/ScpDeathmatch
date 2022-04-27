@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.Subclasses
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
@@ -37,6 +38,7 @@ namespace ScpDeathmatch.Subclasses
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.TogglingFlashlight += OnTogglingFlashlight;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         }
 
@@ -51,6 +53,7 @@ namespace ScpDeathmatch.Subclasses
             Exiled.Events.Handlers.Player.Shooting -= OnShooting;
             Exiled.Events.Handlers.Player.TogglingFlashlight -= OnTogglingFlashlight;
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         }
 
@@ -106,12 +109,29 @@ namespace ScpDeathmatch.Subclasses
                 ev.IsAllowed = false;
         }
 
+        private void OnVerified(VerifiedEventArgs ev)
+        {
+            if (!Round.IsStarted)
+                return;
+
+            plugin.Config.ClassSelection.Selections.Values.ElementAt(UnityEngine.Random.Range(0, plugin.Config.ClassSelection.Selections.Values.Count)).GetSelection()?.AddRole(ev.Player);
+        }
+
         private void OnRoundStarted()
         {
-            foreach (KeyValuePair<Player, ItemType> kvp in selectedItem)
+            if (plugin.Config.ClassSelection.Selections is null || plugin.Config.ClassSelection.Selections.Count == 0)
+                return;
+
+            foreach (Player player in Player.List)
             {
-                if (plugin.Config.ClassSelection.Selections.TryGetValue(kvp.Value, out SubclassSelection selection))
-                    selection.GetSelection()?.AddRole(kvp.Key);
+                if (selectedItem.TryGetValue(player, out ItemType item) &&
+                    plugin.Config.ClassSelection.Selections.TryGetValue(item, out SubclassSelection selection))
+                {
+                    selection.GetSelection()?.AddRole(player);
+                    continue;
+                }
+
+                plugin.Config.ClassSelection.Selections.Values.ElementAt(UnityEngine.Random.Range(0, plugin.Config.ClassSelection.Selections.Values.Count)).GetSelection()?.AddRole(player);
             }
 
             selectedItem.Clear();

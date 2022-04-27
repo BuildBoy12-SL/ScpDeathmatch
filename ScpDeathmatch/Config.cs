@@ -147,11 +147,11 @@ namespace ScpDeathmatch
 
             foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
+                if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
+                    continue;
+
                 try
                 {
-                    if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
-                        continue;
-
                     string path = Path.Combine(Folder, property.Name + ".yml");
                     object value = File.Exists(path)
                         ? Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType)

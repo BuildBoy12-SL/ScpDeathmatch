@@ -57,7 +57,7 @@ namespace ScpDeathmatch.EventHandlers
             }
 
             foreach (Generator generator in Generator.List)
-                generator.CurrentTime = plugin.Config.DefaultGeneratorTime;
+                generator.ActivationTime = plugin.Config.DefaultGeneratorTime;
         }
     }
 }

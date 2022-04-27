@@ -9,6 +9,7 @@ namespace ScpDeathmatch.Configs
 {
     using System.IO;
     using Exiled.API.Features;
+    using ScpDeathmatch.Stats.Commands;
 
     /// <summary>
     /// Handles configs related to the stats database.
@@ -24,5 +25,10 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets the name of the file.
         /// </summary>
         public string FileName { get; set; } = "Stats.db";
+
+        /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="Stats.Commands.ClearStatsCommand"/> class.
+        /// </summary>
+        public ClearStatsCommand ClearStatsCommand { get; set; } = new();
     }
 }

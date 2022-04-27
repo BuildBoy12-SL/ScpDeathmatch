@@ -205,12 +205,14 @@ namespace ScpDeathmatch
         /// <inheritdoc />
         public override void OnRegisteringCommands()
         {
+            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
         }
 
         /// <inheritdoc />
         public override void OnUnregisteringCommands()
         {
+            CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
         }
     }

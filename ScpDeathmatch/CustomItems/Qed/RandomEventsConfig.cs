@@ -37,6 +37,14 @@ namespace ScpDeathmatch.CustomItems.Qed
         };
 
         /// <summary>
+        /// Gets or sets a collection of the <see cref="RandomEvents.RandomTeleport"/> event.
+        /// </summary>
+        public List<RandomTeleport> RandomTeleport { get; set; } = new()
+        {
+            new RandomTeleport(),
+        };
+
+        /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.SpawnGrenade"/> event.
         /// </summary>
         public List<SpawnGrenade> SpawnGrenade { get; set; } = new()
@@ -105,6 +113,7 @@ namespace ScpDeathmatch.CustomItems.Qed
             selectableEvents.Clear();
             selectableEvents.AddRange(LockRoom.Where(x => x.IsEnabled));
             selectableEvents.AddRange(PowerOutage.Where(x => x.IsEnabled));
+            selectableEvents.AddRange(RandomTeleport.Where(x => x.IsEnabled));
             selectableEvents.AddRange(SpawnGrenade.Where(x => x.IsEnabled));
             selectableEvents.AddRange(SpawnItems.Where(x => x.IsEnabled));
             selectableEvents.AddRange(Scp018.Where(x => x.IsEnabled));

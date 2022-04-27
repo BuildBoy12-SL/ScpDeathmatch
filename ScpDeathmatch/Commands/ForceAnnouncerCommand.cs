@@ -26,7 +26,7 @@ namespace ScpDeathmatch.Commands
         /// <summary>
         /// Gets or sets the permission required to execute this command.
         /// </summary>
-        public string RequiredPermission { get; set; } = "ca.announcer";
+        public string RequiredPermission { get; set; } = "sd.announcer";
 
         /// <summary>
         /// Gets or sets the response to send to the sender when they lack the <see cref="RequiredPermission"/>.

@@ -37,6 +37,11 @@ namespace ScpDeathmatch.Configs
         public SecondWind SecondWind { get; set; } = new();
 
         /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="CustomItems.StubbyRevolver"/> class.
+        /// </summary>
+        public StubbyRevolver StubbyRevolver { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.WeaponToken"/> class.
         /// </summary>
         public WeaponToken WeaponToken { get; set; } = new();

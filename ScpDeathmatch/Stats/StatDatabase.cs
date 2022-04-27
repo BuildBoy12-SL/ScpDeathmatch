@@ -72,5 +72,11 @@ namespace ScpDeathmatch.Stats
 
         /// <inheritdoc cref="ILiteCollection{T}.Upsert(T)"/>
         public void Upsert(PlayerInfo playerInfo) => playerInfoCollection.Upsert(playerInfo);
+
+        /// <summary>
+        /// Resets the stats of the specified player info.
+        /// </summary>
+        /// <param name="playerInfo">The info to reset.</param>
+        public void Reset(PlayerInfo playerInfo) => Upsert(new PlayerInfo(playerInfo.Id));
     }
 }

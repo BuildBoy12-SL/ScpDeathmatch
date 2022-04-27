@@ -65,6 +65,9 @@ namespace ScpDeathmatch.Decontamination.Models
         {
             foreach (Player player in Player.List)
             {
+                if (player.SessionVariables.ContainsKey("IsNPC"))
+                    continue;
+
                 float y = player.Position.y;
                 if (IsGlobal || (y < 200f && y > -200.0f))
                 {
