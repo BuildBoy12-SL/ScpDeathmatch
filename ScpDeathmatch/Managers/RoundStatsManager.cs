@@ -77,7 +77,7 @@ namespace ScpDeathmatch.Managers
 
         private string FormatBroadcast()
         {
-            Player winner = Player.Get(player => player.IsAlive).FirstOrDefault();
+            Player winner = Player.Get(player => player.IsAlive && !(plugin.Config.Subclasses.Insurgent.Check(player) && player.Role.Type == RoleType.Scp079)).FirstOrDefault();
             string winnerName = winner?.DisplayNickname ?? winner?.Nickname;
             string firstBloodName = firstBlood?.DisplayNickname ?? firstBlood?.Nickname;
 
