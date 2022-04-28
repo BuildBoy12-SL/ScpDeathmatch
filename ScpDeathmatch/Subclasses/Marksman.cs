@@ -10,6 +10,7 @@ namespace ScpDeathmatch.Subclasses
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Enums;
+    using Exiled.API.Extensions;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.Models;
@@ -19,6 +20,7 @@ namespace ScpDeathmatch.Subclasses
     /// <inheritdoc />
     public class Marksman : Subclass
     {
+        private readonly List<int> grantedScp1853 = new();
         private float staminaOnKill = 20f;
 
         /// <inheritdoc />
@@ -66,6 +68,12 @@ namespace ScpDeathmatch.Subclasses
         };
 
         /// <summary>
+        /// Gets or sets a value indicating whether the player's maximum health should be restored on kill.
+        /// </summary>
+        [Description("Whether the player's maximum health should be restored on kill.")]
+        public bool ResetMaxHealthOnKill { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the multiplier for damage dealt with guns.
         /// </summary>
         [Description("The multiplier for damage dealt with guns.")]
@@ -77,6 +85,11 @@ namespace ScpDeathmatch.Subclasses
         [Description("Whether Scp1853's stamina penalty will be ignored.")]
         public bool Scp1853StaminaImmune { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the player will be granted an <see cref="ItemType.SCP1853"/> when they pick up a gun for the first time.
+        /// </summary>
+        public bool GiveScp1853OnFirstWeapon { get; set; } = true;
+
         /// <inheritdoc />
         [YamlIgnore]
         public override List<CustomAbility> CustomAbilities { get; set; } = new();
@@ -86,6 +99,8 @@ namespace ScpDeathmatch.Subclasses
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.PickingUpItem += OnPickingItem;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             base.SubscribeEvents();
         }
 
@@ -94,6 +109,8 @@ namespace ScpDeathmatch.Subclasses
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingItem;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             base.UnsubscribeEvents();
         }
 
@@ -106,6 +123,9 @@ namespace ScpDeathmatch.Subclasses
             ev.Killer.Stamina.RemainingStamina = Mathf.Clamp(ev.Killer.Stamina.RemainingStamina + (StaminaOnKill / 100f), 0f, 1f);
             foreach (ConfiguredEffect effect in EffectsOnKill)
                 effect.Apply(ev.Killer);
+
+            if (ResetMaxHealthOnKill)
+                ev.Killer.MaxHealth = ev.Killer.ReferenceHub.characterClassManager.CurRole.maxHP;
         }
 
         private void OnHurting(HurtingEventArgs ev)
@@ -113,5 +133,16 @@ namespace ScpDeathmatch.Subclasses
             if (ev.Attacker is not null && Check(ev.Attacker))
                 ev.Amount *= DamageMultiplier;
         }
+
+        private void OnPickingItem(PickingUpItemEventArgs ev)
+        {
+            if (!GiveScp1853OnFirstWeapon || !Check(ev.Player) || grantedScp1853.Contains(ev.Player.Id) || !ev.Pickup.Type.IsWeapon())
+                return;
+
+            ev.Player.AddItem(ItemType.SCP1853);
+            grantedScp1853.Add(ev.Player.Id);
+        }
+
+        private void OnWaitingForPlayers() => grantedScp1853.Clear();
     }
 }

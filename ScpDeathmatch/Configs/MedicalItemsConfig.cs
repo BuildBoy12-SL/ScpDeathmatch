@@ -22,6 +22,12 @@ namespace ScpDeathmatch.Configs
         public bool AdrenalineAhp { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets the intensity of the movement speed effect applied by adrenaline.
+        /// </summary>
+        [Description("The intensity of the movement speed effect applied by adrenaline.")]
+        public byte AdrenalineMovementBoost { get; set; } = 20;
+
+        /// <summary>
         /// Gets or sets a value indicating whether painkillers should keep their regeneration.
         /// </summary>
         [Description("Whether painkillers should keep their regeneration.")]
