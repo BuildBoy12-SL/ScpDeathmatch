@@ -14,7 +14,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomRoles.API.Features;
     using GameCore;
     using MEC;
-    using YamlDotNet.Serialization;
+    using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
     public class Runner : Subclass
@@ -50,8 +50,10 @@ namespace ScpDeathmatch.Subclasses
         public float StaminaMultiplier { get; set; } = 1.2f;
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        {
+            new Tantrum(),
+        };
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)

@@ -38,6 +38,7 @@ namespace ScpDeathmatch
         private SubclassSelectionManager subclassSelectionManager;
         private TimedCommandHandler timedCommandHandler;
 
+        private PlayerEvents playerEvents;
         private ServerEvents serverEvents;
 
         /// <summary>
@@ -132,6 +133,9 @@ namespace ScpDeathmatch
             ZoneAnnouncer = new ZoneAnnouncer(this);
             ZoneAnnouncer.Subscribe();
 
+            playerEvents = new PlayerEvents(this);
+            playerEvents.Subscribe();
+
             serverEvents = new ServerEvents(this);
             serverEvents.Subscribe();
 
@@ -149,6 +153,9 @@ namespace ScpDeathmatch
 
             serverEvents?.Unsubscribe();
             serverEvents = null;
+
+            playerEvents?.Unsubscribe();
+            playerEvents = null;
 
             ZoneAnnouncer?.Unsubscribe();
             ZoneAnnouncer = null;

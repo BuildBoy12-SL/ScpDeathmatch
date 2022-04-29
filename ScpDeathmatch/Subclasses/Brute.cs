@@ -14,7 +14,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.Events.EventArgs;
     using MEC;
     using ScpDeathmatch.Models;
-    using YamlDotNet.Serialization;
+    using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
     public class Brute : Subclass
@@ -56,9 +56,16 @@ namespace ScpDeathmatch.Subclasses
         /// </summary>
         public ConfiguredAhp Ahp { get; set; } = new(0f, 50f, -2f, 0.7f, 0f, true);
 
+        /// <summary>
+        /// Gets or sets a value indicating whether brutes will bypass having their max hp reduced when they take damage.
+        /// </summary>
+        public bool IgnoreMaxHpReduction { get; set; } = true;
+
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        {
+            new BreakDoor(),
+        };
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)

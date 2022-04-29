@@ -42,6 +42,12 @@ namespace ScpDeathmatch
         public short DefaultGeneratorTime { get; set; } = 60;
 
         /// <summary>
+        /// Gets or sets a value indicating whether players will drop active Scp207 and Scp1853 effects as items when they die.
+        /// </summary>
+        [Description("Whether players will drop active Scp207 and Scp1853 effects as items when they die.")]
+        public bool DropEffectsOnDeath { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]

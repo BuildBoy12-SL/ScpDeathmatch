@@ -17,6 +17,11 @@ namespace ScpDeathmatch.Configs
     public class CustomItemsConfig
     {
         /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="CustomItems.ColaCoin"/> class.
+        /// </summary>
+        public ColaCoin ColaCoin { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.JammingCoin"/> class.
         /// </summary>
         public JammingCoin JammingCoin { get; set; } = new();

@@ -130,6 +130,23 @@ namespace ScpDeathmatch.Subclasses
         }
 
         /// <summary>
+        /// Gets all of the subclasses a player has attached.
+        /// </summary>
+        /// <param name="player">The player to check.</param>
+        /// <returns>A collection of subclasses that the player has.</returns>
+        public static ReadOnlyCollection<Subclass> GetSubclasses(Player player)
+        {
+            List<Subclass> subclassList = new List<Subclass>();
+            foreach (Subclass subclass in Registered)
+            {
+                if (subclass.Check(player))
+                    subclassList.Add(subclass);
+            }
+
+            return subclassList.AsReadOnly();
+        }
+
+        /// <summary>
         /// Tries to register this subclass.
         /// </summary>
         /// <returns>True if the subclass registered properly.</returns>

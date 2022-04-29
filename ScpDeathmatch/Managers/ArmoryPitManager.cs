@@ -59,7 +59,7 @@ namespace ScpDeathmatch.Managers
                 ev.Player.Inventory.SendItemsNextFrame = true;
             }
 
-            Pickup pickup = CustomItem.TryGet(ev.Item, out CustomItem customItem) ? customItem.Spawn(ev.Player.Position) : ev.Item.Spawn(ev.Player.Position);
+            Pickup pickup = CustomItem.TryGet(ev.Item, out CustomItem customItem) ? customItem.Spawn(ev.Player.Position, (Player)null) : ev.Item.Spawn(ev.Player.Position);
             ThrowItem(ev, pickup);
             Timing.RunCoroutine(RunCheck(ev.Player, pickup));
         }

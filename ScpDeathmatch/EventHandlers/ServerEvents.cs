@@ -51,10 +51,7 @@ namespace ScpDeathmatch.EventHandlers
         private void OnRoundStarted()
         {
             foreach (KeyValuePair<DoorType, float> kvp in plugin.Config.DoorLocks)
-            {
-                foreach (Door door in Door.Get(kvp.Key))
-                    door.Lock(kvp.Value, DoorLockType.AdminCommand);
-            }
+                Door.Get(kvp.Key)?.Lock(kvp.Value, DoorLockType.AdminCommand);
 
             foreach (Generator generator in Generator.List)
                 generator.ActivationTime = plugin.Config.DefaultGeneratorTime;

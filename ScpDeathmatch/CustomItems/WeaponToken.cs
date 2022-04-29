@@ -133,7 +133,7 @@ namespace ScpDeathmatch.CustomItems
                 return;
 
             ev.Item.Destroy();
-            Spawn(ev.OutputPosition);
+            Spawn(ev.OutputPosition, (Player)null);
         }
 
         private void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
@@ -157,11 +157,7 @@ namespace ScpDeathmatch.CustomItems
                 return;
 
             player.RemoveItem(item);
-
-            if (!TryGet(player, out IEnumerable<CustomItem> _))
-                Give(player);
-            else
-                Spawn(outputPosition);
+            Give(player);
         }
     }
 }

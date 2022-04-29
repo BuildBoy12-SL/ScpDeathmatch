@@ -41,11 +41,17 @@ namespace ScpDeathmatch.HealthSystem.Components
 
         private void OnAnyPlayerDamaged(ReferenceHub target, DamageHandlerBase damageHandler)
         {
-            if (target != player.ReferenceHub || damageHandler is not StandardDamageHandler standardDamageHandler)
+            if (target != player.ReferenceHub)
+                return;
+
+            lastHurt = Time.time;
+            if (damageHandler is not StandardDamageHandler standardDamageHandler)
+                return;
+
+            if (Plugin.Instance.Config.Subclasses.Brute.Check(player) && Plugin.Instance.Config.Subclasses.Brute.IgnoreMaxHpReduction)
                 return;
 
             float amount = standardDamageHandler.DealtHealthDamage != 0 ? standardDamageHandler.DealtHealthDamage : standardDamageHandler.Damage;
-            lastHurt = Time.time;
             player.MaxHealth -= (int)(amount * (config.MaxHealthPercentage / 100f));
         }
 
