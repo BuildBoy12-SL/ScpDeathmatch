@@ -11,6 +11,7 @@ namespace ScpDeathmatch.CustomItems.Qed
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using System.Reflection;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.CustomItems.Qed.Models;
     using ScpDeathmatch.CustomItems.Qed.RandomEvents;
@@ -126,13 +127,17 @@ namespace ScpDeathmatch.CustomItems.Qed
         public void Reload()
         {
             selectableEvents.Clear();
-            selectableEvents.AddRange(LockRoom.Where(x => x.IsEnabled));
-            selectableEvents.AddRange(PowerOutage.Where(x => x.IsEnabled));
-            selectableEvents.AddRange(RandomTeleport.Where(x => x.IsEnabled));
-            selectableEvents.AddRange(SpawnGrenade.Where(x => x.IsEnabled));
-            selectableEvents.AddRange(SpawnItems.Where(x => x.IsEnabled));
-            selectableEvents.AddRange(Scp018.Where(x => x.IsEnabled));
-            selectableEvents.AddRange(UpgradeItems.Where(x => x.IsEnabled));
+            foreach (PropertyInfo propertyInfo in GetType().GetProperties())
+            {
+                if (propertyInfo.GetValue(this) is not IEnumerable<IRandomEvent> toAdd)
+                    continue;
+
+                foreach (IRandomEvent randomEvent in toAdd)
+                {
+                    if (randomEvent.IsEnabled)
+                        selectableEvents.Add(randomEvent);
+                }
+            }
 
             eventChanceCurve = new AnimationCurve();
             foreach (KeyValuePair<float, float> kvp in WeightCurve)
