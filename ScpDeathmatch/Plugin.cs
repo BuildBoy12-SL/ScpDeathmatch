@@ -17,6 +17,7 @@ namespace ScpDeathmatch
     using ScpDeathmatch.HealthSystem;
     using ScpDeathmatch.KillRewards;
     using ScpDeathmatch.Managers;
+    using ScpDeathmatch.Patches.Manual;
     using ScpDeathmatch.Stats;
     using ScpDeathmatch.Subclasses;
 
@@ -88,6 +89,7 @@ namespace ScpDeathmatch
 
             harmony = new Harmony($"deathMatch.{DateTime.UtcNow.Ticks}");
             harmony.PatchAll();
+            PatchManual();
 
             armoryPitManager = new ArmoryPitManager(this);
             armoryPitManager.Subscribe();
@@ -221,6 +223,15 @@ namespace ScpDeathmatch
         {
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
+        }
+
+        private void PatchManual()
+        {
+            foreach (Type type in Assembly.GetTypes())
+            {
+                if (type.GetInterfaces().Contains(typeof(IManualPatch)))
+                    ((IManualPatch)Activator.CreateInstance(type)).Patch(harmony);
+            }
         }
     }
 }

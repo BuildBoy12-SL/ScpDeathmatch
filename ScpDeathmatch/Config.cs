@@ -168,7 +168,8 @@ namespace ScpDeathmatch
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Error while attempting to reload config file '{property.Name}':\n{e.Message}");
+                    Log.Error($"Error while attempting to reload config file '{property.Name}', defaults will be loaded instead!\n{e.Message}");
+                    property.SetValue(this, Activator.CreateInstance(property.PropertyType));
                 }
             }
         }
