@@ -7,8 +7,11 @@
 
 namespace ScpDeathmatch.CustomItems.Qed
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
+    using Exiled.Events.EventArgs;
     using ScpDeathmatch.CustomItems.Qed.Models;
     using ScpDeathmatch.CustomItems.Qed.RandomEvents;
     using UnityEngine;
@@ -19,6 +22,18 @@ namespace ScpDeathmatch.CustomItems.Qed
     public class RandomEventsConfig
     {
         private readonly List<IRandomEvent> selectableEvents = new();
+        private AnimationCurve eventChanceCurve = new();
+
+        /// <summary>
+        /// Gets or sets the list of distance to weight pairs that determines the chances of random events being triggered.
+        /// </summary>
+        [Description("The list of distance to weight pairs that determines the chances of random events being triggered.")]
+        public Dictionary<float, float> WeightCurve { get; set; } = new()
+        {
+            { 0f, 1f },
+            { 15f, 0f },
+            { 30f, -1f },
+        };
 
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.LockRoom"/> event.
@@ -118,12 +133,26 @@ namespace ScpDeathmatch.CustomItems.Qed
             selectableEvents.AddRange(SpawnItems.Where(x => x.IsEnabled));
             selectableEvents.AddRange(Scp018.Where(x => x.IsEnabled));
             selectableEvents.AddRange(UpgradeItems.Where(x => x.IsEnabled));
+
+            eventChanceCurve = new AnimationCurve();
+            foreach (KeyValuePair<float, float> kvp in WeightCurve)
+                eventChanceCurve.AddKey(kvp.Key, kvp.Value);
         }
 
         /// <summary>
         /// Finds a random event from the enabled events.
         /// </summary>
+        /// <param name="ev">The explosion that initiated the random event.</param>
         /// <returns>The found event, or null if there are no enabled events.</returns>
-        public IRandomEvent FindRandom() => selectableEvents.IsEmpty() ? null : selectableEvents[Random.Range(0, selectableEvents.Count)];
+        public IRandomEvent FindRandom(ExplodingGrenadeEventArgs ev)
+        {
+            if (selectableEvents.IsEmpty())
+                return null;
+
+            float distance = Vector3.Distance(ev.Thrower.Position, ev.Grenade.transform.position);
+            float evaluatedWeight = eventChanceCurve.Evaluate(distance);
+            List<IRandomEvent> randomEvents = selectableEvents.Where(randomEvent => Math.Abs(randomEvent.Weight - evaluatedWeight) < 0.5f).ToList();
+            return randomEvents.IsEmpty() ? null : randomEvents[UnityEngine.Random.Range(0, randomEvents.Count)];
+        }
     }
 }

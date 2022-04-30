@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
     using Exiled.Events.EventArgs;
+    using UnityEngine;
 
     /// <summary>
     /// Defines a contract for random events.
@@ -23,6 +24,11 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// Gets or sets a value indicating whether the event can be activated.
         /// </summary>
         bool IsEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the positivity weight of the event.
+        /// </summary>
+        float Weight { get; set; }
 
         /// <summary>
         /// The action to run when the event is activated.

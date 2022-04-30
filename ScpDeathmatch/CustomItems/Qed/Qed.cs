@@ -89,7 +89,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
         {
             ev.TargetsToAffect.Clear();
-            IRandomEvent randomEvent = RandomEvents?.FindRandom();
+            IRandomEvent randomEvent = RandomEvents?.FindRandom(ev);
             if (randomEvent is null)
                 return;
 

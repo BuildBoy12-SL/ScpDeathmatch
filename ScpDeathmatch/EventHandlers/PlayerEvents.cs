@@ -44,10 +44,7 @@ namespace ScpDeathmatch.EventHandlers
 
         private void OnDying(DyingEventArgs ev)
         {
-            if (ev.Target is null)
-                return;
-
-            if (!plugin.Config.DropEffectsOnDeath)
+            if (!plugin.Config.DropEffectsOnDeath || ev.Target is null)
                 return;
 
             byte scp207Intensity = ev.Target.GetEffectIntensity<Scp207>();

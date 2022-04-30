@@ -22,6 +22,9 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <inheritdoc />
         public bool IsEnabled { get; set; } = true;
 
+        /// <inheritdoc />
+        public float Weight { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether the outage should occur in the current room rather than by zones.
         /// </summary>

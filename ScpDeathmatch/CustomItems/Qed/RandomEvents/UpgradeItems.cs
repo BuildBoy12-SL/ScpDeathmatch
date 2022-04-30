@@ -7,7 +7,6 @@
 
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
@@ -25,6 +24,9 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 
         /// <inheritdoc />
         public bool IsEnabled { get; set; } = true;
+
+        /// <inheritdoc />
+        public float Weight { get; set; } = 0.7f;
 
         /// <summary>
         /// Gets or sets the items that should be upgraded.

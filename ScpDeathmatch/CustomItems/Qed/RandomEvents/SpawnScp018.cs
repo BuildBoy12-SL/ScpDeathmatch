@@ -26,6 +26,9 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
+        public float Weight { get; set; } = -0.5f;
+
+        /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)
         {
             ExplosiveGrenade explosiveGrenade = (ExplosiveGrenade)Item.Create(ItemType.SCP018, ev.Thrower);

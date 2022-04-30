@@ -20,6 +20,9 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <inheritdoc />
         public bool IsEnabled { get; set; } = true;
 
+        /// <inheritdoc />
+        public float Weight { get; set; } = 0.5f;
+
         /// <summary>
         /// Gets or sets the maximum distance the player should be from the grenade to be teleported.
         /// </summary>

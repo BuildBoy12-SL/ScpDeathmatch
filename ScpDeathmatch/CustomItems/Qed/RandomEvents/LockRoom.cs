@@ -20,6 +20,9 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <inheritdoc />
         public bool IsEnabled { get; set; } = true;
 
+        /// <inheritdoc />
+        public float Weight { get; set; } = 0.3f;
+
         /// <summary>
         /// Gets or sets the duration of the lockdown.
         /// </summary>
