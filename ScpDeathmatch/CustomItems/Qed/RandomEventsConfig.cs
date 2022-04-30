@@ -154,7 +154,7 @@ namespace ScpDeathmatch.CustomItems.Qed
 
             float minimumWeight = selectableEvents.Min(x => x.Weight);
             float maximumWeight = selectableEvents.Max(x => x.Weight);
-            float bounds = Math.Abs(maximumWeight - minimumWeight) / 4f;
+            float bounds = Math.Abs(maximumWeight - minimumWeight) / (selectableEvents.Count / 2f);
 
             List<IRandomEvent> randomEvents = selectableEvents.Where(randomEvent => Math.Abs(randomEvent.Weight - evaluatedWeight) < bounds).ToList();
             return randomEvents.IsEmpty() ? null : randomEvents[UnityEngine.Random.Range(0, randomEvents.Count)];
