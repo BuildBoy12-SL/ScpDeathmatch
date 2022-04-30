@@ -19,7 +19,7 @@ namespace ScpDeathmatch.Patches.Manual
         /// <inheritdoc/>
         public void Patch(Harmony harmony)
         {
-            MethodInfo runCoroutineInternal = typeof(Timing).GetMethod("RunCoroutineInternal", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo runCoroutineInternal = typeof(Timing).GetMethod("RunCoroutineInternal", BindingFlags.NonPublic | BindingFlags.Instance);
             if (runCoroutineInternal is not null)
                 harmony.Patch(runCoroutineInternal, new HarmonyMethod(typeof(OverrideSegment).GetMethod(nameof(Prefix), BindingFlags.NonPublic | BindingFlags.Static)));
         }
