@@ -11,6 +11,7 @@ namespace ScpDeathmatch.Subclasses
     using System.ComponentModel;
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
+    using Exiled.API.Features.Items;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.Models;
@@ -136,10 +137,14 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnPickingItem(PickingUpItemEventArgs ev)
         {
-            if (!GiveScp1853OnFirstWeapon || !Check(ev.Player) || grantedScp1853.Contains(ev.Player.Id) || !ev.Pickup.Type.IsWeapon())
+            if (!ev.IsAllowed || !GiveScp1853OnFirstWeapon || !Check(ev.Player) || grantedScp1853.Contains(ev.Player.Id) || !ev.Pickup.Type.IsWeapon())
                 return;
 
-            ev.Player.AddItem(ItemType.SCP1853);
+            if (ev.Player.Items.Count >= 7)
+                Item.Create(ItemType.SCP1853).Spawn(ev.Player.Position + Vector3.up);
+            else
+                ev.Player.AddItem(ItemType.SCP1853);
+
             grantedScp1853.Add(ev.Player.Id);
         }
 

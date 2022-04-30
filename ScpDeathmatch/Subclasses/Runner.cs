@@ -9,9 +9,11 @@ namespace ScpDeathmatch.Subclasses
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using CustomPlayerEffects;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
+    using Exiled.Events.EventArgs;
     using GameCore;
     using MEC;
     using ScpDeathmatch.Subclasses.Abilities;
@@ -79,6 +81,24 @@ namespace ScpDeathmatch.Subclasses
             });
 
             base.RoleRemoved(player);
+        }
+
+        /// <inheritdoc />
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
+        }
+
+        /// <inheritdoc />
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
+        }
+
+        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
+        {
+            if (Check(ev.Player) && ev.Effect is Stained)
+                ev.IsAllowed = false;
         }
     }
 }
