@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Patches
+namespace ScpDeathmatch.Subclasses.Patches
 {
 #pragma warning disable SA1313
     using Exiled.API.Features;

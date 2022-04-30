@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Patches
+namespace ScpDeathmatch.Subclasses.Patches
 {
 #pragma warning disable SA1118
     using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace ScpDeathmatch.Patches
     using static HarmonyLib.AccessTools;
 
     /// <summary>
-    /// Patches <see cref="DisarmedPlayers.ValidateEntry"/> to implement configs from <see cref="Config"/>.
+    /// Patches <see cref="DisarmedPlayers.ValidateEntry"/> to implement configs from <see cref="DisarmingConfig"/>.
     /// </summary>
     [HarmonyPatch(typeof(DisarmedPlayers), nameof(DisarmedPlayers.ValidateEntry))]
     internal static class ValidateDisarmPatch
@@ -30,7 +30,7 @@ namespace ScpDeathmatch.Patches
             Label returnTrueLabel = generator.DefineLabel();
 
             const int offset = 3;
-            int index = newInstructions.FindIndex(i => i.opcode == OpCodes.Bne_Un_S) + offset;
+            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Bne_Un_S) + offset;
             newInstructions.InsertRange(index, new[]
             {
                 new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
@@ -40,7 +40,7 @@ namespace ScpDeathmatch.Patches
                 new CodeInstruction(OpCodes.Brfalse_S, returnFalseLabel),
             });
 
-            index = newInstructions.FindLastIndex(i => i.opcode == OpCodes.Ldloc_0);
+            index = newInstructions.FindLastIndex(instruction => instruction.opcode == OpCodes.Ldloc_0);
             newInstructions.InsertRange(index, new[]
             {
                 new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
@@ -50,10 +50,10 @@ namespace ScpDeathmatch.Patches
                 new CodeInstruction(OpCodes.Brfalse_S, returnTrueLabel),
             });
 
-            index = newInstructions.FindLastIndex(i => i.opcode == OpCodes.Ldc_I4_0);
+            index = newInstructions.FindLastIndex(instruction => instruction.opcode == OpCodes.Ldc_I4_0);
             newInstructions[index].labels.Add(returnFalseLabel);
 
-            index = newInstructions.FindLastIndex(i => i.opcode == OpCodes.Ldc_I4_1);
+            index = newInstructions.FindLastIndex(instruction => instruction.opcode == OpCodes.Ldc_I4_1);
             newInstructions[index].labels.Add(returnTrueLabel);
 
             for (int z = 0; z < newInstructions.Count; z++)
