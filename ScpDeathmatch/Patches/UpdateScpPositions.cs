@@ -7,13 +7,16 @@
 
 namespace ScpDeathmatch.Patches
 {
-#pragma warning disable SA1313
+#pragma warning disable SA1118
     using System.Collections.Generic;
+    using System.Reflection.Emit;
     using Exiled.API.Features;
     using HarmonyLib;
-    using MapGeneration;
+    using NorthwoodLib.Pools;
+    using ScpDeathmatch.Configs;
     using ScpDeathmatch.Subclasses;
     using UnityEngine;
+    using static HarmonyLib.AccessTools;
 
     /// <summary>
     /// Patches <see cref="Scp079PlayerScript.UpdateScpPositions"/> to update all player positions for the <see cref="Insurgent"/> subclass.
@@ -21,49 +24,36 @@ namespace ScpDeathmatch.Patches
     [HarmonyPatch(typeof(Scp079PlayerScript), nameof(Scp079PlayerScript.UpdateScpPositions))]
     internal static class UpdateScpPositions
     {
-        private static bool Prefix(Scp079PlayerScript __instance)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
-            if (Player.Get(__instance.gameObject) is not Player player ||
-                !Plugin.Instance.Config.Subclasses.Insurgent.Check(player))
-                return true;
+            List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
 
-            __instance._serverIndicatorUpdateTimer += Time.deltaTime;
-            if (__instance._serverIndicatorUpdateTimer < 1.29999995231628)
-                return false;
+            Label addPositionLabel = generator.DefineLabel();
 
-            __instance._serverIndicatorUpdateTimer = 0.0f;
-            if (__instance.currentCamera == null)
-                return false;
+            int offset = 4;
+            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Ldloc_S) + offset;
 
-            RoomIdentifier roomIdentifier1 = RoomIdUtils.RoomAtPosition(__instance.currentCamera.head.position);
-            if (roomIdentifier1 == null)
-                return false;
-
-            FacilityZone zone = roomIdentifier1.Zone;
-            List<Vector3> positions = new List<Vector3>();
-            foreach (KeyValuePair<GameObject, ReferenceHub> allHub in ReferenceHub.GetAllHubs())
+            newInstructions.InsertRange(index, new[]
             {
-                ReferenceHub referenceHub = allHub.Value;
-                RoomIdentifier roomIdentifier2 = RoomIdUtils.RoomAtPositionRaycasts(referenceHub.PlayerCameraReference.position);
-                if (roomIdentifier2 != null && roomIdentifier2.Zone == zone)
-                    positions.Add(referenceHub.PlayerCameraReference.position);
-            }
+                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Subclasses))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(SubclassesConfig), nameof(SubclassesConfig.Insurgent))),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Scp079PlayerScript), nameof(Scp079PlayerScript.gameObject))),
+                new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(GameObject) })),
+                new CodeInstruction(OpCodes.Callvirt, Method(typeof(Scavenger), nameof(Scavenger.Check))),
+                new CodeInstruction(OpCodes.Brtrue_S, addPositionLabel),
+            });
 
-            if (positions.Count == 0)
-            {
-                if (__instance._sendIndicatorsOnce)
-                    return false;
+            offset = 1;
+            index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Beq_S) + offset;
+            newInstructions[index].labels.Add(addPositionLabel);
 
-                __instance._sendIndicatorsOnce = true;
-            }
-            else
-            {
-                __instance._sendIndicatorsOnce = false;
-            }
+            for (int z = 0; z < newInstructions.Count; z++)
+                yield return newInstructions[z];
 
-            __instance.TargetSetupIndicators(__instance.connectionToClient, positions);
-
-            return false;
+            ListPool<CodeInstruction>.Shared.Return(newInstructions);
         }
     }
 }
