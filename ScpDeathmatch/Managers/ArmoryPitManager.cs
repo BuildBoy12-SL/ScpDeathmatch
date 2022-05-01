@@ -73,7 +73,7 @@ namespace ScpDeathmatch.Managers
 
                 yield return Timing.WaitForSeconds(1f);
                 Room room = Map.FindParentRoom(pickup.GameObject);
-                if (room is null || room.Type != RoomType.HczArmory || pickup.Position.y > -1002f)
+                if (room is null || (room.Type != RoomType.HczArmory && room.Type != RoomType.Surface) || pickup.Position.y > -1002f)
                     continue;
 
                 pickup.Destroy();
