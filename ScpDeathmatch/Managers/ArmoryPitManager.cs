@@ -68,7 +68,7 @@ namespace ScpDeathmatch.Managers
         {
             for (int i = 0; i < 5; i++)
             {
-                if (Round.IsEnded)
+                if (Round.IsEnded || !pickup.GameObject)
                     yield break;
 
                 yield return Timing.WaitForSeconds(1f);
