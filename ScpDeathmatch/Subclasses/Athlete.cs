@@ -21,6 +21,8 @@ namespace ScpDeathmatch.Subclasses
     /// <inheritdoc />
     public class Athlete : Subclass
     {
+        private readonly Dictionary<Player, byte> previousIntensities = new();
+
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 90;
 
@@ -125,10 +127,15 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnUsedItem(UsedItemEventArgs ev)
         {
-            if (!Check(ev.Player) || ev.Item.Type != ItemType.SCP207)
+            if (!Check(ev.Player))
                 return;
 
-            if (ColaHealth.TryGetValue(ev.Player.GetEffectIntensity<Scp207>(), out int additionalHealth))
+            byte newIntensity = ev.Player.GetEffectIntensity<Scp207>();
+            if (previousIntensities.TryGetValue(ev.Player, out byte previousIntensity) && previousIntensity == newIntensity)
+                return;
+
+            previousIntensities[ev.Player] = newIntensity;
+            if (ColaHealth.TryGetValue(newIntensity, out int additionalHealth))
                 ev.Player.MaxHealth += additionalHealth;
         }
     }
