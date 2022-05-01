@@ -124,6 +124,9 @@ namespace ScpDeathmatch.Subclasses
 
             foreach (Player player in Player.List)
             {
+                if (player.SessionVariables.ContainsKey("IsNPC"))
+                    continue;
+
                 if (selectedItem.TryGetValue(player, out ItemType item) &&
                     plugin.Config.ClassSelection.Selections.TryGetValue(item, out SubclassSelection selection))
                 {

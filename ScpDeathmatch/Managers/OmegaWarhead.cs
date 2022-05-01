@@ -70,7 +70,12 @@ namespace ScpDeathmatch.Managers
             AlphaWarheadController.Host.StartDetonation();
             AlphaWarheadController.Host.NetworktimeToDetonation = 0.1f;
             foreach (Player player in Player.List)
+            {
+                if (player.SessionVariables.ContainsKey("IsNPC"))
+                    continue;
+
                 player.Kill(DamageType.Warhead);
+            }
         }
     }
 }

@@ -97,7 +97,12 @@ namespace ScpDeathmatch.Stats
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             foreach (Player player in Player.List)
+            {
+                if (player.SessionVariables.ContainsKey("IsNPC"))
+                    continue;
+
                 AddRoundKills(player);
+            }
         }
     }
 }

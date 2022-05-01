@@ -38,6 +38,9 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         {
             foreach (Player player in Player.List)
             {
+                if (player.SessionVariables.ContainsKey("IsNPC"))
+                    continue;
+
                 if ((player.Position - ev.Grenade.transform.position).magnitude <= MaxDistance * MaxDistance)
                 {
                     Room room = SameZone ? Room.Random(player.Zone) : Room.Random();

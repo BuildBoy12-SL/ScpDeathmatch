@@ -30,6 +30,9 @@ namespace ScpDeathmatch.Managers
                 int aliveCount = 0;
                 foreach (Player player in Player.List)
                 {
+                    if (player.SessionVariables.ContainsKey("IsNPC"))
+                        continue;
+
                     if (plugin.Config.Subclasses.Insurgent.Check(player) &&
                         !plugin.Config.Subclasses.Insurgent.Count079Alive &&
                         player.Role.Type == RoleType.Scp079)

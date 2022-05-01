@@ -84,12 +84,18 @@ namespace ScpDeathmatch.Subclasses
         {
             yield return Timing.WaitForSeconds(3f);
             foreach (Player player in Player.List)
-                previousZones.Add(player, player.Zone);
+            {
+                if (!player.SessionVariables.ContainsKey("IsNPC"))
+                    previousZones.Add(player, player.Zone);
+            }
 
             while (Round.IsStarted)
             {
                 foreach (Player player in Player.List)
                 {
+                    if (player.SessionVariables.ContainsKey("IsNPC"))
+                        continue;
+
                     if (previousZones.TryGetValue(player, out ZoneType zoneType) && zoneType != player.Zone)
                         Alert(player, zoneType);
 
