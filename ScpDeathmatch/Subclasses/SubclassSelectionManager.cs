@@ -8,10 +8,10 @@
 namespace ScpDeathmatch.Subclasses
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
+    using ScpDeathmatch.API.Extensions;
 
     /// <summary>
     /// Manages the selection of subclasses at round start.
@@ -114,7 +114,7 @@ namespace ScpDeathmatch.Subclasses
             if (!Round.IsStarted)
                 return;
 
-            plugin.Config.ClassSelection.Selections.Values.ElementAt(UnityEngine.Random.Range(0, plugin.Config.ClassSelection.Selections.Values.Count)).GetSelection()?.AddRole(ev.Player);
+            plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(ev.Player);
         }
 
         private void OnRoundStarted()
@@ -131,7 +131,7 @@ namespace ScpDeathmatch.Subclasses
                     continue;
                 }
 
-                plugin.Config.ClassSelection.Selections.Values.ElementAt(UnityEngine.Random.Range(0, plugin.Config.ClassSelection.Selections.Values.Count)).GetSelection()?.AddRole(player);
+                plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(player);
             }
 
             selectedItem.Clear();

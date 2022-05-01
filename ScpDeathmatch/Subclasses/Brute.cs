@@ -54,12 +54,20 @@ namespace ScpDeathmatch.Subclasses
         /// <summary>
         /// Gets or sets the ahp settings.
         /// </summary>
+        [Description("The ahp settings.")]
         public ConfiguredAhp Ahp { get; set; } = new(0f, 50f, -2f, 0.7f, 0f, true);
 
         /// <summary>
         /// Gets or sets a value indicating whether brutes will bypass having their max hp reduced when they take damage.
         /// </summary>
+        [Description("Whether brutes will bypass having their max hp reduced when they take damage.")]
         public bool IgnoreMaxHpReduction { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether brutes will bypass stamina and movement restrictions inflicted by items.
+        /// </summary>
+        [Description("Whether brutes will bypass stamina and movement restrictions inflicted by items.")]
+        public bool IgnoreItemWeight { get; set; } = true;
 
         /// <inheritdoc />
         public override List<CustomAbility> CustomAbilities { get; set; } = new()

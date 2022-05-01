@@ -32,7 +32,7 @@ namespace ScpDeathmatch.CustomItems
         public override string Description { get; set; } = "Toggles goggles that mimic Scp939 vision";
 
         /// <inheritdoc />
-        public override float Weight { get; set; } = 0f;
+        public override float Weight { get; set; }
 
         /// <inheritdoc />
         [YamlIgnore]

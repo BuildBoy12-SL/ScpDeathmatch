@@ -30,7 +30,7 @@ namespace ScpDeathmatch.CustomItems
         public override string Description { get; set; } = "When held by a runner in 914 it will always transform into a cola.";
 
         /// <inheritdoc />
-        public override float Weight { get; set; } = 0;
+        public override float Weight { get; set; }
 
         /// <inheritdoc />
         public override SpawnProperties SpawnProperties { get; set; } = new();

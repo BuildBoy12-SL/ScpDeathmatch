@@ -8,9 +8,9 @@
 namespace ScpDeathmatch.HealthSystem.Patches
 {
 #pragma warning disable SA1313
-    using Exiled.API.Features;
     using HarmonyLib;
     using InventorySystem.Items.Usables;
+    using ScpDeathmatch.HealthSystem.Components;
 
     /// <summary>
     /// Patches <see cref="Medkit.OnEffectsActivated"/> to fully heal a player when they use a medkit.
@@ -20,8 +20,9 @@ namespace ScpDeathmatch.HealthSystem.Patches
     {
         private static bool Prefix(Medkit __instance)
         {
-            Player player = Player.Get(__instance.Owner);
-            player.Health = player.MaxHealth = player.ReferenceHub.characterClassManager.CurRole.maxHP;
+            if (__instance.Owner.gameObject.TryGetComponent(out HealthComponent healthComponent))
+                healthComponent.Heal();
+
             __instance.Owner.playerEffectsController.UseMedicalItem(__instance.ItemTypeId);
             return false;
         }

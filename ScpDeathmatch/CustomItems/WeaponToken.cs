@@ -18,6 +18,7 @@ namespace ScpDeathmatch.CustomItems
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using Scp914;
+    using ScpDeathmatch.API.Extensions;
     using ScpDeathmatch.Models;
     using UnityEngine;
     using YamlDotNet.Serialization;
@@ -36,7 +37,7 @@ namespace ScpDeathmatch.CustomItems
         public override string Description { get; set; } = "To be thrown into the HczArmory pit for a random item";
 
         /// <inheritdoc />
-        public override float Weight { get; set; } = 0f;
+        public override float Weight { get; set; }
 
         /// <inheritdoc />
         public override SpawnProperties SpawnProperties { get; set; } = new();
@@ -91,7 +92,7 @@ namespace ScpDeathmatch.CustomItems
             if (PossibleRewards is null || PossibleRewards.Count == 0)
                 return;
 
-            string name = PossibleRewards[UnityEngine.Random.Range(0, PossibleRewards.Count)];
+            string name = PossibleRewards.Random();
             if (TryGive(player, name, false))
             {
                 player.ShowHint(string.Format(GaveItem, name));

@@ -40,7 +40,7 @@ namespace ScpDeathmatch.CustomItems
         public override string Description { get; set; } = "Blow up and respawn if you take another player's life";
 
         /// <inheritdoc />
-        public override float Weight { get; set; } = 0f;
+        public override float Weight { get; set; }
 
         /// <inheritdoc />
         [YamlIgnore]

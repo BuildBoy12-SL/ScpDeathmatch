@@ -35,7 +35,7 @@ namespace ScpDeathmatch.CustomItems
         public override string Description { get; set; } = "A coin that can be used to temporarily jam doors.";
 
         /// <inheritdoc />
-        public override float Weight { get; set; } = 0f;
+        public override float Weight { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum time, in seconds, between uses of this item.

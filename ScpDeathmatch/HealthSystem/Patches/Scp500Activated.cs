@@ -17,7 +17,7 @@ namespace ScpDeathmatch.HealthSystem.Patches
     using NorthwoodLib.Pools;
     using PlayerStatsSystem;
     using ScpDeathmatch.Configs;
-    using ScpDeathmatch.Models;
+    using ScpDeathmatch.HealthSystem.Components;
     using static HarmonyLib.AccessTools;
 
     /// <summary>
@@ -33,29 +33,12 @@ namespace ScpDeathmatch.HealthSystem.Patches
             int offset = -1;
             int index = newInstructions.FindIndex(instruction => instruction.OperandIs(Method(typeof(HealthStat), nameof(HealthStat.ServerHeal), new[] { typeof(float) }))) + offset;
 
-            LocalBuilder player = generator.DeclareLocal(typeof(Player));
-
             newInstructions.InsertRange(index, new[]
             {
                 new CodeInstruction(OpCodes.Ldarg_0).MoveLabelsFrom(newInstructions[index]),
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ItemBase), nameof(ItemBase.Owner))),
                 new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
-                new CodeInstruction(OpCodes.Stloc_S, player.LocalIndex),
-                new CodeInstruction(OpCodes.Ldloc_S, player.LocalIndex),
-
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ItemBase), nameof(ItemBase.Owner))),
-                new CodeInstruction(OpCodes.Ldfld, Field(typeof(ReferenceHub), nameof(ReferenceHub.characterClassManager))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(CharacterClassManager), nameof(CharacterClassManager.CurRole))),
-                new CodeInstruction(OpCodes.Ldfld, Field(typeof(Role), nameof(Role.maxHP))),
-                new CodeInstruction(OpCodes.Callvirt, PropertySetter(typeof(Player), nameof(Player.MaxHealth))),
-
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp500Ahp))),
-                new CodeInstruction(OpCodes.Ldloc_S, player.LocalIndex),
-                new CodeInstruction(OpCodes.Callvirt, Method(typeof(ConfiguredAhp), nameof(ConfiguredAhp.AddTo), new[] { typeof(Player) })),
+                new CodeInstruction(OpCodes.Call, Method(typeof(Scp500Activated), nameof(RunAdditionalScp500Effects), new[] { typeof(Player) })),
             });
 
             Label skipRegenerationLabel = generator.DefineLabel();
@@ -79,6 +62,14 @@ namespace ScpDeathmatch.HealthSystem.Patches
                 yield return newInstructions[z];
 
             ListPool<CodeInstruction>.Shared.Return(newInstructions);
+        }
+
+        private static void RunAdditionalScp500Effects(Player player)
+        {
+            if (player.GameObject.TryGetComponent(out HealthComponent healthComponent))
+                healthComponent.Heal();
+
+            Plugin.Instance.Config.MedicalItems.Scp500Ahp.AddTo(player);
         }
     }
 }

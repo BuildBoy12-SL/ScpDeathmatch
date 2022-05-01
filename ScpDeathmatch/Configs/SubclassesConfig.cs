@@ -15,6 +15,11 @@ namespace ScpDeathmatch.Configs
     public class SubclassesConfig
     {
         /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="Athlete"/> class.
+        /// </summary>
+        public Athlete Athlete { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Brute"/> class.
         /// </summary>
         public Brute Brute { get; set; } = new();
@@ -33,11 +38,6 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Recon"/> class.
         /// </summary>
         public Recon Recon { get; set; } = new();
-
-        /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Runner"/> class.
-        /// </summary>
-        public Runner Runner { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Scavenger"/> class.
