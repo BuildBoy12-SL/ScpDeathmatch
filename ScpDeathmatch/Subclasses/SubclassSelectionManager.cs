@@ -130,8 +130,12 @@ namespace ScpDeathmatch.Subclasses
                 if (selectedItem.TryGetValue(player, out ItemType item) &&
                     plugin.Config.ClassSelection.Selections.TryGetValue(item, out SubclassSelection selection))
                 {
-                    selection.GetSelection()?.AddRole(player);
-                    continue;
+                    Subclass subclass = selection.GetSelection();
+                    if (subclass is not null)
+                    {
+                        subclass.AddRole(player);
+                        continue;
+                    }
                 }
 
                 plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(player);
