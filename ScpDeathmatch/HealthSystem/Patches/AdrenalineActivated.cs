@@ -10,7 +10,6 @@ namespace ScpDeathmatch.HealthSystem.Patches
 #pragma warning disable SA1118
     using System.Collections.Generic;
     using System.Reflection.Emit;
-    using CustomPlayerEffects;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using HarmonyLib;
@@ -50,6 +49,16 @@ namespace ScpDeathmatch.HealthSystem.Patches
             index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Pop) + offset;
             newInstructions[index].labels.Add(skipAhpLabel);
 
+            index = newInstructions.FindLastIndex(instruction => instruction.opcode == OpCodes.Ldc_R4);
+            newInstructions.RemoveAt(index);
+            newInstructions.InsertRange(index, new[]
+            {
+                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.AdrenalineInvigoratedDuration))),
+            });
+
             for (int z = 0; z < newInstructions.Count; z++)
                 yield return newInstructions[z];
 
@@ -58,7 +67,7 @@ namespace ScpDeathmatch.HealthSystem.Patches
 
         private static void EnableMovementBoost(Player player)
         {
-            player.EnableEffect(EffectType.MovementBoost, 8f, true);
+            player.EnableEffect(EffectType.MovementBoost, Plugin.Instance.Config.MedicalItems.AdrenalineMovementBoostDuration, true);
             player.ChangeEffectIntensity(EffectType.MovementBoost, Plugin.Instance.Config.MedicalItems.AdrenalineMovementBoost);
         }
     }

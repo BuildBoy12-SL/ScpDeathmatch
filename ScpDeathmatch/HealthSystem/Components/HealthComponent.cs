@@ -84,7 +84,7 @@ namespace ScpDeathmatch.HealthSystem.Components
                 if (player.IsDead)
                     continue;
 
-                if (player.GetEffectActive<Invigorated>() || lastHurt + config.Health.RegenDelay < Time.time)
+                if ((config.Health.InvigoratedBypassDelay && player.GetEffectActive<Invigorated>()) || lastHurt + config.Health.RegenDelay < Time.time)
                     player.Heal(player.MaxHealth * (config.Health.RegenPercentage / 100f));
             }
         }

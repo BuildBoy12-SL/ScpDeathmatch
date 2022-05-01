@@ -28,6 +28,18 @@ namespace ScpDeathmatch.Configs
         public byte AdrenalineMovementBoost { get; set; } = 20;
 
         /// <summary>
+        /// Gets or sets the duration of the movement boost effect given by adrenaline.
+        /// </summary>
+        [Description("The duration of the movement boost effect given by adrenaline.")]
+        public float AdrenalineMovementBoostDuration { get; set; } = 8f;
+
+        /// <summary>
+        /// Gets or sets the duration of the invigorated effect given by adrenaline.
+        /// </summary>
+        [Description("The duration of the invigorated effect given by adrenaline.")]
+        public float AdrenalineInvigoratedDuration { get; set; } = 8f;
+
+        /// <summary>
         /// Gets or sets a value indicating whether painkillers should keep their regeneration.
         /// </summary>
         [Description("Whether painkillers should keep their regeneration.")]

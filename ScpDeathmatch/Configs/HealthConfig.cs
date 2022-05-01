@@ -35,6 +35,12 @@ namespace ScpDeathmatch.Configs
         public float RegenDelay { get; set; } = 30f;
 
         /// <summary>
+        /// Gets or sets a value indicating whether the cooldown will be bypassed while the player has the invigorated effect.
+        /// </summary>
+        [Description("Whether the cooldown will be bypassed while the player has the invigorated effect.")]
+        public bool InvigoratedBypassDelay { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets the amount of time, in seconds, between each tick while regenerating.
         /// </summary>
         [Description("The amount of time, in seconds, between each tick while regenerating.")]
