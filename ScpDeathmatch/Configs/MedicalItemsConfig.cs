@@ -7,7 +7,9 @@
 
 namespace ScpDeathmatch.Configs
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using Exiled.API.Enums;
     using ScpDeathmatch.Models;
 
     /// <summary>
@@ -74,5 +76,24 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         [Description("Whether Scp500 will remove the Scp1853 effect.")]
         public bool Scp500RemoveScp1853 { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets a list of all effects to activate when Scp500 is consumed.
+        /// </summary>
+        [Description("A list of all effects to activate when Scp500 is consumed.")]
+        public List<ConfiguredEffect> Scp500Effects { get; set; } = new()
+        {
+            new ConfiguredEffect(EffectType.MovementBoost, 50, 10f),
+        };
+
+        /// <summary>
+        /// Gets or sets a value indicating whether using Scp500 will disarm the player.
+        /// </summary>
+        public bool Scp500DisarmUser { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating how long to disarm the player for.
+        /// </summary>
+        public float Scp500DisarmDuration { get; set; } = 10f;
     }
 }

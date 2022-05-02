@@ -14,10 +14,12 @@ namespace ScpDeathmatch.HealthSystem.Patches
     using HarmonyLib;
     using InventorySystem.Items;
     using InventorySystem.Items.Usables;
+    using MEC;
     using NorthwoodLib.Pools;
     using PlayerStatsSystem;
     using ScpDeathmatch.Configs;
     using ScpDeathmatch.HealthSystem.Components;
+    using ScpDeathmatch.Models;
     using static HarmonyLib.AccessTools;
 
     /// <summary>
@@ -66,10 +68,21 @@ namespace ScpDeathmatch.HealthSystem.Patches
 
         private static void RunAdditionalScp500Effects(Player player)
         {
+            MedicalItemsConfig config = Plugin.Instance.Config.MedicalItems;
+
             if (player.GameObject.TryGetComponent(out HealthComponent healthComponent))
                 healthComponent.Heal();
 
-            Plugin.Instance.Config.MedicalItems.Scp500Ahp.AddTo(player);
+            if (config.Scp500DisarmUser)
+            {
+                player.Handcuff();
+                Timing.CallDelayed(config.Scp500DisarmDuration, player.RemoveHandcuffs);
+            }
+
+            foreach (ConfiguredEffect configuredEffect in config.Scp500Effects)
+                configuredEffect.Apply(player);
+
+            config.Scp500Ahp.AddTo(player);
         }
     }
 }
