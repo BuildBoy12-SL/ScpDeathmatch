@@ -55,6 +55,7 @@ namespace ScpDeathmatch.Commands.Client
             }
 
             scp1853.IsEnabled = false;
+            player.DisableEffect(EffectType.Poisoned);
             response = SuccessResponse;
             return true;
         }

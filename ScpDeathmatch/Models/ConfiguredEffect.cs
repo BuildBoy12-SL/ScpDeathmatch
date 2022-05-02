@@ -59,7 +59,7 @@ namespace ScpDeathmatch.Models
         public void Apply(Player player)
         {
             player.EnableEffect(Type, Duration);
-            player.ChangeEffectIntensity(Type, Intensity, Duration);
+            player.ChangeEffectIntensity(Type, Intensity);
         }
     }
 }

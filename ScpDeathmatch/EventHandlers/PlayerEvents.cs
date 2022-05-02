@@ -63,10 +63,17 @@ namespace ScpDeathmatch.EventHandlers
 
         private void OnInteractingLocker(InteractingLockerEventArgs ev)
         {
-            if (ev.Locker is PedestalScpLocker &&
-                ev.Player.CurrentItem is not null &&
-                plugin.Config.CanOpenPedestal.Contains(ev.Player.CurrentItem.Type))
-                ev.IsAllowed = true;
+            if (ev.Locker is not PedestalScpLocker)
+                return;
+
+            foreach (Item item in ev.Player.Items)
+            {
+                if (item is not null && plugin.Config.CanOpenPedestal.Contains(item.Type))
+                {
+                    ev.IsAllowed = true;
+                    return;
+                }
+            }
         }
     }
 }
