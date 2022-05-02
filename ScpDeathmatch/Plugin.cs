@@ -17,6 +17,7 @@ namespace ScpDeathmatch
     using ScpDeathmatch.HealthSystem;
     using ScpDeathmatch.KillRewards;
     using ScpDeathmatch.Managers;
+    using ScpDeathmatch.MicroHidEnhancers;
     using ScpDeathmatch.Patches.Manual;
     using ScpDeathmatch.Stats;
     using ScpDeathmatch.Subclasses;
@@ -32,6 +33,7 @@ namespace ScpDeathmatch
         private DisarmingLivesManager disarmingLivesManager;
         private HealthManager healthManager;
         private MicroHidHealing microHidHealing;
+        private MicroHidMovement microHidMovement;
         private OmegaWarhead omegaWarhead;
         private RewardManager rewardManager;
         private RoundManager roundManager;
@@ -109,6 +111,9 @@ namespace ScpDeathmatch
 
             microHidHealing = new MicroHidHealing(this);
             microHidHealing.Subscribe();
+
+            microHidMovement = new MicroHidMovement(this);
+            microHidMovement.Subscribe();
 
             omegaWarhead = new OmegaWarhead(this);
             omegaWarhead.Subscribe();
@@ -192,6 +197,9 @@ namespace ScpDeathmatch
             omegaWarhead?.Unsubscribe();
             omegaWarhead = null;
 
+            microHidMovement?.Unsubscribe();
+            microHidMovement = null;
+
             microHidHealing?.Unsubscribe();
             microHidHealing = null;
 
@@ -223,6 +231,7 @@ namespace ScpDeathmatch
         {
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
+            Config.ClientCommands.Register();
         }
 
         /// <inheritdoc />
@@ -230,6 +239,7 @@ namespace ScpDeathmatch
         {
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
+            Config.ClientCommands.Unregister();
         }
 
         private void PatchManual()

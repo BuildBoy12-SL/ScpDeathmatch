@@ -66,6 +66,12 @@ namespace ScpDeathmatch
         public ClassSelectionConfig ClassSelection { get; set; }
 
         /// <summary>
+        /// Gets or sets the configs for general client commands.
+        /// </summary>
+        [YamlIgnore]
+        public ClientCommandsConfig ClientCommands { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs for automated commands.
         /// </summary>
         [YamlIgnore]
@@ -124,6 +130,12 @@ namespace ScpDeathmatch
         /// </summary>
         [YamlIgnore]
         public RewardsConfig Rewards { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configs related to the micro movement enhancement.
+        /// </summary>
+        [YamlIgnore]
+        public SpeedyMicroConfig SpeedyMicro { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for the stat broadcast.

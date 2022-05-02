@@ -10,7 +10,6 @@ namespace ScpDeathmatch.Subclasses
     using System.Collections.Generic;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
-    using MEC;
     using ScpDeathmatch.API.Extensions;
 
     /// <summary>
@@ -78,11 +77,8 @@ namespace ScpDeathmatch.Subclasses
             if (!Round.IsLobby || ev.NewRole == RoleType.None)
                 return;
 
-            Timing.CallDelayed(0.5f, () =>
-            {
-                if (ev.Player.Role == ev.NewRole)
-                    ev.Player.ResetInventory(plugin.Config.ClassSelection.Selections.Keys);
-            });
+            ev.Items.Clear();
+            ev.Items.AddRange(plugin.Config.ClassSelection.Selections.Keys);
         }
 
         private void OnDroppingItem(DroppingItemEventArgs ev)

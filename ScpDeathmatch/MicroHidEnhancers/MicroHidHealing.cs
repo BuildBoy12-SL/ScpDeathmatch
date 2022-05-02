@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Managers
+namespace ScpDeathmatch.MicroHidEnhancers
 {
     using System.Collections.Generic;
     using Exiled.API.Features;

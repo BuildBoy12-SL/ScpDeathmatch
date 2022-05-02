@@ -26,7 +26,7 @@ namespace ScpDeathmatch.Stats.Components
 
         private void FixedUpdate()
         {
-            if (Round.IsLobby)
+            if (!ScpDeathmatch.Plugin.Instance.Config.StatsDatabase.ShowStatsHint || Round.IsLobby)
                 return;
 
             globalTimer += Time.deltaTime;
