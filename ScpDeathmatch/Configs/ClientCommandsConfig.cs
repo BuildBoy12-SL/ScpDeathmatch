@@ -34,8 +34,8 @@ namespace ScpDeathmatch.Configs
         {
             foreach (PropertyInfo property in GetType().GetProperties())
             {
-                if (property.GetValue(this) is ICommand value)
-                    QueryProcessor.DotCommandHandler.RegisterCommand(value);
+                if (property.GetValue(this) is ICommand command)
+                    QueryProcessor.DotCommandHandler.RegisterCommand(command);
             }
         }
 
@@ -46,8 +46,8 @@ namespace ScpDeathmatch.Configs
         {
             foreach (PropertyInfo property in GetType().GetProperties())
             {
-                if (property.GetValue(this) is ICommand value)
-                    QueryProcessor.DotCommandHandler.UnregisterCommand(value);
+                if (property.GetValue(this) is ICommand command)
+                    QueryProcessor.DotCommandHandler.UnregisterCommand(command);
             }
         }
     }
