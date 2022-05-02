@@ -50,7 +50,7 @@ namespace ScpDeathmatch.Managers
             if (ev.Amount < plugin.Config.BodySlamming.MinimumDamage)
                 return;
 
-            Player target = Player.List.Closest(ev.Target.Position, plugin.Config.BodySlamming.MaximumDistance);
+            Player target = Player.List.Closest(ev.Target.Position, plugin.Config.BodySlamming.MaximumDistance, player => player != ev.Target && !player.SessionVariables.ContainsKey("IsNPC"));
             if (target is null)
                 return;
 

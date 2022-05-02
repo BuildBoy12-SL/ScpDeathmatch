@@ -87,7 +87,7 @@ namespace ScpDeathmatch.API.Extensions
                 if (predicate != null && !predicate(obj))
                     continue;
 
-                float distance = (obj.transform.position - position).sqrMagnitude;
+                float distance = Vector3.Distance(obj.transform.position, position);
                 if (distance < closest)
                 {
                     closest = distance;
@@ -108,7 +108,7 @@ namespace ScpDeathmatch.API.Extensions
                 if (predicate != null && !predicate(player))
                     continue;
 
-                float distance = (player.Position - position).sqrMagnitude;
+                float distance = Vector3.Distance(player.Position, position);
                 if (distance < closest)
                 {
                     closest = distance;
@@ -129,7 +129,7 @@ namespace ScpDeathmatch.API.Extensions
                 if (predicate != null && !predicate(door))
                     continue;
 
-                float distance = (door.Position - position).sqrMagnitude;
+                float distance = Vector3.Distance(door.Position, position);
                 if (distance < closest)
                 {
                     closest = distance;
