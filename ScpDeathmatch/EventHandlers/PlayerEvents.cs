@@ -10,6 +10,7 @@ namespace ScpDeathmatch.EventHandlers
     using CustomPlayerEffects;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
+    using MapGeneration.Distributors;
     using UnityEngine;
     using PlayerHandlers = Exiled.Events.Handlers.Player;
 
@@ -32,6 +33,7 @@ namespace ScpDeathmatch.EventHandlers
         public void Subscribe()
         {
             Exiled.Events.Handlers.Player.Dying += OnDying;
+            Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
         }
 
         /// <summary>
@@ -40,6 +42,7 @@ namespace ScpDeathmatch.EventHandlers
         public void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractingLocker;
         }
 
         private void OnDying(DyingEventArgs ev)
@@ -56,6 +59,14 @@ namespace ScpDeathmatch.EventHandlers
 
             for (int i = 0; i < scp1853Intensity; i++)
                 Item.Create(ItemType.SCP1853).Spawn(spawnPosition);
+        }
+
+        private void OnInteractingLocker(InteractingLockerEventArgs ev)
+        {
+            if (ev.Locker is PedestalScpLocker &&
+                ev.Player.CurrentItem is not null &&
+                plugin.Config.CanOpenPedestal.Contains(ev.Player.CurrentItem.Type))
+                ev.IsAllowed = true;
         }
     }
 }

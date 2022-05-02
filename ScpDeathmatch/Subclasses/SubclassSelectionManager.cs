@@ -32,9 +32,9 @@ namespace ScpDeathmatch.Subclasses
         public void Subscribe()
         {
             Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
-            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.TogglingFlashlight += OnTogglingFlashlight;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
             Exiled.Events.Handlers.Player.Verified += OnVerified;
@@ -47,9 +47,9 @@ namespace ScpDeathmatch.Subclasses
         public void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
-            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
             Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
             Exiled.Events.Handlers.Player.Shooting -= OnShooting;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
             Exiled.Events.Handlers.Player.TogglingFlashlight -= OnTogglingFlashlight;
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
@@ -72,15 +72,6 @@ namespace ScpDeathmatch.Subclasses
             }
         }
 
-        private void OnChangingRole(ChangingRoleEventArgs ev)
-        {
-            if (!Round.IsLobby || ev.NewRole == RoleType.None)
-                return;
-
-            ev.Items.Clear();
-            ev.Items.AddRange(plugin.Config.ClassSelection.Selections.Keys);
-        }
-
         private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if (Round.IsLobby)
@@ -91,6 +82,12 @@ namespace ScpDeathmatch.Subclasses
         {
             if (Round.IsLobby)
                 ev.IsAllowed = false;
+        }
+
+        private void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (Round.IsLobby)
+                ev.Player.ResetInventory(plugin.Config.ClassSelection.Selections.Keys);
         }
 
         private void OnTogglingFlashlight(TogglingFlashlightEventArgs ev)

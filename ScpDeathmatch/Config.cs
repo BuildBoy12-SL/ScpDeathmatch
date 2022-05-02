@@ -36,6 +36,16 @@ namespace ScpDeathmatch
         };
 
         /// <summary>
+        /// Gets or sets items that can open scp pedestal lockers.
+        /// </summary>
+        [Description("Items that can open scp pedestal lockers.")]
+        public List<ItemType> CanOpenPedestal { get; set; } = new()
+        {
+            ItemType.KeycardScientist,
+            ItemType.KeycardGuard,
+        };
+
+        /// <summary>
         /// Gets or sets the amount of time a generator will take to activate.
         /// </summary>
         [Description("The amount of time a generator will take to activate.")]
