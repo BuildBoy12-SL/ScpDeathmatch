@@ -93,17 +93,31 @@ namespace ScpDeathmatch.Subclasses
         }
 
         /// <inheritdoc />
-        protected override void OnChangingRole(ChangingRoleEventArgs ev)
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            base.SubscribeEvents();
+        }
+
+        /// <inheritdoc />
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            base.UnsubscribeEvents();
+        }
+
+        /// <inheritdoc />
+        protected override void OnSpawned(SpawnedEventArgs ev)
         {
             if (Check(ev.Player))
-                Timing.CallDelayed(1f, () => Ahp.AddTo(ev.Player));
+                Ahp.AddTo(ev.Player);
 
-            base.OnChangingRole(ev);
+            base.OnSpawned(ev);
         }
 
         private IEnumerator<float> RunRegeneration(Player player)
         {
-            while (Round.IsStarted)
+            while (true)
             {
                 yield return Timing.WaitForSeconds(SecondsPerTick);
                 player.Heal(HealthPerTick);

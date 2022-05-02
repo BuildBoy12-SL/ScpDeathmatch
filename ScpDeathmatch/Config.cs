@@ -54,6 +54,12 @@ namespace ScpDeathmatch
         public string Folder { get; set; } = Path.Combine(Paths.Configs, "ScpDeathmatch");
 
         /// <summary>
+        /// Gets or sets the configs for body slamming.
+        /// </summary>
+        [YamlIgnore]
+        public BodySlammingConfig BodySlamming { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs for class selection.
         /// </summary>
         [YamlIgnore]

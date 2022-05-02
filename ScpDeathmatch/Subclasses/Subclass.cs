@@ -261,12 +261,22 @@ namespace ScpDeathmatch.Subclasses
         /// <returns>True if the player has this role.</returns>
         public bool Check(Player player) => trackedPlayers.Contains(player);
 
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSpawned(ReferenceHub)"/>
+        protected virtual void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (Check(ev.Player))
+            {
+                ev.Player.ReferenceHub.serverRoles.Network_myText = ev.Player.IsDead ? DeadBadge : Badge;
+                ev.Player.ReferenceHub.serverRoles.Network_myColor = ev.Player.IsDead ? DeadBadgeColor : BadgeColor;
+            }
+        }
+
         /// <summary>
         /// Called when the role is initialized to setup internal events.
         /// </summary>
         protected virtual void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         }
 
         /// <summary>
@@ -274,7 +284,7 @@ namespace ScpDeathmatch.Subclasses
         /// </summary>
         protected virtual void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         }
 
         /// <summary>
@@ -291,22 +301,6 @@ namespace ScpDeathmatch.Subclasses
         /// <param name="player">The <see cref="Player"/> the role was removed from.</param>
         protected virtual void RoleRemoved(Player player)
         {
-        }
-
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnChangingRole(ChangingRoleEventArgs)"/>
-        protected virtual void OnChangingRole(ChangingRoleEventArgs ev)
-        {
-            if (Check(ev.Player))
-                ev.Player.ReferenceHub.serverRoles.RefreshPermissions();
-
-            Timing.CallDelayed(1f, () =>
-            {
-                if (Check(ev.Player))
-                {
-                    ev.Player.ReferenceHub.serverRoles.Network_myText = ev.NewRole == RoleType.Spectator ? DeadBadge : Badge;
-                    ev.Player.ReferenceHub.serverRoles.Network_myColor = ev.NewRole == RoleType.Spectator ? DeadBadgeColor : BadgeColor;
-                }
-            });
         }
 
         /// <summary>

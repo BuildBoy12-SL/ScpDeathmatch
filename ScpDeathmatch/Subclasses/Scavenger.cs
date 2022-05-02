@@ -113,9 +113,34 @@ namespace ScpDeathmatch.Subclasses
         }
 
         /// <inheritdoc />
-        protected override void OnChangingRole(ChangingRoleEventArgs ev)
+        protected override void SubscribeEvents()
         {
-            base.OnChangingRole(ev);
+            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+        }
+
+        /// <inheritdoc />
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+        }
+
+        private static void SyncCategoryLimits(Player player, SyncList<sbyte> limits)
+        {
+            MirrorExtensions.SendFakeSyncObject(player, ServerConfigSynchronizer.Singleton.netIdentity, typeof(ServerConfigSynchronizer), (writer) =>
+            {
+                writer.WriteUInt64(1ul);
+                writer.WriteUInt32((uint)limits.Count);
+                for (int i = 0; i < limits.Count; i++)
+                {
+                    writer.WriteByte((byte)SyncList<byte>.Operation.OP_SET);
+                    writer.WriteUInt32((uint)i);
+                    writer.WriteSByte(limits[i]);
+                }
+            });
+        }
+
+        private void OnChangingRole(ChangingRoleEventArgs ev)
+        {
             if (!Check(ev.Player) || ev.NewRole is RoleType.None or RoleType.Spectator)
                 return;
 
@@ -134,21 +159,6 @@ namespace ScpDeathmatch.Subclasses
                 if (ev.Items[i] == ItemType.KeycardJanitor)
                     ev.Items[i] = ItemType.KeycardScientist;
             }
-        }
-
-        private void SyncCategoryLimits(Player player, SyncList<sbyte> limits)
-        {
-            MirrorExtensions.SendFakeSyncObject(player, ServerConfigSynchronizer.Singleton.netIdentity, typeof(ServerConfigSynchronizer), (writer) =>
-            {
-                writer.WriteUInt64(1ul);
-                writer.WriteUInt32((uint)limits.Count);
-                for (int i = 0; i < limits.Count; i++)
-                {
-                    writer.WriteByte((byte)SyncList<byte>.Operation.OP_SET);
-                    writer.WriteUInt32((uint)i);
-                    writer.WriteSByte(limits[i]);
-                }
-            });
         }
     }
 }

@@ -27,6 +27,7 @@ namespace ScpDeathmatch
         private Harmony harmony;
 
         private ArmoryPitManager armoryPitManager;
+        private BodySlammingManager bodySlammingManager;
         private DecontaminationManager decontaminationManager;
         private DisarmingLivesManager disarmingLivesManager;
         private HealthManager healthManager;
@@ -93,6 +94,9 @@ namespace ScpDeathmatch
 
             armoryPitManager = new ArmoryPitManager(this);
             armoryPitManager.Subscribe();
+
+            bodySlammingManager = new BodySlammingManager(this);
+            bodySlammingManager.Subscribe();
 
             decontaminationManager = new DecontaminationManager(this);
             decontaminationManager.Subscribe();
@@ -199,6 +203,9 @@ namespace ScpDeathmatch
 
             decontaminationManager?.Unsubscribe();
             decontaminationManager = null;
+
+            bodySlammingManager?.Unsubscribe();
+            bodySlammingManager = null;
 
             armoryPitManager?.Unsubscribe();
             armoryPitManager = null;

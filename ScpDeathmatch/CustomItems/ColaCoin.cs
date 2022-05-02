@@ -27,7 +27,7 @@ namespace ScpDeathmatch.CustomItems
         public override string Name { get; set; } = "Cola Coin";
 
         /// <inheritdoc />
-        public override string Description { get; set; } = "When held by a runner in 914 it will always transform into a cola.";
+        public override string Description { get; set; } = "When held by an athlete in 914 it will always transform into a cola.";
 
         /// <inheritdoc />
         public override float Weight { get; set; }
@@ -57,7 +57,7 @@ namespace ScpDeathmatch.CustomItems
 
         private void OnUpgradingItem(UpgradingItemEventArgs ev)
         {
-            if (TryGet(ev.Item, out _))
+            if (Check(ev.Item))
                 ev.IsAllowed = false;
         }
 
@@ -75,7 +75,7 @@ namespace ScpDeathmatch.CustomItems
 
         private void UpgradeItem(Item item, Player player)
         {
-            if (item is null || !TryGet(item, out _))
+            if (item is null || !Check(item) || !Plugin.Instance.Config.Subclasses.Athlete.Check(player))
                 return;
 
             player.RemoveItem(item);

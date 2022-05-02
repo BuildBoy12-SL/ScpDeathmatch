@@ -12,6 +12,7 @@ namespace ScpDeathmatch.Subclasses.Abilities
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Interactables.Interobjects;
+    using ScpDeathmatch.API.Extensions;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
@@ -61,7 +62,11 @@ namespace ScpDeathmatch.Subclasses.Abilities
                 return false;
             }
 
-            Door closestDoor = ClosestDoor(player);
+            Door closestDoor = Door.List.Closest(
+                player.Position,
+                MaximumDistance,
+                door => door.IsBreakable && !door.GameObject.GetComponentInParent<CheckpointDoor>() && (AffectOpenDoors || !door.IsOpen));
+
             if (closestDoor is null)
             {
                 response = "You are too far away from a door to use this ability.";
@@ -96,28 +101,5 @@ namespace ScpDeathmatch.Subclasses.Abilities
         }
 
         private void OnWaitingForPlayers() => uses.Clear();
-
-        private Door ClosestDoor(Player player)
-        {
-            float closest = MaximumDistance;
-            Door closestObject = null;
-            foreach (Door door in Door.List)
-            {
-                if (!door.IsBreakable || door.GameObject.GetComponentInParent<CheckpointDoor>())
-                    continue;
-
-                if (!AffectOpenDoors && door.IsOpen)
-                    continue;
-
-                float dist = Vector3.Distance(door.Position, player.Position);
-                if (dist < closest)
-                {
-                    closest = dist;
-                    closestObject = door;
-                }
-            }
-
-            return closestObject;
-        }
     }
 }

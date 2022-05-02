@@ -16,6 +16,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.Events.EventArgs;
     using GameCore;
     using MEC;
+    using PlayerStatsSystem;
     using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
@@ -65,6 +66,12 @@ namespace ScpDeathmatch.Subclasses
             { 4, 5 },
         };
 
+        /// <summary>
+        /// Gets or sets a value indicating whether players should be immune to fall damage.
+        /// </summary>
+        [Description("Whether players should be immune to fall damage.")]
+        public bool FallDamageImmunity { get; set; } = true;
+
         /// <inheritdoc />
         public override List<CustomAbility> CustomAbilities { get; set; } = new()
         {
@@ -101,6 +108,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
         }
@@ -109,6 +117,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
             Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
         }
@@ -117,6 +126,15 @@ namespace ScpDeathmatch.Subclasses
         {
             if (Check(ev.Target))
                 ev.Target.MaxHealth = MaxHealth;
+        }
+
+        private void OnHurting(HurtingEventArgs ev)
+        {
+            if (FallDamageImmunity &&
+                Check(ev.Target) &&
+                ev.Handler.Base is UniversalDamageHandler universalDamageHandler &&
+                universalDamageHandler.TranslationId == DeathTranslations.Falldown.Id)
+                ev.IsAllowed = false;
         }
 
         private void OnReceivingEffect(ReceivingEffectEventArgs ev)
