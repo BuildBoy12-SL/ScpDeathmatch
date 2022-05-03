@@ -23,7 +23,7 @@ namespace ScpDeathmatch.Configs
             { ItemType.Adrenaline, new SubclassSelection("Athlete", "You've selected the Athlete subclass") },
             { ItemType.Medkit, new SubclassSelection("Brute", "You've selected the Brute subclass") },
             { ItemType.KeycardChaosInsurgency, new SubclassSelection("Insurgent", "You've selected the Insurgent subclass") },
-            { ItemType.GunE11SR, new SubclassSelection("Marksman", "You've selected the Marksman subclass") },
+            { ItemType.SCP1853, new SubclassSelection("Marksman", "You've selected the Marksman subclass") },
             { ItemType.Flashlight, new SubclassSelection("Recon", "You've selected the Recon subclass") },
             { ItemType.KeycardScientist, new SubclassSelection("Scavenger", "You've selected the Scavenger subclass") },
         };
