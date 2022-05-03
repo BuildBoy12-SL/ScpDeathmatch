@@ -10,6 +10,7 @@ namespace ScpDeathmatch.Subclasses
     using System.Collections.Generic;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using MEC;
     using ScpDeathmatch.API.Extensions;
 
     /// <summary>
@@ -19,6 +20,7 @@ namespace ScpDeathmatch.Subclasses
     {
         private readonly Plugin plugin;
         private readonly Dictionary<Player, ItemType> selectedItem = new();
+        private readonly List<int> itemsInProgress = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubclassSelectionManager"/> class.
@@ -58,18 +60,21 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnChangingItem(ChangingItemEventArgs ev)
         {
-            if (Round.IsLobby && ev.NewItem is not null &&
-                plugin.Config.ClassSelection.Selections.TryGetValue(ev.NewItem.Type, out SubclassSelection selection))
-            {
-                selectedItem[ev.Player] = ev.NewItem.Type;
-                if (string.IsNullOrEmpty(selection.Message))
-                    return;
+            if (plugin.Config.ClassSelection.Selections is null || plugin.Config.ClassSelection.Selections.Count == 0)
+                return;
 
-                if (selection.IsBroadcast)
-                    ev.Player.Broadcast(3, selection.Message, shouldClearPrevious: true);
-                else
-                    ev.Player.ShowHint(selection.Message);
-            }
+            if (!Round.IsLobby || ev.NewItem is null ||
+                !plugin.Config.ClassSelection.Selections.TryGetValue(ev.NewItem.Type, out SubclassSelection selection))
+                return;
+
+            selectedItem[ev.Player] = ev.NewItem.Type;
+            if (string.IsNullOrEmpty(selection.Message))
+                return;
+
+            if (selection.IsBroadcast)
+                ev.Player.Broadcast(3, selection.Message, shouldClearPrevious: true);
+            else
+                ev.Player.ShowHint(selection.Message);
         }
 
         private void OnDroppingItem(DroppingItemEventArgs ev)
@@ -86,8 +91,21 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnSpawned(SpawnedEventArgs ev)
         {
-            if (Round.IsLobby)
-                ev.Player.ResetInventory(plugin.Config.ClassSelection.Selections.Keys);
+            if (plugin.Config.ClassSelection.Selections is null || plugin.Config.ClassSelection.Selections.Count == 0)
+                return;
+
+            if (Round.IsLobby && !itemsInProgress.Contains(ev.Player.Id))
+            {
+                itemsInProgress.Add(ev.Player.Id);
+                ev.Player.ClearInventory();
+                Timing.CallDelayed(0.5f, () =>
+                {
+                    foreach (ItemType newItem in plugin.Config.ClassSelection.Selections.Keys)
+                        ev.Player.AddItem(newItem);
+
+                    itemsInProgress.Remove(ev.Player.Id);
+                });
+            }
         }
 
         private void OnTogglingFlashlight(TogglingFlashlightEventArgs ev)
@@ -104,10 +122,11 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnVerified(VerifiedEventArgs ev)
         {
-            if (!Round.IsStarted)
+            if (plugin.Config.ClassSelection.Selections is null || plugin.Config.ClassSelection.Selections.Count == 0)
                 return;
 
-            plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(ev.Player);
+            if (Round.IsStarted)
+                plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(ev.Player);
         }
 
         private void OnRoundStarted()
@@ -115,6 +134,7 @@ namespace ScpDeathmatch.Subclasses
             if (plugin.Config.ClassSelection.Selections is null || plugin.Config.ClassSelection.Selections.Count == 0)
                 return;
 
+            itemsInProgress.Clear();
             foreach (Player player in Player.List)
             {
                 if (player.SessionVariables.ContainsKey("IsNPC"))
