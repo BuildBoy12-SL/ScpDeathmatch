@@ -111,15 +111,18 @@ namespace ScpDeathmatch.Subclasses
             if (!type.IsClass)
                 throw new ArgumentException("OverrideClass must be a class.");
 
+            List<Subclass> subclasses = new();
             foreach (PropertyInfo propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 if (propertyInfo.PropertyType.IsSubclassOf(typeof(Subclass)))
                 {
                     Subclass subclass = (Subclass)propertyInfo.GetValue(overrideClass) ?? Activator.CreateInstance(propertyInfo.PropertyType) as Subclass;
                     subclass?.TryRegister();
-                    yield return subclass;
+                    subclasses.Add(subclass);
                 }
             }
+
+            return subclasses;
         }
 
         /// <summary>
@@ -127,7 +130,7 @@ namespace ScpDeathmatch.Subclasses
         /// </summary>
         public static void UnregisterSubclasses()
         {
-            foreach (Subclass subclass in Registered)
+            foreach (Subclass subclass in Registered.ToList())
                 subclass.TryUnregister();
         }
 
