@@ -13,6 +13,7 @@ namespace ScpDeathmatch
     using Exiled.API.Features;
     using HarmonyLib;
     using RemoteAdmin;
+    using ScpDeathmatch.Commands;
     using ScpDeathmatch.Managers;
     using ScpDeathmatch.Models;
     using ScpDeathmatch.Patches.Manual;
@@ -118,6 +119,8 @@ namespace ScpDeathmatch
         {
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
+            Config.MiscCommands.Register();
+
             Config.ClientCommands.Register();
         }
 
@@ -126,6 +129,8 @@ namespace ScpDeathmatch
         {
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
+            Config.MiscCommands.Unregister();
+
             Config.ClientCommands.Unregister();
         }
 

@@ -130,6 +130,12 @@ namespace ScpDeathmatch
         public MedicalItemsConfig MedicalItems { get; set; }
 
         /// <summary>
+        /// Gets or sets the configs for misc. commands.
+        /// </summary>
+        [YamlIgnore]
+        public MiscCommandsConfig MiscCommands { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs related to the omega warhead.
         /// </summary>
         [YamlIgnore]
