@@ -8,42 +8,21 @@
 namespace ScpDeathmatch
 {
     using System;
+    using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using HarmonyLib;
     using RemoteAdmin;
-    using ScpDeathmatch.Decontamination;
-    using ScpDeathmatch.EventHandlers;
-    using ScpDeathmatch.HealthSystem;
-    using ScpDeathmatch.KillRewards;
     using ScpDeathmatch.Managers;
-    using ScpDeathmatch.MicroHidEnhancers;
+    using ScpDeathmatch.Models;
     using ScpDeathmatch.Patches.Manual;
     using ScpDeathmatch.Stats;
-    using ScpDeathmatch.Subclasses;
 
     /// <inheritdoc />
     public class Plugin : Plugin<Config>
     {
+        private readonly List<Subscribable> subscribed = new();
         private Harmony harmony;
-
-        private ArmoryPitManager armoryPitManager;
-        private BodySlammingManager bodySlammingManager;
-        private DecontaminationManager decontaminationManager;
-        private DisarmingLivesManager disarmingLivesManager;
-        private HealthManager healthManager;
-        private MicroHidHealing microHidHealing;
-        private MicroHidMovement microHidMovement;
-        private OmegaWarhead omegaWarhead;
-        private RewardManager rewardManager;
-        private RoundManager roundManager;
-        private RoundStatsManager roundStatsManager;
-        private StatTracker statTracker;
-        private SubclassSelectionManager subclassSelectionManager;
-        private TimedCommandHandler timedCommandHandler;
-
-        private PlayerEvents playerEvents;
-        private ServerEvents serverEvents;
 
         /// <summary>
         /// Gets an instance of the <see cref="Plugin"/> class.
@@ -94,61 +73,15 @@ namespace ScpDeathmatch
             harmony.PatchAll();
             PatchManual();
 
-            armoryPitManager = new ArmoryPitManager(this);
-            armoryPitManager.Subscribe();
-
-            bodySlammingManager = new BodySlammingManager(this);
-            bodySlammingManager.Subscribe();
-
-            decontaminationManager = new DecontaminationManager(this);
-            decontaminationManager.Subscribe();
-
-            disarmingLivesManager = new DisarmingLivesManager(this);
-            disarmingLivesManager.Subscribe();
-
-            healthManager = new HealthManager();
-            healthManager.Subscribe();
-
-            microHidHealing = new MicroHidHealing(this);
-            microHidHealing.Subscribe();
-
-            microHidMovement = new MicroHidMovement(this);
-            microHidMovement.Subscribe();
-
-            omegaWarhead = new OmegaWarhead(this);
-            omegaWarhead.Subscribe();
-
             RespawnManager = new RespawnManager();
-
-            rewardManager = new RewardManager(this);
-            rewardManager.Subscribe();
-
-            roundManager = new RoundManager(this);
-            roundManager.Subscribe();
-
-            roundStatsManager = new RoundStatsManager(this);
-            roundStatsManager.Subscribe();
 
             StatDatabase = new StatDatabase(this);
             StatDatabase.Open();
 
-            statTracker = new StatTracker(this);
-            statTracker.Subscribe();
-
-            subclassSelectionManager = new SubclassSelectionManager(this);
-            subclassSelectionManager.Subscribe();
-
-            timedCommandHandler = new TimedCommandHandler(this);
-            timedCommandHandler.Subscribe();
-
             ZoneAnnouncer = new ZoneAnnouncer(this);
             ZoneAnnouncer.Subscribe();
 
-            playerEvents = new PlayerEvents(this);
-            playerEvents.Subscribe();
-
-            serverEvents = new ServerEvents(this);
-            serverEvents.Subscribe();
+            Subscribe();
 
             Config.CustomItems.Register();
             Config.Subclasses.Register();
@@ -162,61 +95,15 @@ namespace ScpDeathmatch
             Config.CustomItems.Unregister();
             Config.Subclasses.Unregister();
 
-            serverEvents?.Unsubscribe();
-            serverEvents = null;
-
-            playerEvents?.Unsubscribe();
-            playerEvents = null;
+            Unsubscribe();
 
             ZoneAnnouncer?.Unsubscribe();
             ZoneAnnouncer = null;
 
-            timedCommandHandler?.Unsubscribe();
-            timedCommandHandler = null;
-
-            subclassSelectionManager?.Unsubscribe();
-            subclassSelectionManager = null;
-
-            statTracker?.Unsubscribe();
-            statTracker = null;
-
             StatDatabase?.Close();
             StatDatabase = null;
 
-            roundStatsManager?.Unsubscribe();
-            roundStatsManager = null;
-
-            roundManager?.Unsubscribe();
-            roundManager = null;
-
-            rewardManager?.Unsubscribe();
-            rewardManager = null;
-
             RespawnManager = null;
-
-            omegaWarhead?.Unsubscribe();
-            omegaWarhead = null;
-
-            microHidMovement?.Unsubscribe();
-            microHidMovement = null;
-
-            microHidHealing?.Unsubscribe();
-            microHidHealing = null;
-
-            healthManager?.Unsubscribe();
-            healthManager = null;
-
-            disarmingLivesManager?.Unsubscribe();
-            disarmingLivesManager = null;
-
-            decontaminationManager?.Unsubscribe();
-            decontaminationManager = null;
-
-            bodySlammingManager?.Unsubscribe();
-            bodySlammingManager = null;
-
-            armoryPitManager?.Unsubscribe();
-            armoryPitManager = null;
 
             harmony?.UnpatchAll(harmony.Id);
             harmony = null;
@@ -249,6 +136,27 @@ namespace ScpDeathmatch
                 if (type.GetInterfaces().Contains(typeof(IManualPatch)))
                     ((IManualPatch)Activator.CreateInstance(type)).Patch(harmony);
             }
+        }
+
+        private void Subscribe()
+        {
+            foreach (Type type in Assembly.GetTypes())
+            {
+                if (type.IsSubclassOf(typeof(Subscribable)))
+                {
+                    Subscribable subscribable = (Subscribable)Activator.CreateInstance(type, args: this);
+                    subscribable.Subscribe();
+                    subscribed.Add(subscribable);
+                }
+            }
+        }
+
+        private void Unsubscribe()
+        {
+            foreach (Subscribable subscribable in subscribed)
+                subscribable.Unsubscribe();
+
+            subscribed.Clear();
         }
     }
 }

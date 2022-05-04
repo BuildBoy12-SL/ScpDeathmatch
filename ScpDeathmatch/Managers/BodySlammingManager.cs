@@ -11,32 +11,30 @@ namespace ScpDeathmatch.Managers
     using Exiled.Events.EventArgs;
     using PlayerStatsSystem;
     using ScpDeathmatch.API.Extensions;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles body slamming from heights.
     /// </summary>
-    public class BodySlammingManager
+    public class BodySlammingManager : Subscribable
     {
-        private readonly Plugin plugin;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BodySlammingManager"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public BodySlammingManager(Plugin plugin) => this.plugin = plugin;
+        public BodySlammingManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
         }
@@ -47,10 +45,10 @@ namespace ScpDeathmatch.Managers
                 universalDamageHandler.TranslationId != DeathTranslations.Falldown.Id)
                 return;
 
-            if (ev.Amount < plugin.Config.BodySlamming.MinimumDamage)
+            if (ev.Amount < Plugin.Config.BodySlamming.MinimumDamage)
                 return;
 
-            Player target = Player.List.Closest(ev.Target.Position, plugin.Config.BodySlamming.MaximumDistance, player => player != ev.Target && !player.SessionVariables.ContainsKey("IsNPC"));
+            Player target = Player.List.Closest(ev.Target.Position, Plugin.Config.BodySlamming.MaximumDistance, player => player != ev.Target && !player.SessionVariables.ContainsKey("IsNPC"));
             if (target is null)
                 return;
 

@@ -12,41 +12,40 @@ namespace ScpDeathmatch.MicroHidEnhancers
     using Exiled.Events.EventArgs;
     using InventorySystem.Items.MicroHID;
     using MEC;
+    using ScpDeathmatch.Models;
     using UnityEngine;
 
     /// <summary>
     /// Manages the <see cref="ItemType.MicroHID"/> healing.
     /// </summary>
-    public class MicroHidHealing
+    public class MicroHidHealing : Subscribable
     {
-        private readonly Plugin plugin;
         private readonly Dictionary<Player, CoroutineHandle> healingCoroutines = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MicroHidHealing"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public MicroHidHealing(Plugin plugin) => this.plugin = plugin;
+        public MicroHidHealing(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.ChangingMicroHIDState -= OnChangingMicroHIDState;
         }
 
         private void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
         {
-            if (!plugin.Config.HealingMicro.IsEnabled || !ev.IsAllowed)
+            if (!Plugin.Config.HealingMicro.IsEnabled || !ev.IsAllowed)
                 return;
 
             switch (ev.NewState)
@@ -68,14 +67,14 @@ namespace ScpDeathmatch.MicroHidEnhancers
 
         private IEnumerator<float> RunHealing(Player player)
         {
-            yield return Timing.WaitForSeconds(plugin.Config.HealingMicro.InitialDelay);
+            yield return Timing.WaitForSeconds(Plugin.Config.HealingMicro.InitialDelay);
             if (player.MaxArtificialHealth == 0f)
-                player.AddAhp(0f, plugin.Config.HealingMicro.MaximumAhp, plugin.Config.HealingMicro.AhpDecayRate, plugin.Config.HealingMicro.AhpEfficacy, 0f, true);
+                player.AddAhp(0f, Plugin.Config.HealingMicro.MaximumAhp, Plugin.Config.HealingMicro.AhpDecayRate, Plugin.Config.HealingMicro.AhpEfficacy, 0f, true);
 
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(plugin.Config.HealingMicro.SecondsPerTick);
-                float newHealth = player.Health + plugin.Config.HealingMicro.HealthPerTick;
+                yield return Timing.WaitForSeconds(Plugin.Config.HealingMicro.SecondsPerTick);
+                float newHealth = player.Health + Plugin.Config.HealingMicro.HealthPerTick;
                 if (newHealth > player.MaxHealth)
                 {
                     player.Health = player.MaxHealth;

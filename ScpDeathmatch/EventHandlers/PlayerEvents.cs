@@ -11,35 +11,33 @@ namespace ScpDeathmatch.EventHandlers
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
     using MapGeneration.Distributors;
+    using ScpDeathmatch.Models;
     using UnityEngine;
     using PlayerHandlers = Exiled.Events.Handlers.Player;
 
     /// <summary>
     /// Handles events derived from <see cref="Exiled.Events.Handlers.Player"/>.
     /// </summary>
-    public class PlayerEvents
+    public class PlayerEvents : Subscribable
     {
-        private readonly Plugin plugin;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerEvents"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public PlayerEvents(Plugin plugin) => this.plugin = plugin;
+        public PlayerEvents(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractingLocker;
@@ -47,7 +45,7 @@ namespace ScpDeathmatch.EventHandlers
 
         private void OnDying(DyingEventArgs ev)
         {
-            if (!plugin.Config.DropEffectsOnDeath || ev.Target is null)
+            if (!Plugin.Config.DropEffectsOnDeath || ev.Target is null)
                 return;
 
             byte scp207Intensity = ev.Target.GetEffectIntensity<Scp207>();
@@ -68,7 +66,7 @@ namespace ScpDeathmatch.EventHandlers
 
             foreach (Item item in ev.Player.Items)
             {
-                if (item is not null && plugin.Config.CanOpenPedestal.Contains(item.Type))
+                if (item is not null && Plugin.Config.CanOpenPedestal.Contains(item.Type))
                 {
                     ev.IsAllowed = true;
                     return;

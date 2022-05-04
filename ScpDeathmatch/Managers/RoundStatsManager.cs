@@ -11,13 +11,13 @@ namespace ScpDeathmatch.Managers
     using System.Linq;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles the counting of kills and display of stats at the end of the round.
     /// </summary>
-    public class RoundStatsManager
+    public class RoundStatsManager : Subscribable
     {
-        private readonly Plugin plugin;
         private readonly SortedList<Player, int> kills = new();
         private Player firstBlood;
 
@@ -25,22 +25,21 @@ namespace ScpDeathmatch.Managers
         /// Initializes a new instance of the <see cref="RoundStatsManager"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public RoundStatsManager(Plugin plugin) => this.plugin = plugin;
+        public RoundStatsManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
@@ -63,7 +62,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Broadcast broadcast = plugin.Config.StatBroadcast.Broadcast;
+            Broadcast broadcast = Plugin.Config.StatBroadcast.Broadcast;
             string content = FormatBroadcast();
             if (broadcast.Show && !string.IsNullOrEmpty(content))
                 Map.Broadcast(broadcast.Duration, content, broadcast.Type, true);
@@ -77,7 +76,7 @@ namespace ScpDeathmatch.Managers
 
         private string FormatBroadcast()
         {
-            Player winner = Player.Get(player => player.IsAlive && !(plugin.Config.Subclasses.Insurgent.Check(player) && player.Role.Type == RoleType.Scp079)).FirstOrDefault();
+            Player winner = Player.Get(player => player.IsAlive && !(Plugin.Config.Subclasses.Insurgent.Check(player) && player.Role.Type == RoleType.Scp079)).FirstOrDefault();
             string winnerName = winner?.DisplayNickname ?? winner?.Nickname;
             string firstBloodName = firstBlood?.DisplayNickname ?? firstBlood?.Nickname;
 
@@ -90,10 +89,10 @@ namespace ScpDeathmatch.Managers
                 topKillCount = topKills.Value;
             }
 
-            return plugin.Config.StatBroadcast.Broadcast.Content
-                .Replace("$Winner", string.IsNullOrEmpty(winnerName) ? string.Empty : string.Format(plugin.Config.StatBroadcast.Winner, winnerName))
-                .Replace("$TopKills", string.IsNullOrEmpty(topKillName) || topKillCount == 0 ? string.Empty : string.Format(plugin.Config.StatBroadcast.TopKills, topKillName, topKillCount))
-                .Replace("$FirstBlood", string.IsNullOrEmpty(firstBloodName) ? string.Empty : string.Format(plugin.Config.StatBroadcast.FirstBlood, firstBloodName));
+            return Plugin.Config.StatBroadcast.Broadcast.Content
+                .Replace("$Winner", string.IsNullOrEmpty(winnerName) ? string.Empty : string.Format(Plugin.Config.StatBroadcast.Winner, winnerName))
+                .Replace("$TopKills", string.IsNullOrEmpty(topKillName) || topKillCount == 0 ? string.Empty : string.Format(Plugin.Config.StatBroadcast.TopKills, topKillName, topKillCount))
+                .Replace("$FirstBlood", string.IsNullOrEmpty(firstBloodName) ? string.Empty : string.Format(Plugin.Config.StatBroadcast.FirstBlood, firstBloodName));
         }
     }
 }

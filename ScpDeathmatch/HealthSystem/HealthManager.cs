@@ -9,26 +9,32 @@ namespace ScpDeathmatch.HealthSystem
 {
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.HealthSystem.Components;
+    using ScpDeathmatch.Models;
     using UnityEngine;
 
     /// <summary>
     /// Manages the health system.
     /// </summary>
-    public class HealthManager
+    public class HealthManager : Subscribable
     {
         /// <summary>
-        /// Subscribes to all required events.
+        /// Initializes a new instance of the <see cref="HealthManager"/> class.
         /// </summary>
-        public void Subscribe()
+        /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
+        public HealthManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
+
+        /// <inheritdoc/>
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.Destroying += OnDestroying;
             Exiled.Events.Handlers.Player.Verified += OnVerified;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc/>
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
             Exiled.Events.Handlers.Player.Verified -= OnVerified;

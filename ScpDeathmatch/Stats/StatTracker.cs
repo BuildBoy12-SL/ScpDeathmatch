@@ -9,6 +9,7 @@ namespace ScpDeathmatch.Stats
 {
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.Models;
     using ScpDeathmatch.Stats.Components;
     using ScpDeathmatch.Stats.Models;
     using UnityEngine;
@@ -16,20 +17,19 @@ namespace ScpDeathmatch.Stats
     /// <summary>
     /// Tracks the stats of players.
     /// </summary>
-    public class StatTracker
+    public class StatTracker : Subscribable
     {
-        private readonly Plugin plugin;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StatTracker"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public StatTracker(Plugin plugin) => this.plugin = plugin;
+        public StatTracker(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.Destroying += OnDestroying;
             Exiled.Events.Handlers.Player.Died += OnDied;
@@ -37,10 +37,8 @@ namespace ScpDeathmatch.Stats
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
             Exiled.Events.Handlers.Player.Died -= OnDied;
@@ -50,12 +48,12 @@ namespace ScpDeathmatch.Stats
 
         private void AddRoundKills(Player player)
         {
-            if (!plugin.StatDatabase.TryGet(player, out PlayerInfo playerInfo))
+            if (!Plugin.StatDatabase.TryGet(player, out PlayerInfo playerInfo))
                 return;
 
             playerInfo.Kills += playerInfo.RoundKills;
             playerInfo.RoundKills = 0;
-            plugin.StatDatabase.Upsert(playerInfo);
+            Plugin.StatDatabase.Upsert(playerInfo);
         }
 
         private void OnDestroying(DestroyingEventArgs ev)
@@ -70,26 +68,26 @@ namespace ScpDeathmatch.Stats
             if (!Round.IsStarted)
                 return;
 
-            if (plugin.StatDatabase.TryGet(ev.Target, out PlayerInfo targetInfo))
+            if (Plugin.StatDatabase.TryGet(ev.Target, out PlayerInfo targetInfo))
             {
                 targetInfo.Deaths++;
-                plugin.StatDatabase.Upsert(targetInfo);
+                Plugin.StatDatabase.Upsert(targetInfo);
             }
 
             if (ev.Killer is null || ev.Killer == ev.Target)
                 return;
 
-            if (plugin.StatDatabase.TryGet(ev.Killer, out PlayerInfo killerInfo))
+            if (Plugin.StatDatabase.TryGet(ev.Killer, out PlayerInfo killerInfo))
             {
                 killerInfo.RoundKills++;
-                plugin.StatDatabase.Upsert(killerInfo);
+                Plugin.StatDatabase.Upsert(killerInfo);
             }
         }
 
         private void OnVerified(VerifiedEventArgs ev)
         {
-            if (!plugin.StatDatabase.TryGet(ev.Player, out _))
-                plugin.StatDatabase.Upsert(new PlayerInfo(ev.Player.UserId));
+            if (!Plugin.StatDatabase.TryGet(ev.Player, out _))
+                Plugin.StatDatabase.Upsert(new PlayerInfo(ev.Player.UserId));
 
             ev.Player.GameObject.AddComponent<StatComponent>();
         }

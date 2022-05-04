@@ -14,40 +14,39 @@ namespace ScpDeathmatch.MicroHidEnhancers
     using Exiled.Events.EventArgs;
     using InventorySystem.Items.MicroHID;
     using MEC;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Manages the <see cref="ItemType.MicroHID"/> movement enhancement.
     /// </summary>
-    public class MicroHidMovement
+    public class MicroHidMovement : Subscribable
     {
-        private readonly Plugin plugin;
         private readonly Dictionary<Player, CoroutineHandle> movementCoroutines = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MicroHidMovement"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public MicroHidMovement(Plugin plugin) => this.plugin = plugin;
+        public MicroHidMovement(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.ChangingMicroHIDState += OnChangingMicroHIDState;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.ChangingMicroHIDState -= OnChangingMicroHIDState;
         }
 
         private void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
         {
-            if (!plugin.Config.SpeedyMicro.IsEnabled || !ev.IsAllowed)
+            if (!Plugin.Config.SpeedyMicro.IsEnabled || !ev.IsAllowed)
                 return;
 
             CoroutineHandle coroutineHandle;
@@ -74,16 +73,16 @@ namespace ScpDeathmatch.MicroHidEnhancers
 
         private IEnumerator<float> RunMovementIncrease(Player player)
         {
-            yield return Timing.WaitForSeconds(plugin.Config.SpeedyMicro.InitialDelay);
+            yield return Timing.WaitForSeconds(Plugin.Config.SpeedyMicro.InitialDelay);
 
             PlayerEffect movementBoost = player.GetEffect(EffectType.MovementBoost);
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(plugin.Config.SpeedyMicro.SecondsPerTick);
-                byte newIntensity = (byte)(movementBoost.Intensity + plugin.Config.SpeedyMicro.BoostIncreasePerTick);
-                if (newIntensity > plugin.Config.SpeedyMicro.MaximumBoost)
+                yield return Timing.WaitForSeconds(Plugin.Config.SpeedyMicro.SecondsPerTick);
+                byte newIntensity = (byte)(movementBoost.Intensity + Plugin.Config.SpeedyMicro.BoostIncreasePerTick);
+                if (newIntensity > Plugin.Config.SpeedyMicro.MaximumBoost)
                 {
-                    movementBoost.Intensity = plugin.Config.SpeedyMicro.MaximumBoost;
+                    movementBoost.Intensity = Plugin.Config.SpeedyMicro.MaximumBoost;
                     continue;
                 }
 
@@ -96,8 +95,8 @@ namespace ScpDeathmatch.MicroHidEnhancers
             PlayerEffect movementBoost = player.GetEffect(EffectType.MovementBoost);
             while (movementBoost.IsEnabled)
             {
-                yield return Timing.WaitForSeconds(plugin.Config.SpeedyMicro.SecondsPerTick);
-                movementBoost.Intensity -= plugin.Config.SpeedyMicro.BoostDecreasePerTick;
+                yield return Timing.WaitForSeconds(Plugin.Config.SpeedyMicro.SecondsPerTick);
+                movementBoost.Intensity -= Plugin.Config.SpeedyMicro.BoostDecreasePerTick;
             }
         }
     }

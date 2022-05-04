@@ -9,19 +9,21 @@ namespace ScpDeathmatch.Managers
 {
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Manages deciding when the round should ends.
     /// </summary>
-    public class RoundManager
+    public class RoundManager : Subscribable
     {
-        private readonly Plugin plugin;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RoundManager"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public RoundManager(Plugin plugin) => this.plugin = plugin;
+        public RoundManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
         private int AliveCount
         {
@@ -33,8 +35,8 @@ namespace ScpDeathmatch.Managers
                     if (player.SessionVariables.ContainsKey("IsNPC"))
                         continue;
 
-                    if (plugin.Config.Subclasses.Insurgent.Check(player) &&
-                        !plugin.Config.Subclasses.Insurgent.Count079Alive &&
+                    if (Plugin.Config.Subclasses.Insurgent.Check(player) &&
+                        !Plugin.Config.Subclasses.Insurgent.Count079Alive &&
                         player.Role.Type == RoleType.Scp079)
                         continue;
 
@@ -46,25 +48,21 @@ namespace ScpDeathmatch.Managers
             }
         }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
         }
 
         private void OnEndingRound(EndingRoundEventArgs ev)
         {
-            ev.IsRoundEnded = AliveCount + plugin.RespawnManager.Count <= 1;
+            ev.IsRoundEnded = AliveCount + Plugin.RespawnManager.Count <= 1;
             ev.IsAllowed = true;
         }
     }

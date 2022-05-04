@@ -18,30 +18,27 @@ namespace ScpDeathmatch.Managers
     /// <summary>
     /// Handles granting extra lives to players who have others disarmed.
     /// </summary>
-    public class DisarmingLivesManager
+    public class DisarmingLivesManager : Subscribable
     {
-        private readonly Plugin plugin;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DisarmingLivesManager"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public DisarmingLivesManager(Plugin plugin) => this.plugin = plugin;
+        public DisarmingLivesManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.Handcuffing -= OnHandcuffing;
@@ -50,10 +47,10 @@ namespace ScpDeathmatch.Managers
 
         private void OnDying(DyingEventArgs ev)
         {
-            if (!plugin.Config.ExtraLives.IsEnabled || !ev.IsAllowed)
+            if (!Plugin.Config.ExtraLives.IsEnabled || !ev.IsAllowed)
                 return;
 
-            if (!plugin.Config.ExtraLives.RespawnOnSuicide && (ev.Killer is null || ev.Killer == ev.Target))
+            if (!Plugin.Config.ExtraLives.RespawnOnSuicide && (ev.Killer is null || ev.Killer == ev.Target))
                 return;
 
             List<DisarmedPlayers.DisarmedEntry> disarmedEntries = DisarmedPlayers.Entries.Where(entry => entry.Disarmer == ev.Target.NetworkIdentity.netId).ToList();
@@ -66,17 +63,17 @@ namespace ScpDeathmatch.Managers
             ev.IsAllowed = false;
             ev.Target.Health = ev.Target.MaxHealth;
 
-            if (plugin.Config.ExtraLives.SpawnRagdolls)
+            if (Plugin.Config.ExtraLives.SpawnRagdolls)
             {
                 RagdollInfo ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, ev.Handler.Base, ev.Target.Role.Type, ev.Target.Position, ev.Target.CameraTransform.rotation, ev.Target.DisplayNickname ?? ev.Target.Nickname, System.DateTime.Now.ToOADate());
                 _ = new Ragdoll(ragdollInfo, true);
             }
 
-            Vector3 newPosition = TeleportPosition.Get(ev.Target, plugin.Config.ExtraLives.TeleportType);
+            Vector3 newPosition = TeleportPosition.Get(ev.Target, Plugin.Config.ExtraLives.TeleportType);
             if (newPosition != Vector3.zero)
                 ev.Target.Position = newPosition + Vector3.up;
 
-            ev.Target.Broadcast(plugin.Config.ExtraLives.ExtraLifeBroadcast);
+            ev.Target.Broadcast(Plugin.Config.ExtraLives.ExtraLifeBroadcast);
         }
 
         private void OnHandcuffing(HandcuffingEventArgs ev)
@@ -85,12 +82,12 @@ namespace ScpDeathmatch.Managers
                 return;
 
             int disarmedEntries = DisarmedPlayers.Entries.Count(entry => entry.Disarmer == ev.Cuffer.NetworkIdentity.netId);
-            ev.IsAllowed = disarmedEntries < plugin.Config.Disarming.DetainLimit;
+            ev.IsAllowed = disarmedEntries < Plugin.Config.Disarming.DetainLimit;
         }
 
         private void OnHurting(HurtingEventArgs ev)
         {
-            if (plugin.Config.Disarming.DisarmedDamage || ev.Attacker is null || ev.Attacker == ev.Target)
+            if (Plugin.Config.Disarming.DisarmedDamage || ev.Attacker is null || ev.Attacker == ev.Target)
                 return;
 
             if (ev.Target.Inventory.IsDisarmed())

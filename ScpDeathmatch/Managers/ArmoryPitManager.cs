@@ -14,33 +14,31 @@ namespace ScpDeathmatch.Managers
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
+    using ScpDeathmatch.Models;
     using UnityEngine;
 
     /// <summary>
     /// Manages the tracking of items thrown into the <see cref="RoomType.HczArmory"/> pit.
     /// </summary>
-    public class ArmoryPitManager
+    public class ArmoryPitManager : Subscribable
     {
-        private readonly Plugin plugin;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ArmoryPitManager"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public ArmoryPitManager(Plugin plugin) => this.plugin = plugin;
+        public ArmoryPitManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
         }
@@ -79,13 +77,13 @@ namespace ScpDeathmatch.Managers
                 pickup.Destroy();
                 if (pickup.Type == ItemType.MicroHID)
                 {
-                    plugin.Config.CustomItems.SecondWind.Give(player);
+                    Plugin.Config.CustomItems.SecondWind.Give(player);
                     yield break;
                 }
 
-                if (plugin.Config.CustomItems.WeaponToken.Check(pickup))
+                if (Plugin.Config.CustomItems.WeaponToken.Check(pickup))
                 {
-                    plugin.Config.CustomItems.WeaponToken.GiveRandom(player);
+                    Plugin.Config.CustomItems.WeaponToken.GiveRandom(player);
                     yield break;
                 }
             }

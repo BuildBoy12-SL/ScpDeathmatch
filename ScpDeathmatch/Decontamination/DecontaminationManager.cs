@@ -11,34 +11,33 @@ namespace ScpDeathmatch.Decontamination
     using LightContainmentZoneDecontamination;
     using MEC;
     using ScpDeathmatch.Decontamination.Models;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles the decontamination sequence.
     /// </summary>
-    public class DecontaminationManager
+    public class DecontaminationManager : Subscribable
     {
-        private readonly Plugin plugin;
         private CoroutineHandle coroutineHandle;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DecontaminationManager"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public DecontaminationManager(Plugin plugin) => this.plugin = plugin;
+        public DecontaminationManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc/>
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
@@ -46,7 +45,7 @@ namespace ScpDeathmatch.Decontamination
 
         private void OnWaitingForPlayers()
         {
-            if (plugin.Config.Decontamination.IsEnabled)
+            if (Plugin.Config.Decontamination.IsEnabled)
             {
                 DecontaminationController.Singleton.NetworkRoundStartTime = -1.0;
                 DecontaminationController.Singleton._stopUpdating = true;
@@ -58,13 +57,13 @@ namespace ScpDeathmatch.Decontamination
 
         private void OnRoundStarted()
         {
-            if (plugin.Config.Decontamination.IsEnabled)
+            if (Plugin.Config.Decontamination.IsEnabled)
                 coroutineHandle = Timing.RunCoroutine(RunDecontamination());
         }
 
         private IEnumerator<float> RunDecontamination()
         {
-            foreach (DecontaminationPhase decontaminationPhase in plugin.Config.Decontamination.Phases)
+            foreach (DecontaminationPhase decontaminationPhase in Plugin.Config.Decontamination.Phases)
             {
                 yield return Timing.WaitForSeconds(decontaminationPhase.TriggerTime);
                 decontaminationPhase.Run();

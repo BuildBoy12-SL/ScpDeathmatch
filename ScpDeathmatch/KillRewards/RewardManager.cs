@@ -13,20 +13,23 @@ namespace ScpDeathmatch.KillRewards
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.KillRewards.Models;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Manages rewards defined by <see cref="RewardRequirement"/>s.
     /// </summary>
-    public class RewardManager
+    public class RewardManager : Subscribable
     {
-        private readonly Plugin plugin;
         private readonly Dictionary<Player, (DamageType, HitboxType?)> cachedHitboxes = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RewardManager"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public RewardManager(Plugin plugin) => this.plugin = plugin;
+        public RewardManager(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
         private static Dictionary<ItemType, DamageType> ItemConversion { get; } = new()
         {
@@ -42,10 +45,8 @@ namespace ScpDeathmatch.KillRewards
             { ItemType.MicroHID, DamageType.MicroHid },
         };
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
@@ -53,10 +54,8 @@ namespace ScpDeathmatch.KillRewards
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
@@ -66,13 +65,13 @@ namespace ScpDeathmatch.KillRewards
 
         private void OnDied(DiedEventArgs ev)
         {
-            if (!plugin.Config.Rewards.IsEnabled ||
+            if (!Plugin.Config.Rewards.IsEnabled ||
                 ev.Killer is null ||
                 !cachedHitboxes.TryGetValue(ev.Killer, out var tuple) ||
-                plugin.Config.Rewards.Rewards.Count == 0)
+                Plugin.Config.Rewards.Rewards.Count == 0)
                 return;
 
-            foreach (RewardRequirement rewardRequirement in plugin.Config.Rewards.Rewards)
+            foreach (RewardRequirement rewardRequirement in Plugin.Config.Rewards.Rewards)
             {
                 if (rewardRequirement.Check(tuple.Item1, tuple.Item2))
                     rewardRequirement.Reward(ev.Killer, ev.Target);

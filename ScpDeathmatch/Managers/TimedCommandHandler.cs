@@ -15,31 +15,29 @@ namespace ScpDeathmatch.Managers
     /// <summary>
     /// Handles configurable commands from <see cref="Configs.CommandConfig"/>.
     /// </summary>
-    public class TimedCommandHandler
+    public class TimedCommandHandler : Subscribable
     {
-        private readonly Plugin plugin;
         private readonly List<CoroutineHandle> coroutineHandles = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimedCommandHandler"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public TimedCommandHandler(Plugin plugin) => this.plugin = plugin;
+        public TimedCommandHandler(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
@@ -48,13 +46,13 @@ namespace ScpDeathmatch.Managers
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            foreach (ConfiguredCommand command in plugin.Config.Commands.RoundEnd)
+            foreach (ConfiguredCommand command in Plugin.Config.Commands.RoundEnd)
                 coroutineHandles.Add(command.Execute());
         }
 
         private void OnRoundStarted()
         {
-            foreach (ConfiguredCommand command in plugin.Config.Commands.RoundStart)
+            foreach (ConfiguredCommand command in Plugin.Config.Commands.RoundStart)
                 coroutineHandles.Add(command.Execute());
         }
 

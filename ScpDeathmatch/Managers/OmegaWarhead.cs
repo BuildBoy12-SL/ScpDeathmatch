@@ -11,13 +11,13 @@ namespace ScpDeathmatch.Managers
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using MEC;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles the running of the omega warhead.
     /// </summary>
-    public class OmegaWarhead
+    public class OmegaWarhead : Subscribable
     {
-        private readonly Plugin plugin;
         private CoroutineHandle warheadCoroutine;
         private bool isOmega;
 
@@ -25,21 +25,20 @@ namespace ScpDeathmatch.Managers
         /// Initializes a new instance of the <see cref="OmegaWarhead"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public OmegaWarhead(Plugin plugin) => this.plugin = plugin;
+        public OmegaWarhead(Plugin plugin)
+            : base(plugin)
+        {
+        }
 
-        /// <summary>
-        /// Subscribes to all required events.
-        /// </summary>
-        public void Subscribe()
+        /// <inheritdoc />
+        public override void Subscribe()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Warhead.Detonated += OnDetonated;
         }
 
-        /// <summary>
-        /// Unsubscribes from all required events.
-        /// </summary>
-        public void Unsubscribe()
+        /// <inheritdoc />
+        public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Warhead.Detonated -= OnDetonated;
@@ -54,7 +53,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnDetonated()
         {
-            if (!plugin.Config.OmegaWarhead.IsEnabled || isOmega)
+            if (!Plugin.Config.OmegaWarhead.IsEnabled || isOmega)
                 return;
 
             warheadCoroutine = Timing.RunCoroutine(RunWarhead());
@@ -63,9 +62,9 @@ namespace ScpDeathmatch.Managers
 
         private IEnumerator<float> RunWarhead()
         {
-            yield return Timing.WaitForSeconds(plugin.Config.OmegaWarhead.InitialDelay);
-            Cassie.Message(plugin.Config.OmegaWarhead.Cassie, isNoisy: !plugin.Config.OmegaWarhead.SuppressCassieNoise);
-            yield return Timing.WaitForSeconds(plugin.Config.OmegaWarhead.Time);
+            yield return Timing.WaitForSeconds(Plugin.Config.OmegaWarhead.InitialDelay);
+            Cassie.Message(Plugin.Config.OmegaWarhead.Cassie, isNoisy: !Plugin.Config.OmegaWarhead.SuppressCassieNoise);
+            yield return Timing.WaitForSeconds(Plugin.Config.OmegaWarhead.Time);
             AlphaWarheadController.Host.InstantPrepare();
             AlphaWarheadController.Host.StartDetonation();
             AlphaWarheadController.Host.NetworktimeToDetonation = 0.1f;
