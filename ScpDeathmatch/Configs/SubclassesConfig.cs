@@ -7,6 +7,7 @@
 
 namespace ScpDeathmatch.Configs
 {
+    using System.Collections.Generic;
     using ScpDeathmatch.Subclasses;
 
     /// <summary>
@@ -14,6 +15,8 @@ namespace ScpDeathmatch.Configs
     /// </summary>
     public class SubclassesConfig
     {
+        private IEnumerable<Subclass> registeredSubclasses;
+
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Athlete"/> class.
         /// </summary>
@@ -47,11 +50,18 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Registers all custom items.
         /// </summary>
-        public void Register() => Subclass.RegisterSubclasses(this);
+        public void Register() => registeredSubclasses = Subclass.RegisterSubclasses(this);
 
         /// <summary>
         /// Unregisters all custom items.
         /// </summary>
-        public void Unregister() => Subclass.UnregisterSubclasses();
+        public void Unregister()
+        {
+            if (registeredSubclasses is null)
+                return;
+
+            foreach (Subclass subclass in registeredSubclasses)
+                subclass.TryUnregister();
+        }
     }
 }

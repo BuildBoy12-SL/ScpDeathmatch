@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
+    using Exiled.CustomItems.API;
     using Exiled.CustomItems.API.Features;
     using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.CustomItems.Qed;
@@ -17,6 +18,8 @@ namespace ScpDeathmatch.Configs
     /// </summary>
     public class CustomItemsConfig
     {
+        private IEnumerable<CustomItem> registeredItems;
+
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="BigIron"/> class.
         /// </summary>
@@ -65,11 +68,18 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Registers all custom items.
         /// </summary>
-        public void Register() => CustomItem.RegisterItems(overrideClass: this);
+        public void Register() => registeredItems = CustomItem.RegisterItems(overrideClass: this);
 
         /// <summary>
         /// Unregisters all custom items.
         /// </summary>
-        public void Unregister() => CustomItem.UnregisterItems();
+        public void Unregister()
+        {
+            if (registeredItems is null)
+                return;
+
+            foreach (CustomItem customItem in registeredItems)
+                customItem.Unregister();
+        }
     }
 }

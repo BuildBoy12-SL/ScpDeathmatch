@@ -104,7 +104,8 @@ namespace ScpDeathmatch.Subclasses
         /// Registers all subclasses in the selected class.
         /// </summary>
         /// <param name="overrideClass">The class to pull the subclasses from.</param>
-        public static void RegisterSubclasses(object overrideClass)
+        /// <returns>The registered subclasses.</returns>
+        public static IEnumerable<Subclass> RegisterSubclasses(object overrideClass)
         {
             Type type = overrideClass.GetType();
             if (!type.IsClass)
@@ -116,6 +117,7 @@ namespace ScpDeathmatch.Subclasses
                 {
                     Subclass subclass = (Subclass)propertyInfo.GetValue(overrideClass) ?? Activator.CreateInstance(propertyInfo.PropertyType) as Subclass;
                     subclass?.TryRegister();
+                    yield return subclass;
                 }
             }
         }
