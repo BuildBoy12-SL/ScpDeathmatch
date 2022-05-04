@@ -58,6 +58,12 @@ namespace ScpDeathmatch
         public bool DropEffectsOnDeath { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets the amount of generators to spawn.
+        /// </summary>
+        [Description("The amount of generators to spawn.")]
+        public int GeneratorsToSpawn { get; set; } = 5;
+
+        /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]
