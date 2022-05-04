@@ -16,16 +16,16 @@ namespace ScpDeathmatch.Configs
     public class MiscCommandsConfig
     {
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Commands.SpawnGenerator"/> command.
+        /// Gets or sets a configurable instance of the <see cref="SpawnObject"/> command.
         /// </summary>
-        public SpawnGenerator SpawnGenerator { get; set; } = new();
+        public SpawnObject SpawnObject { get; set; } = new();
 
         /// <summary>
         /// Registers all commands.
         /// </summary>
         public void Register()
         {
-            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(SpawnGenerator);
+            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(SpawnObject);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public void Unregister()
         {
-            CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(SpawnGenerator);
+            CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(SpawnObject);
         }
     }
 }
