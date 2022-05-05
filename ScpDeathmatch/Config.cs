@@ -64,6 +64,15 @@ namespace ScpDeathmatch
         public int GeneratorsToSpawn { get; set; } = 5;
 
         /// <summary>
+        /// Gets or sets the rooms where generators cannot spawn.
+        /// </summary>
+        [Description("The rooms where generators cannot spawn.")]
+        public List<RoomType> BlacklistedGeneratorSpawns { get; set; } = new()
+        {
+            RoomType.HczNuke,
+        };
+
+        /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]
