@@ -46,12 +46,6 @@ namespace ScpDeathmatch
         };
 
         /// <summary>
-        /// Gets or sets the amount of time a generator will take to activate.
-        /// </summary>
-        [Description("The amount of time a generator will take to activate.")]
-        public short DefaultGeneratorTime { get; set; } = 60;
-
-        /// <summary>
         /// Gets or sets a value indicating whether players will drop active Scp207 and Scp1853 effects as items when they die.
         /// </summary>
         [Description("Whether players will drop active Scp207 and Scp1853 effects as items when they die.")]
@@ -110,6 +104,12 @@ namespace ScpDeathmatch
         /// </summary>
         [YamlIgnore]
         public ExtraLivesConfig ExtraLives { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configs related to generators.
+        /// </summary>
+        [YamlIgnore]
+        public GeneratorsConfig Generators { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to the micro healing.
