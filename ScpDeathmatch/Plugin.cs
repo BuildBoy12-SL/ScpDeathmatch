@@ -119,9 +119,8 @@ namespace ScpDeathmatch
         {
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
-            Config.MiscCommands.Register();
-
             Config.ClientCommands.Register();
+            Config.MiscCommands.Register();
         }
 
         /// <inheritdoc />
@@ -129,9 +128,8 @@ namespace ScpDeathmatch
         {
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.StatsDatabase.ClearStatsCommand);
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
-            Config.MiscCommands.Unregister();
-
             Config.ClientCommands.Unregister();
+            Config.MiscCommands.Unregister();
         }
 
         private void PatchManual()
