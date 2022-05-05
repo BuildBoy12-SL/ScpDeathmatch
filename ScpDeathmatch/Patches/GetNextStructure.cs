@@ -7,65 +7,61 @@
 
 namespace ScpDeathmatch.Patches
 {
-#pragma warning disable SA1313
+#pragma warning disable SA1118
     using System.Collections.Generic;
-    using Exiled.API.Features;
+    using System.Reflection.Emit;
     using HarmonyLib;
+    using MapGeneration;
     using MapGeneration.Distributors;
     using NorthwoodLib.Pools;
-    using UnityEngine;
+    using static HarmonyLib.AccessTools;
 
     /// <summary>
-    /// Patches <see cref="StructureDistributor.TryGetNextStructure"/> to respect <see cref="Config.BlacklistedGeneratorSpawns"/>.
+    /// Patches <see cref="StructureDistributor.TryGetNextStructure"/> to respect <see cref="Configs.MapGenerationConfig.SpawnBlacklist"/>.
     /// </summary>
     [HarmonyPatch(typeof(StructureDistributor), nameof(StructureDistributor.TryGetNextStructure))]
     internal static class GetNextStructure
     {
-        private static bool Prefix(StructureDistributor __instance, out int structureId, out StructureSpawnpoint spawnpoint, ref bool __result)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            spawnpoint = null;
-            if (!__instance._queuedStructures.TryDequeue(out structureId))
+            List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
+
+            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Br_S);
+            Label continueLabel = (Label)newInstructions[index].operand;
+
+            const int offset = 4;
+            index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Ldloc_2) + offset;
+
+            newInstructions.InsertRange(index, new[]
             {
-                __result = false;
-                return false;
-            }
+                new CodeInstruction(OpCodes.Ldloc_2),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldfld, Field(typeof(StructureDistributor), nameof(StructureDistributor.Settings))),
+                new CodeInstruction(OpCodes.Ldfld, Field(typeof(SpawnablesDistributorSettings), nameof(SpawnablesDistributorSettings.SpawnableStructures))),
+                new CodeInstruction(OpCodes.Ldarg_1),
+                new CodeInstruction(OpCodes.Ldind_I4),
+                new CodeInstruction(OpCodes.Ldelem_Ref),
+                new CodeInstruction(OpCodes.Ldfld, Field(typeof(SpawnableStructure), nameof(SpawnableStructure.StructureType))),
+                new CodeInstruction(OpCodes.Call, Method(typeof(GetNextStructure), nameof(IsValidSpawnpoint))),
+                new CodeInstruction(OpCodes.Brfalse_S, continueLabel),
+            });
 
-            if (__instance._missingSpawnpoints.Contains(structureId))
-            {
-                __result = true;
-                return false;
-            }
+            for (int z = 0; z < newInstructions.Count; z++)
+                yield return newInstructions[z];
 
-            List<StructureSpawnpoint> structureSpawnpointList = ListPool<StructureSpawnpoint>.Shared.Rent();
-            foreach (StructureSpawnpoint availableInstance in StructureSpawnpoint.AvailableInstances)
-            {
-                StructureType structureType = __instance.Settings.SpawnableStructures[structureId].StructureType;
-                if (availableInstance == null || !availableInstance.CompatibleStructures.Contains(structureType))
-                    continue;
+            ListPool<CodeInstruction>.Shared.Return(newInstructions);
+        }
 
-                if (structureType == StructureType.Scp079Generator)
-                {
-                    Room room = Map.FindParentRoom(availableInstance.gameObject);
-                    if (room != null && Plugin.Instance.Config.BlacklistedGeneratorSpawns.Contains(room.Type))
-                        continue;
-                }
+        private static bool IsValidSpawnpoint(StructureSpawnpoint spawnpoint, StructureType structureType)
+        {
+            if (!Plugin.Instance.Config.MapGeneration.SpawnBlacklist.TryGetValue(structureType, out List<RoomName> blacklistedRooms))
+                return true;
 
-                structureSpawnpointList.Add(availableInstance);
-            }
+            RoomIdentifier roomIdentifier = RoomIdUtils.RoomAtPosition(spawnpoint.transform.position);
+            if (roomIdentifier is null)
+                return true;
 
-            if (structureSpawnpointList.Count > 0)
-            {
-                StructureSpawnpoint structureSpawnpoint = structureSpawnpointList[Random.Range(0, structureSpawnpointList.Count)];
-                StructureSpawnpoint.AvailableInstances.Remove(structureSpawnpoint);
-                spawnpoint = structureSpawnpoint;
-            }
-            else
-            {
-                __instance._missingSpawnpoints.Add(structureId);
-            }
-
-            __result = true;
-            return false;
+            return !blacklistedRooms.Contains(roomIdentifier.Name);
         }
     }
 }

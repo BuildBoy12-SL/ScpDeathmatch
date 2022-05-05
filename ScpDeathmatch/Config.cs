@@ -58,21 +58,6 @@ namespace ScpDeathmatch
         public bool DropEffectsOnDeath { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the amount of generators to spawn.
-        /// </summary>
-        [Description("The amount of generators to spawn.")]
-        public int GeneratorsToSpawn { get; set; } = 5;
-
-        /// <summary>
-        /// Gets or sets the rooms where generators cannot spawn.
-        /// </summary>
-        [Description("The rooms where generators cannot spawn.")]
-        public List<RoomType> BlacklistedGeneratorSpawns { get; set; } = new()
-        {
-            RoomType.HczNuke,
-        };
-
-        /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]
@@ -137,6 +122,12 @@ namespace ScpDeathmatch
         /// </summary>
         [YamlIgnore]
         public HealthConfig Health { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configs related to map generation.
+        /// </summary>
+        [YamlIgnore]
+        public MapGenerationConfig MapGeneration { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to medical items.
