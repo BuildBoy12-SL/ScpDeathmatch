@@ -54,6 +54,27 @@ namespace ScpDeathmatch.HealthSystem.Components
             PlayerStats.OnAnyPlayerDamaged += OnAnyPlayerDamaged;
         }
 
+        private void FixedUpdate()
+        {
+            if (player.Stamina.RemainingStamina > 0.025f)
+                return;
+
+            player.Stamina.RemainingStamina += config.Health.LfsStaminaAdded;
+            int newMaxHealth = player.MaxHealth - config.Health.LfsHpRemoved;
+            if (newMaxHealth <= 0)
+            {
+                player.Kill("Ran to death.");
+                return;
+            }
+
+            player.MaxHealth = newMaxHealth;
+            if (player.Health > player.MaxHealth)
+            {
+                player.Health = player.MaxHealth;
+                lastHurt = Time.time;
+            }
+        }
+
         private void OnDestroy()
         {
             PlayerStats.OnAnyPlayerDamaged -= OnAnyPlayerDamaged;

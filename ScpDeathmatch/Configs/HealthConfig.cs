@@ -61,5 +61,17 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         [Description("Whether Scp207 will deal damage.")]
         public bool Scp207Damage { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets the amount of stamina to add when they hit the stamina threshold.
+        /// </summary>
+        [Description("The amount of stamina to add when they hit the stamina threshold.")]
+        public float LfsStaminaAdded { get; set; } = 0.05f;
+
+        /// <summary>
+        /// Gets or sets the amount of maximum health to be removed from a player when they get additional stamina from LFS.
+        /// </summary>
+        [Description("The amount of maximum health to be removed from a player when they get additional stamina from LFS.")]
+        public int LfsHpRemoved { get; set; } = 1;
     }
 }
