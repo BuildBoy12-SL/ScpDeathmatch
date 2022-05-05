@@ -13,7 +13,6 @@ namespace ScpDeathmatch
     using Exiled.API.Features;
     using HarmonyLib;
     using RemoteAdmin;
-    using ScpDeathmatch.Commands;
     using ScpDeathmatch.Managers;
     using ScpDeathmatch.Models;
     using ScpDeathmatch.Patches.Manual;

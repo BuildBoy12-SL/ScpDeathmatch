@@ -8,7 +8,6 @@
 namespace ScpDeathmatch.Managers
 {
     using System.Collections.Generic;
-    using Exiled.API.Features;
     using MEC;
     using ScpDeathmatch.Models;
 

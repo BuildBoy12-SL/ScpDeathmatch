@@ -13,7 +13,6 @@ namespace ScpDeathmatch.Subclasses.Abilities
     using Exiled.CustomRoles.API.Features;
     using Interactables.Interobjects;
     using ScpDeathmatch.API.Extensions;
-    using UnityEngine;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />

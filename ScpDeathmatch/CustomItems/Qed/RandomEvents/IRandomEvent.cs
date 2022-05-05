@@ -8,7 +8,6 @@
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
     using Exiled.Events.EventArgs;
-    using UnityEngine;
 
     /// <summary>
     /// Defines a contract for random events.
