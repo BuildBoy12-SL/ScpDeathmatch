@@ -9,6 +9,7 @@ namespace ScpDeathmatch.Subclasses.Abilities
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Interactables.Interobjects;
@@ -52,6 +53,16 @@ namespace ScpDeathmatch.Subclasses.Abilities
         [Description("Whether open doors can be broken.")]
         public bool AffectOpenDoors { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets the doors that cannot be broken.
+        /// </summary>
+        [Description("The doors that cannot be broken.")]
+        public HashSet<DoorType> Blacklist { get; set; } = new()
+        {
+            DoorType.HczArmory,
+            DoorType.LczArmory,
+        };
+
         /// <inheritdoc />
         public override bool CanUseAbility(Player player, out string response)
         {
@@ -64,7 +75,7 @@ namespace ScpDeathmatch.Subclasses.Abilities
             Door closestDoor = Door.List.Closest(
                 player.Position,
                 MaximumDistance,
-                door => door.IsBreakable && !door.GameObject.GetComponentInParent<CheckpointDoor>() && (AffectOpenDoors || !door.IsOpen));
+                door => !Blacklist.Contains(door.Type) && door.IsBreakable && !door.GameObject.GetComponentInParent<CheckpointDoor>() && (AffectOpenDoors || !door.IsOpen));
 
             if (closestDoor is null)
             {

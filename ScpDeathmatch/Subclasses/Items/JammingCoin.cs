@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.CustomItems
+namespace ScpDeathmatch.Subclasses.Items
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -16,6 +16,7 @@ namespace ScpDeathmatch.CustomItems
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using Interactables.Interobjects;
+    using ScpDeathmatch.Subclasses.Abilities;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
@@ -91,7 +92,14 @@ namespace ScpDeathmatch.CustomItems
             if (cooldowns.TryGetValue(ev.Player, out float cooldown) && Time.time < cooldown)
                 return;
 
-            ev.Door.Lock(GetDuration(ev.Door), DoorLockType.AdminCommand);
+            float time = GetDuration(ev.Door);
+            if (ev.Player.SessionVariables.TryGetValue("StickyJamming", out object obj) && obj is StickyJamming stickyJamming)
+            {
+                time = stickyJamming.JamDuration;
+                ev.Player.SessionVariables.Remove("StickyJamming");
+            }
+
+            ev.Door.Lock(time, DoorLockType.AdminCommand);
             cooldowns[ev.Player] = Time.time + Cooldown;
         }
 

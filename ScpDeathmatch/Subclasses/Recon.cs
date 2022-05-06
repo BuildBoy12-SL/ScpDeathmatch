@@ -12,6 +12,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using MEC;
+    using ScpDeathmatch.Subclasses.Abilities;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
@@ -55,8 +56,10 @@ namespace ScpDeathmatch.Subclasses
         public string AlertLeft { get; set; } = "{0} has left your current zone";
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        {
+            new EnhancedReconSwitch(),
+        };
 
         /// <inheritdoc />
         protected override void SubscribeEvents()

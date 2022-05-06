@@ -12,7 +12,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
-    using YamlDotNet.Serialization;
+    using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
     public class Insurgent : Subclass
@@ -64,8 +64,10 @@ namespace ScpDeathmatch.Subclasses
         };
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        {
+            new StickyJamming(),
+        };
 
         /// <inheritdoc />
         protected override void SubscribeEvents()

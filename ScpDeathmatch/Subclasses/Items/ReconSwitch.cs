@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.CustomItems
+namespace ScpDeathmatch.Subclasses.Items
 {
     using System.Collections.Generic;
     using System.ComponentModel;

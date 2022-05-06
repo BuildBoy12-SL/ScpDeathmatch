@@ -95,6 +95,7 @@ namespace ScpDeathmatch.Subclasses
         /// <inheritdoc />
         public override List<CustomAbility> CustomAbilities { get; set; } = new()
         {
+            new UpgradeItem(),
             new ScavengerAura(),
         };
 

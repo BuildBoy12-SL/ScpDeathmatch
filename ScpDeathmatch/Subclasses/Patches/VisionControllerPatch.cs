@@ -7,17 +7,12 @@
 
 namespace ScpDeathmatch.Subclasses.Patches
 {
-#pragma warning disable SA1118
-    using System.Collections.Generic;
-    using System.Reflection.Emit;
+#pragma warning disable SA1313
+    using CustomPlayerEffects;
     using Exiled.API.Features;
     using HarmonyLib;
-    using NorthwoodLib.Pools;
-    using ScpDeathmatch.Configs;
-    using ScpDeathmatch.CustomItems;
-    using ScpDeathmatch.Subclasses;
+    using ScpDeathmatch.Subclasses.Abilities;
     using UnityEngine;
-    using static HarmonyLib.AccessTools;
 
     /// <summary>
     /// Patches <see cref="Scp939_VisionController.FixedUpdate"/> to limit the distance of non-scp player's vision.
@@ -25,41 +20,35 @@ namespace ScpDeathmatch.Subclasses.Patches
     [HarmonyPatch(typeof(Scp939_VisionController), nameof(Scp939_VisionController.FixedUpdate))]
     internal static class VisionControllerPatch
     {
-        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+        private static bool Prefix(Scp939_VisionController __instance)
         {
-            List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
+            Player player = Player.Get(__instance.gameObject);
+            if (!Plugin.Instance.Config.Subclasses.Recon.Check(player))
+                return true;
 
-            Label skipOverrideLabel = generator.DefineLabel();
-
-            const int offset = 1;
-            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Ret) + offset;
-            newInstructions[index].labels.Add(skipOverrideLabel);
-
-            newInstructions.InsertRange(index, new[]
+            float maximumDistance = Plugin.Instance.Config.CustomItems.ReconSwitch.MaximumDistance;
+            bool enhancementActivated = false;
+            if (player.SessionVariables.TryGetValue("EnhancedReconSwitch", out object obj) &&
+                obj is EnhancedReconSwitch enhancedReconSwitch)
             {
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Subclasses))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(SubclassesConfig), nameof(SubclassesConfig.Recon))),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Scp939_VisionController), nameof(Scp939_VisionController.gameObject))),
-                new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(GameObject) })),
-                new CodeInstruction(OpCodes.Callvirt, Method(typeof(Recon), nameof(Recon.Check))),
-                new CodeInstruction(OpCodes.Brfalse_S, skipOverrideLabel),
+                maximumDistance *= enhancedReconSwitch.RangeMultiplier;
+                enhancementActivated = true;
+            }
 
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.CustomItems))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(CustomItemsConfig), nameof(CustomItemsConfig.ReconSwitch))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ReconSwitch), nameof(ReconSwitch.MaximumDistance))),
-                new CodeInstruction(OpCodes.Stsfld, Field(typeof(Scp939_VisionController), nameof(Scp939_VisionController.noise))),
-            });
+            foreach (Visuals939 enabledEffect in Visuals939.EnabledEffects)
+            {
+                if (enabledEffect is null)
+                    continue;
 
-            for (int z = 0; z < newInstructions.Count; z++)
-                yield return newInstructions[z];
+                if (!enhancementActivated && enabledEffect.Hub.playerEffectsController.AllEffects.TryGetValue(typeof(Invisible), out PlayerEffect playerEffect) && playerEffect.IsEnabled)
+                    continue;
 
-            ListPool<CodeInstruction>.Shared.Return(newInstructions);
+                if (enabledEffect.Hub.characterClassManager.CurClass == RoleType.Spectator ||
+                    Vector3.Distance(__instance.transform.position, enabledEffect.transform.position) < maximumDistance)
+                    __instance.AddVision(enabledEffect);
+            }
+
+            return false;
         }
     }
 }

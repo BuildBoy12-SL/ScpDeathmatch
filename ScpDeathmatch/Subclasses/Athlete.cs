@@ -109,7 +109,6 @@ namespace ScpDeathmatch.Subclasses
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
-            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
         }
 
@@ -118,7 +117,6 @@ namespace ScpDeathmatch.Subclasses
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
-            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
             Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
         }
 
@@ -134,12 +132,6 @@ namespace ScpDeathmatch.Subclasses
                 Check(ev.Target) &&
                 ev.Handler.Base is UniversalDamageHandler universalDamageHandler &&
                 universalDamageHandler.TranslationId == DeathTranslations.Falldown.Id)
-                ev.IsAllowed = false;
-        }
-
-        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
-        {
-            if (Check(ev.Player) && ev.Effect is Stained)
                 ev.IsAllowed = false;
         }
 

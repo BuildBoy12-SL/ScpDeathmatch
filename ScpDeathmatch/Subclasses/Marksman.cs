@@ -15,6 +15,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.Models;
+    using ScpDeathmatch.Subclasses.Abilities;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
@@ -92,8 +93,10 @@ namespace ScpDeathmatch.Subclasses
         public bool GiveScp1853OnFirstWeapon { get; set; } = true;
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override List<CustomAbility> CustomAbilities { get; set; } = new();
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        {
+            new Cracked1853(),
+        };
 
         /// <inheritdoc />
         protected override void SubscribeEvents()

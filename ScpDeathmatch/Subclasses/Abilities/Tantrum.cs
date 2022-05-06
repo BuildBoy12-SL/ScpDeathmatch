@@ -9,6 +9,7 @@ namespace ScpDeathmatch.Subclasses.Abilities
 {
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
+    using Exiled.Events.EventArgs;
     using Mirror;
     using PlayableScps.ScriptableObjects;
     using UnityEngine;
@@ -31,6 +32,18 @@ namespace ScpDeathmatch.Subclasses.Abilities
         public override float Cooldown { get; set; } = 45f;
 
         /// <inheritdoc />
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.WalkingOnTantrum += OnWalkingOnTantrum;
+        }
+
+        /// <inheritdoc />
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.WalkingOnTantrum -= OnWalkingOnTantrum;
+        }
+
+        /// <inheritdoc />
         protected override void AbilityUsed(Player player)
         {
             GameObject gameObject = UnityEngine.Object.Instantiate(ScpScriptableObjects.Instance.Scp173Data.TantrumPrefab);
@@ -41,6 +54,12 @@ namespace ScpDeathmatch.Subclasses.Abilities
                 if (teslaGate.PlayerInIdleRange(player))
                     teslaGate.Base.TantrumsToBeDestroyed.Add(gameObject);
             }
+        }
+
+        private void OnWalkingOnTantrum(WalkingOnTantrumEventArgs ev)
+        {
+            if (Players.Contains(ev.Player))
+                ev.IsAllowed = false;
         }
     }
 }

@@ -109,6 +109,32 @@ namespace ScpDeathmatch.Subclasses.Abilities
             base.UnsubscribeEvents();
         }
 
+        private static bool HasUniquePermissions(Player player, Item item)
+        {
+            if (item is not Keycard keycard)
+                return true;
+
+            KeycardPermissions combinedPermissions = 0;
+            foreach (Item heldItem in player.Items)
+            {
+                if (heldItem is Keycard heldKeycard)
+                    combinedPermissions |= heldKeycard.Permissions;
+            }
+
+            return (combinedPermissions & keycard.Permissions) != keycard.Permissions;
+        }
+
+        private static int GetItemCount(Player player, ItemType itemType)
+        {
+            if (itemType.IsAmmo())
+            {
+                player.Ammo.TryGetValue(itemType, out ushort ammoCount);
+                return ammoCount;
+            }
+
+            return player.Items.Count(item => item.Type == itemType);
+        }
+
         private void OnDroppingItem(DroppingItemEventArgs ev)
         {
             onCooldown.Add(ev.Item.Serial);
@@ -122,6 +148,20 @@ namespace ScpDeathmatch.Subclasses.Abilities
 
             coroutines.Clear();
             onCooldown.Clear();
+        }
+
+        private bool IsValidPickup(Player player, ItemPickupBase pickupBase, out Item item)
+        {
+            ItemBase itemBase = player.Inventory.CreateItemInstance(pickupBase.Info.ItemId, false);
+            item = Item.Get(itemBase);
+            if (!AllowDuplicateKeycards && !HasUniquePermissions(player, item))
+                return false;
+
+            if (!ItemLimits.TryGetValue(item.Type, out Limit limit) ||
+                !limit.WithinLimit(GetItemCount(player, item.Type)))
+                return false;
+
+            return true;
         }
 
         private IEnumerator<float> RunAbility(Player player)
@@ -151,46 +191,6 @@ namespace ScpDeathmatch.Subclasses.Abilities
                     Timing.CallDelayed(DropCooldown, () => onCooldown.Remove(pickupBase.Info.Serial));
                 }
             }
-        }
-
-        private bool IsValidPickup(Player player, ItemPickupBase pickupBase, out Item item)
-        {
-            ItemBase itemBase = player.Inventory.CreateItemInstance(pickupBase.Info.ItemId, false);
-            item = Item.Get(itemBase);
-            if (!AllowDuplicateKeycards && !HasUniquePermissions(player, item))
-                return false;
-
-            if (!ItemLimits.TryGetValue(item.Type, out Limit limit) ||
-                !limit.WithinLimit(GetItemCount(player, item.Type)))
-                return false;
-
-            return true;
-        }
-
-        private bool HasUniquePermissions(Player player, Item item)
-        {
-            if (!(item is Keycard keycard))
-                return true;
-
-            KeycardPermissions combinedPermissions = 0;
-            foreach (Item heldItem in player.Items)
-            {
-                if (heldItem is Keycard heldKeycard)
-                    combinedPermissions |= heldKeycard.Permissions;
-            }
-
-            return (combinedPermissions & keycard.Permissions) != keycard.Permissions;
-        }
-
-        private int GetItemCount(Player player, ItemType itemType)
-        {
-            if (itemType.IsAmmo())
-            {
-                player.Ammo.TryGetValue(itemType, out ushort ammoCount);
-                return ammoCount;
-            }
-
-            return player.Items.Count(item => item.Type == itemType);
         }
     }
 }
