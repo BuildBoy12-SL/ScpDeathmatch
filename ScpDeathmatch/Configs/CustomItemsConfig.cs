@@ -12,7 +12,6 @@ namespace ScpDeathmatch.Configs
     using Exiled.CustomItems.API.Features;
     using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.CustomItems.Qed;
-    using ScpDeathmatch.Subclasses.Items;
 
     /// <summary>
     /// Handles configs related to custom items.
@@ -30,11 +29,6 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets a configurable instance of the <see cref="CustomItems.ColaCoin"/> class.
         /// </summary>
         public ColaCoin ColaCoin { get; set; } = new();
-
-        /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Items.JammingCoin"/> class.
-        /// </summary>
-        public JammingCoin JammingCoin { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the configurable instances of the <see cref="CustomItems.PunishmentGun"/> class.

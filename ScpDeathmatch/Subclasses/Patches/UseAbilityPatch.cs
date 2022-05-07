@@ -25,6 +25,7 @@ namespace ScpDeathmatch.Subclasses.Patches
     {
         private static bool Prefix(ArraySegment<string> arguments, ICommandSender sender, out string response, ref bool __result)
         {
+            response = string.Empty;
             Player player = Player.Get(sender);
             int abilityNumber = 0;
             if (arguments.Count > 0)
@@ -59,7 +60,7 @@ namespace ScpDeathmatch.Subclasses.Patches
 
             foreach (Subclass subclass in subclasses)
             {
-                if (subclass.CustomAbilities.Count < abilityNumber + 1 || subclass.CustomAbilities[abilityNumber] is not ActiveAbility activeAbility || !activeAbility.CanUseAbility(player, out _))
+                if (subclass.CustomAbilities.Count < abilityNumber + 1 || subclass.CustomAbilities[abilityNumber] is not ActiveAbility activeAbility || !activeAbility.CanUseAbility(player, out response))
                     continue;
 
                 activeAbility.UseAbility(player);
@@ -68,7 +69,6 @@ namespace ScpDeathmatch.Subclasses.Patches
                 return false;
             }
 
-            response = "Could not find an ability that was able to be used.";
             return false;
         }
 
@@ -78,21 +78,17 @@ namespace ScpDeathmatch.Subclasses.Patches
             if (role is null)
                 return CheckSubclasses(arguments, sender, abilityNumber, out response);
 
-            if (role.CustomAbilities.Count >= abilityNumber + 1)
-            {
-                if (role.CustomAbilities[abilityNumber] is ActiveAbility active)
-                {
-                    if (!active.CanUseAbility(sender, out response))
-                        return false;
-
-                    active.UseAbility(sender);
-                    response = $"Ability {active.Name} used.";
-                    return true;
-                }
-            }
-
             response = "Could not find an ability that was able to be used.";
-            return false;
+            if (role.CustomAbilities.Count < abilityNumber + 1 ||
+                role.CustomAbilities[abilityNumber] is not ActiveAbility active)
+                return false;
+
+            if (!active.CanUseAbility(sender, out response))
+                return false;
+
+            active.UseAbility(sender);
+            response = $"Ability {active.Name} used.";
+            return true;
         }
 
         private static bool CheckSubclasses(ArraySegment<string> arguments, Player sender, int abilityNumber, out string response)
@@ -104,21 +100,17 @@ namespace ScpDeathmatch.Subclasses.Patches
                 return false;
             }
 
-            if (subclass.CustomAbilities.Count >= abilityNumber + 1)
-            {
-                if (subclass.CustomAbilities[abilityNumber] is ActiveAbility active)
-                {
-                    if (!active.CanUseAbility(sender, out response))
-                        return false;
-
-                    active.UseAbility(sender);
-                    response = $"Ability {active.Name} used.";
-                    return true;
-                }
-            }
-
             response = "Could not find an ability that was able to be used.";
-            return false;
+            if (subclass.CustomAbilities.Count < abilityNumber + 1 ||
+                subclass.CustomAbilities[abilityNumber] is not ActiveAbility active)
+                return false;
+
+            if (!active.CanUseAbility(sender, out response))
+                return false;
+
+            active.UseAbility(sender);
+            response = $"Ability {active.Name} used.";
+            return true;
         }
     }
 }

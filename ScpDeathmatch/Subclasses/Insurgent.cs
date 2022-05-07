@@ -58,10 +58,7 @@ namespace ScpDeathmatch.Subclasses
         public bool Count079Alive { get; set; } = false;
 
         /// <inheritdoc />
-        public override List<string> Inventory { get; set; } = new()
-        {
-            "Jamming Coin",
-        };
+        public override List<string> Inventory { get; set; } = new();
 
         /// <inheritdoc />
         public override List<CustomAbility> CustomAbilities { get; set; } = new()
