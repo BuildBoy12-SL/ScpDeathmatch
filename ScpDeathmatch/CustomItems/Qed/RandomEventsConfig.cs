@@ -165,8 +165,8 @@ namespace ScpDeathmatch.CustomItems.Qed
             float distance = Vector3.Distance(ev.Thrower.Position, ev.Grenade.transform.position);
             float evaluatedWeight = eventChanceCurve.Evaluate(distance);
 
-            float minimumWeight = selectableEvents.Min(x => x.Weight);
-            float maximumWeight = selectableEvents.Max(x => x.Weight);
+            float minimumWeight = selectableEvents.Min(randomEvent => randomEvent.Weight);
+            float maximumWeight = selectableEvents.Max(randomEvent => randomEvent.Weight);
             float bounds = Math.Abs(maximumWeight - minimumWeight) / (selectableEvents.Count / 2f);
 
             List<IRandomEvent> randomEvents = selectableEvents.Where(randomEvent => Math.Abs(randomEvent.Weight - evaluatedWeight) < bounds).ToList();

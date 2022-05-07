@@ -75,6 +75,7 @@ namespace ScpDeathmatch.CustomItems
         {
             $"{ItemType.GunRevolver}",
             $"{ItemType.MicroHID}",
+            "BigIron",
         };
 
         /// <summary>
