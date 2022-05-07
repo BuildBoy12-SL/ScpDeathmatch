@@ -41,19 +41,19 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
                 if (player.SessionVariables.ContainsKey("IsNPC"))
                     continue;
 
-                if ((player.Position - ev.Grenade.transform.position).magnitude <= MaxDistance * MaxDistance)
+                if ((player.Position - ev.Grenade.transform.position).magnitude > MaxDistance * MaxDistance)
+                    continue;
+
+                Room room;
+                Vector3 newPosition;
+
+                do
                 {
-                    Room room;
-                    Vector3 newPosition;
-
-                    do
-                    {
-                        room = SameZone ? Room.Random(player.Zone) : Room.Random();
-                    }
-                    while (!PlayerMovementSync.FindSafePosition(room.Position + Vector3.up, out newPosition));
-
-                    player.Teleport(newPosition);
+                    room = SameZone ? Room.Random(player.Zone) : Room.Random();
                 }
+                while (!PlayerMovementSync.FindSafePosition(room.Position + Vector3.up, out newPosition));
+
+                player.Teleport(newPosition);
             }
         }
     }
