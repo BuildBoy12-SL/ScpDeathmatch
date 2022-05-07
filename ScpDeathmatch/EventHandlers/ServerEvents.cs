@@ -8,8 +8,12 @@
 namespace ScpDeathmatch.EventHandlers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
+    using Exiled.CustomItems.API.Features;
+    using MEC;
     using ScpDeathmatch.Models;
     using ServerHandlers = Exiled.Events.Handlers.Server;
 
@@ -18,6 +22,8 @@ namespace ScpDeathmatch.EventHandlers
     /// </summary>
     public class ServerEvents : Subscribable
     {
+        private CoroutineHandle coinCoroutine;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ServerEvents"/> class.
         /// </summary>
@@ -50,6 +56,34 @@ namespace ScpDeathmatch.EventHandlers
         {
             foreach (KeyValuePair<DoorType, float> kvp in Plugin.Config.DoorLocks)
                 Door.Get(kvp.Key)?.Lock(kvp.Value, DoorLockType.AdminCommand);
+
+            if (coinCoroutine.IsRunning)
+                Timing.KillCoroutines(coinCoroutine);
+
+            coinCoroutine = Timing.CallDelayed(Plugin.Config.CoinDeletionDelay, () =>
+            {
+                foreach (Pickup pickup in Map.Pickups)
+                {
+                    if (pickup.Type == ItemType.Coin && !CustomItem.TryGet(pickup, out _))
+                        pickup.Destroy();
+                }
+
+                foreach (Player player in Player.List)
+                {
+                    for (int i = 0; i < player.Items.Count; i++)
+                    {
+                        Item item = player.Items.ElementAt(i);
+                        if (item.Type == ItemType.Coin && !CustomItem.TryGet(item, out _))
+                            player.RemoveItem(item);
+                    }
+                }
+            });
+        }
+
+        private void OnRoundEnded()
+        {
+            if (coinCoroutine.IsRunning)
+                Timing.KillCoroutines(coinCoroutine);
         }
     }
 }

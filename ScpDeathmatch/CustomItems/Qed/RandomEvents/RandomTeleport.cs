@@ -7,8 +7,10 @@
 
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
+    using System.ComponentModel;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using MEC;
     using UnityEngine;
 
     /// <inheritdoc />
@@ -26,12 +28,20 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <summary>
         /// Gets or sets the maximum distance the player should be from the grenade to be teleported.
         /// </summary>
+        [Description("The maximum distance the player should be from the grenade to be teleported.")]
         public float MaxDistance { get; set; } = 3;
 
         /// <summary>
         /// Gets or sets a value indicating whether the player should be teleported to a room in the same zone.
         /// </summary>
+        [Description("Whether the player should be teleported to a room in the same zone.")]
         public bool SameZone { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the delay before teleporting the affected players.
+        /// </summary>
+        [Description("The delay before teleporting the affected players.")]
+        public float Delay { get; set; } = 0f;
 
         /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)
@@ -51,7 +61,10 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
                 }
                 while (!PlayerMovementSync.FindSafePosition(room.Position + Vector3.up, out newPosition));
 
-                player.Teleport(newPosition);
+                if (Delay > 0f)
+                    Timing.CallDelayed(Delay, () => player.Teleport(newPosition));
+                else
+                    player.Teleport(newPosition);
             }
         }
     }

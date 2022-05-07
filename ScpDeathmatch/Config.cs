@@ -58,6 +58,12 @@ namespace ScpDeathmatch
         public bool PreventCom15Lcz { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets the time, in seconds, before all coins will be deleted from a round.
+        /// </summary>
+        [Description("The time, in seconds, before all coins will be deleted from a round.")]
+        public float CoinDeletionDelay { get; set; } = 180f;
+
+        /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]
