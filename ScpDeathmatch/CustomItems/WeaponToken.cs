@@ -47,7 +47,7 @@ namespace ScpDeathmatch.CustomItems
         public override ItemType Type { get; set; } = ItemType.Coin;
 
         /// <summary>
-        /// Gets or sets a collection of item-chance pairs that can upgrade into the second wind item.
+        /// Gets or sets a collection of item-chance pairs that can upgrade into a weapon token.
         /// </summary>
         [Description("A collection of item-chance pairs that can upgrade into a weapon token.")]
         public Dictionary<ItemType, UpgradeSetting> UpgradeSettings { get; set; } = new()
