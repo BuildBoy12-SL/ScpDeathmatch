@@ -13,7 +13,6 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomRoles.API.Features;
     using MEC;
     using ScpDeathmatch.Subclasses.Abilities;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     public class Recon : Subclass
@@ -40,10 +39,7 @@ namespace ScpDeathmatch.Subclasses
         public override string BadgeColor { get; set; } = "mint";
 
         /// <inheritdoc />
-        public override List<string> Inventory { get; set; } = new()
-        {
-            "Goggle Toggle",
-        };
+        public override List<string> Inventory { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the alert to send to recons when a player enters their zone.
