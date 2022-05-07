@@ -21,8 +21,6 @@ namespace ScpDeathmatch.Configs
     /// </summary>
     public class ClientCommandsConfig
     {
-        private readonly List<ICommand> registeredCommands = new();
-
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Commands.Client.Remove1853"/> class.
         /// </summary>
@@ -55,10 +53,7 @@ namespace ScpDeathmatch.Configs
             foreach (PropertyInfo property in GetType().GetProperties())
             {
                 if (property.GetValue(this) is ICommand command)
-                {
                     QueryProcessor.DotCommandHandler.RegisterCommand(command);
-                    registeredCommands.Add(command);
-                }
             }
 
             SubclassCommands.Register();
@@ -69,10 +64,12 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public void Unregister()
         {
-            foreach (ICommand command in registeredCommands)
-                QueryProcessor.DotCommandHandler.UnregisterCommand(command);
+            foreach (PropertyInfo property in GetType().GetProperties())
+            {
+                if (property.GetValue(this) is ICommand command)
+                    QueryProcessor.DotCommandHandler.UnregisterCommand(command);
+            }
 
-            registeredCommands.Clear();
             SubclassCommands.Unregister();
         }
 
@@ -81,8 +78,6 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public class SubclassCommandsConfig
         {
-            private readonly List<ICommand> registeredCommands = new();
-
             /// <summary>
             /// Gets or sets a configurable instance of the <see cref="Subclasses.Commands.ToggleGoggles"/> class.
             /// </summary>
@@ -101,10 +96,7 @@ namespace ScpDeathmatch.Configs
                 foreach (PropertyInfo property in GetType().GetProperties())
                 {
                     if (property.GetValue(this) is ICommand command)
-                    {
                         QueryProcessor.DotCommandHandler.RegisterCommand(command);
-                        registeredCommands.Add(command);
-                    }
                 }
             }
 
@@ -113,10 +105,11 @@ namespace ScpDeathmatch.Configs
             /// </summary>
             public void Unregister()
             {
-                foreach (ICommand command in registeredCommands)
-                    QueryProcessor.DotCommandHandler.UnregisterCommand(command);
-
-                registeredCommands.Clear();
+                foreach (PropertyInfo property in GetType().GetProperties())
+                {
+                    if (property.GetValue(this) is ICommand command)
+                        QueryProcessor.DotCommandHandler.UnregisterCommand(command);
+                }
             }
         }
     }

@@ -51,11 +51,5 @@ namespace ScpDeathmatch.Subclasses.Abilities
         {
             player.SessionVariables.Add("StickyJamming", this);
         }
-
-        /// <inheritdoc />
-        protected override void AbilityEnded(Player player)
-        {
-            player.SessionVariables.Remove("StickyJamming");
-        }
     }
 }
