@@ -103,6 +103,14 @@ namespace ScpDeathmatch.CustomItems.Qed
                     new(ItemType.Painkillers, 6),
                 },
             },
+            new SpawnItems
+            {
+                Name = "Spawn Big Iron",
+                PossibleItems = new List<ItemPair>
+                {
+                    new("BigIron", 1),
+                },
+            },
         };
 
         /// <summary>

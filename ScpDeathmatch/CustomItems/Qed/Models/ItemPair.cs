@@ -24,16 +24,23 @@ namespace ScpDeathmatch.CustomItems.Qed.Models
         /// </summary>
         /// <param name="item"><inheritdoc cref="Item"/></param>
         /// <param name="amount"><inheritdoc cref="Amount"/></param>
-        public ItemPair(ItemType item, int amount)
+        public ItemPair(string item, int amount)
         {
             Item = item;
+            Amount = amount;
+        }
+
+        /// <inheritdoc cref="ItemPair(string,int)"/>
+        public ItemPair(ItemType item, int amount)
+        {
+            Item = item.ToString();
             Amount = amount;
         }
 
         /// <summary>
         /// Gets or sets the item.
         /// </summary>
-        public ItemType Item { get; set; }
+        public string Item { get; set; }
 
         /// <summary>
         /// Gets or sets the amount of the item.

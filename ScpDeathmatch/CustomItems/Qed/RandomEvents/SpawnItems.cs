@@ -7,8 +7,11 @@
 
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
+    using System;
     using System.Collections.Generic;
+    using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.CustomItems.Qed.Models;
     using UnityEngine;
@@ -36,10 +39,27 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
             if (PossibleItems is null || PossibleItems.IsEmpty())
                 return;
 
-            ItemPair pair = PossibleItems[Random.Range(0, PossibleItems.Count)];
+            ItemPair pair = PossibleItems[UnityEngine.Random.Range(0, PossibleItems.Count)];
             Vector3 spawnPosition = ev.Grenade.transform.position + (Vector3.up * 2);
             for (int i = 0; i < pair.Amount; i++)
-                Item.Create(pair.Item).Spawn(spawnPosition);
+                SpawnItem(pair.Item, spawnPosition);
+        }
+
+        private void SpawnItem(string itemName, Vector3 position)
+        {
+            if (CustomItem.TryGet(itemName, out CustomItem customItem))
+            {
+                customItem.Spawn(position, (Player)null);
+                return;
+            }
+
+            if (Enum.TryParse(itemName, out ItemType type))
+            {
+                Item.Create(type).Spawn(position);
+                return;
+            }
+
+            Log.Warn($"{Name}: {nameof(SpawnItem)}: {itemName} is not a valid ItemType or Custom Item name.");
         }
     }
 }
