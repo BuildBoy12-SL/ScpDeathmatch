@@ -7,21 +7,17 @@
 
 namespace ScpDeathmatch.Subclasses.Abilities
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using Interactables.Interobjects;
-    using UnityEngine;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     public class StickyJamming : ActiveAbility
     {
-        private readonly Dictionary<Player, float> cooldowns = new();
-
         /// <inheritdoc />
         public override string Name { get; set; } = "Sticky Jamming";
 
@@ -90,11 +86,7 @@ namespace ScpDeathmatch.Subclasses.Abilities
             if (!ev.Player.SessionVariables.ContainsKey("StickyJamming") || !ev.Door.IsOpen)
                 return;
 
-            if (cooldowns.TryGetValue(ev.Player, out float cooldown) && Time.time < cooldown)
-                return;
-
             ev.Door.Lock(GetDuration(ev.Door), DoorLockType.AdminCommand);
-            cooldowns[ev.Player] = Time.time + Cooldown;
             ev.Player.SessionVariables.Remove("StickyJamming");
         }
 
