@@ -7,10 +7,12 @@
 
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
+    using ScpDeathmatch.Models;
     using UnityEngine;
 
     /// <inheritdoc />
@@ -43,6 +45,12 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         [Description("The delay before teleporting the affected players.")]
         public float Delay { get; set; } = 0f;
 
+        /// <summary>
+        /// Gets or sets the effects to apply to the affected players.
+        /// </summary>
+        [Description("The effects to apply to the affected players.")]
+        public List<ConfiguredEffect> Effects { get; set; } = new();
+
         /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)
         {
@@ -51,6 +59,12 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
                 if (player.SessionVariables.ContainsKey("IsNPC") ||
                     (player.Position - ev.Grenade.transform.position).magnitude > MaxDistance * MaxDistance)
                     continue;
+
+                if (Effects != null)
+                {
+                    foreach (ConfiguredEffect effect in Effects)
+                        effect.Apply(player);
+                }
 
                 Room room;
                 Vector3 newPosition;
