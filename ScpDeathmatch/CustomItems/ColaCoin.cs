@@ -7,6 +7,7 @@
 
 namespace ScpDeathmatch.CustomItems
 {
+    using System.ComponentModel;
     using System.Linq;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
@@ -14,6 +15,7 @@ namespace ScpDeathmatch.CustomItems
     using Exiled.API.Features.Spawn;
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
+    using UnityEngine;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
@@ -38,6 +40,12 @@ namespace ScpDeathmatch.CustomItems
         /// <inheritdoc />
         [YamlIgnore]
         public override ItemType Type { get; set; } = ItemType.Coin;
+
+        /// <summary>
+        /// Gets or sets the amount of colas to grant when upgraded.
+        /// </summary>
+        [Description("The amount of colas to grant when upgraded.")]
+        public int ColaAmount { get; set; } = 1;
 
         /// <inheritdoc />
         protected override void SubscribeEvents()
@@ -79,7 +87,16 @@ namespace ScpDeathmatch.CustomItems
                 return;
 
             player.RemoveItem(item);
-            player.AddItem(ItemType.SCP207);
+            for (int i = 0; i < ColaAmount; i++)
+            {
+                if (player.Items.Count >= 8)
+                {
+                    Item.Create(ItemType.SCP207).Spawn(player.Position + Vector3.up);
+                    continue;
+                }
+
+                player.AddItem(ItemType.SCP207);
+            }
         }
     }
 }

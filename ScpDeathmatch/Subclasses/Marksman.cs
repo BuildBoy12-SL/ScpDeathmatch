@@ -17,7 +17,6 @@ namespace ScpDeathmatch.Subclasses
     using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Abilities;
     using UnityEngine;
-    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     public class Marksman : Subclass

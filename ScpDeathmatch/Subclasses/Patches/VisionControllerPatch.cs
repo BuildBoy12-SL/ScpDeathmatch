@@ -26,7 +26,7 @@ namespace ScpDeathmatch.Subclasses.Patches
             if (!Plugin.Instance.Config.Subclasses.Recon.Check(player))
                 return true;
 
-            float maximumDistance = Plugin.Instance.Config.CustomItems.ReconSwitch.MaximumDistance;
+            float maximumDistance = Plugin.Instance.Config.ClientCommands.SubclassCommands.ToggleGoggles.MaximumDistance;
             bool enhancementActivated = false;
             if (player.SessionVariables.TryGetValue("EnhancedReconSwitch", out object obj) &&
                 obj is EnhancedReconSwitch enhancedReconSwitch)

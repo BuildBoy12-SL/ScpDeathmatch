@@ -52,11 +52,6 @@ namespace ScpDeathmatch.Configs
         public Qed Qed { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Items.ReconSwitch"/> class.
-        /// </summary>
-        public ReconSwitch ReconSwitch { get; set; } = new();
-
-        /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.SecondWind"/> class.
         /// </summary>
         public SecondWind SecondWind { get; set; } = new();

@@ -170,7 +170,7 @@ namespace ScpDeathmatch.Subclasses.Abilities
             while (!Round.IsEnded)
             {
                 yield return Timing.WaitForSeconds(RefreshRate);
-                if (player.IsDead)
+                if (player.IsDead || player.SessionVariables.ContainsKey("PauseScavengerAura"))
                     continue;
 
                 int colliderCount = Physics.OverlapSphereNonAlloc(player.Position, Radius, colliders, PickupMask);

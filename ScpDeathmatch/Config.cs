@@ -52,6 +52,12 @@ namespace ScpDeathmatch
         public bool DropEffectsOnDeath { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets a value indicating whether the spawning of a <see cref="ItemType.GunCOM15"/> in <see cref="ZoneType.LightContainment"/> is blocked.
+        /// </summary>
+        [Description("Whether the spawning of a COM15 in Light Containment Zone is blocked.")]
+        public bool PreventCom15Lcz { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]
