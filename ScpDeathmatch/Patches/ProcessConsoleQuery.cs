@@ -47,8 +47,7 @@ namespace ScpDeathmatch.Patches
 
         private static bool TryRunCommand(QueryProcessor sender, string query)
         {
-            string[] array = query.Trim().Split(QueryProcessor.SpaceArray, 512, StringSplitOptions.RemoveEmptyEntries);
-            ConsoleCommand clientCommand = Plugin.Instance.Config.ClientCommands.CustomCommands.FirstOrDefault(cmd => string.Equals(cmd.Command, array[0], StringComparison.OrdinalIgnoreCase));
+            ConsoleCommand clientCommand = Plugin.Instance.Config.ClientCommands.CustomCommands.FirstOrDefault(cmd => string.Equals(cmd.Command, query, StringComparison.OrdinalIgnoreCase));
             if (clientCommand is null)
                 return false;
 

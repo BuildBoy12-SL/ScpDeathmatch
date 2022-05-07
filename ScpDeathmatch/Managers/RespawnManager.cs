@@ -37,11 +37,16 @@ namespace ScpDeathmatch.Managers
         {
             yield return Timing.WaitForSeconds(0.5f);
             if (spawner.VerifyCondition())
+            {
                 spawner.Respawn();
+            }
             else
+            {
                 spawner.Fail();
+                spawner.Dispose();
+            }
 
-            yield return Timing.WaitForSeconds(1.5f);
+            yield return Timing.WaitForSeconds(1f);
             toRespawn.Remove(spawner);
         }
     }

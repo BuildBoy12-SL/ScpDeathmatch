@@ -15,7 +15,7 @@ namespace ScpDeathmatch.Models
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
-    using MEC;
+    using Exiled.Events.EventArgs;
     using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.Enums;
     using UnityEngine;
@@ -23,13 +23,15 @@ namespace ScpDeathmatch.Models
     /// <summary>
     /// Handles the respawning of players.
     /// </summary>
-    public class Respawner
+    public class Respawner : IDisposable
     {
         private readonly RoleType roleType;
         private readonly List<Item> items;
         private readonly Vector3 position;
         private readonly ZoneType zone;
         private readonly IEnumerable<PlayerEffect> effects;
+        private bool isDisposed;
+        private bool isRespawning;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Respawner"/> class.
@@ -49,7 +51,9 @@ namespace ScpDeathmatch.Models
             zone = player.Zone;
             effects = player.ActiveEffects;
 
-            player.ClearInventory();
+            Player.ClearInventory();
+
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         }
 
         /// <summary>
@@ -72,27 +76,11 @@ namespace ScpDeathmatch.Models
         /// </summary>
         public void Respawn()
         {
+            if (isDisposed)
+                return;
+
+            isRespawning = true;
             Player.Role.Type = roleType;
-            Timing.CallDelayed(1f, () =>
-            {
-                foreach (Item item in items)
-                {
-                    if (!(CustomItem.TryGet(item, out CustomItem customItem) && customItem is SecondWind))
-                        Player.AddItem(item);
-                }
-
-                Player.Inventory.SendItemsNextFrame = true;
-                foreach (PlayerEffect playerEffect in effects)
-                    Player.ReferenceHub.playerEffectsController.EnableEffect(playerEffect);
-
-                Vector3 newPosition = Vector3.zero;
-                if (TeleportType == TeleportType.Role)
-                    newPosition = TeleportPosition.Get(roleType);
-                else if (TeleportType == TeleportType.Zone)
-                    newPosition = TeleportPosition.Get(zone);
-
-                Player.Position = (newPosition != Vector3.zero ? newPosition : position) + Vector3.up;
-            });
         }
 
         /// <summary>
@@ -100,6 +88,9 @@ namespace ScpDeathmatch.Models
         /// </summary>
         public void Fail()
         {
+            if (isDisposed)
+                return;
+
             foreach (Item item in items)
             {
                 if (CustomItem.TryGet(item, out CustomItem customItem) && customItem is SecondWind)
@@ -107,6 +98,50 @@ namespace ScpDeathmatch.Models
 
                 item.Spawn(position);
             }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (isDisposed)
+                return;
+
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            isDisposed = true;
+        }
+
+        private void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (isDisposed || !isRespawning || ev.Player != Player)
+                return;
+
+            Player.ClearInventory();
+            foreach (Item item in items)
+            {
+                if (CustomItem.TryGet(item, out CustomItem customItem))
+                {
+                    if (customItem is not SecondWind)
+                        customItem.Give(Player);
+
+                    continue;
+                }
+
+                Player.AddItem(item.Type);
+            }
+
+            foreach (PlayerEffect playerEffect in effects)
+                Player.EnableEffect(playerEffect);
+
+            Vector3 newPosition = TeleportType switch
+            {
+                TeleportType.Role => TeleportPosition.Get(roleType),
+                TeleportType.Zone => TeleportPosition.Get(zone),
+                _ => position
+            };
+
+            Player.Position = newPosition + Vector3.up;
+            isRespawning = false;
+            Dispose();
         }
     }
 }

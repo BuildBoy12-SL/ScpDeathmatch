@@ -17,11 +17,15 @@ namespace ScpDeathmatch.CustomItems
     using Exiled.API.Features.Spawn;
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
+    using Footprinting;
+    using InventorySystem.Items.ThrowableProjectiles;
+    using InventorySystem.Items.Usables.Scp330;
     using PlayerStatsSystem;
     using Scp914;
     using ScpDeathmatch.Enums;
     using ScpDeathmatch.Models;
     using UnityEngine;
+    using Utils.Networking;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
@@ -88,10 +92,12 @@ namespace ScpDeathmatch.CustomItems
         /// <param name="player">The player that detonated the item.</param>
         public void Detonate(Player player)
         {
-            ExplosiveGrenade explosiveGrenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
-            explosiveGrenade.FuseTime = 0.3f;
             lastDetonator = player;
-            explosiveGrenade.SpawnActive(player.Position, player);
+            if (!CandyPink.TryGetGrenade(out ExplosionGrenade grenade))
+                return;
+
+            new CandyPink.CandyExplosionMessage { Origin = player.Position }.SendToAuthenticated();
+            ExplosionGrenade.Explode(new Footprint(player.ReferenceHub), player.Position, grenade);
         }
 
         /// <inheritdoc />
@@ -118,7 +124,7 @@ namespace ScpDeathmatch.CustomItems
                 return;
 
             lastDetonator = null;
-            Plugin.Instance.RespawnManager.Add(new Respawner(ev.Thrower, () => !KillRequired || ev.TargetsToAffect.Count > 1, TeleportType));
+            Plugin.Instance.RespawnManager.Add(new Respawner(ev.Thrower, () => !KillRequired || ev.TargetsToAffect.Count > 0, TeleportType));
             foreach (Player player in ev.TargetsToAffect)
                 player.Hurt(new UniversalDamageHandler(-1f, DeathTranslations.Explosion, DamageHandlerBase.CassieAnnouncement.Default));
         }
