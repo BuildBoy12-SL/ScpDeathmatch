@@ -43,8 +43,16 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 
                 if ((player.Position - ev.Grenade.transform.position).magnitude <= MaxDistance * MaxDistance)
                 {
-                    Room room = SameZone ? Room.Random(player.Zone) : Room.Random();
-                    player.Position = room.Position + Vector3.up;
+                    Room room;
+                    Vector3 newPosition;
+
+                    do
+                    {
+                        room = SameZone ? Room.Random(player.Zone) : Room.Random();
+                    }
+                    while (!PlayerMovementSync.FindSafePosition(room.Position + Vector3.up, out newPosition));
+
+                    player.Teleport(newPosition);
                 }
             }
         }
