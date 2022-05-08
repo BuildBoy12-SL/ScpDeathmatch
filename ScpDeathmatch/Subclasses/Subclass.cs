@@ -17,6 +17,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Represents a subclass.
@@ -58,22 +59,12 @@ namespace ScpDeathmatch.Subclasses
         /// <summary>
         /// Gets or sets the badge to be applied to players that have the role.
         /// </summary>
-        public abstract string Badge { get; set; }
-
-        /// <summary>
-        /// Gets or sets the color of the <see cref="Badge"/>.
-        /// </summary>
-        public abstract string BadgeColor { get; set; }
+        public abstract ConfiguredBadge Badge { get; set; }
 
         /// <summary>
         /// Gets or sets the badge to be applied to dead players that have the role.
         /// </summary>
-        public virtual string DeadBadge { get; set; } = "Dead";
-
-        /// <summary>
-        /// Gets or sets the color of the <see cref="DeadBadge"/>.
-        /// </summary>
-        public virtual string DeadBadgeColor { get; set; } = "silver";
+        public virtual ConfiguredBadge DeadBadge { get; set; } = new("Dead", "silver");
 
         /// <summary>
         /// Gets or sets the abilities of the subclass.
@@ -266,8 +257,8 @@ namespace ScpDeathmatch.Subclasses
             }
 
             ev.Player.Health = ev.Player.MaxHealth = MaxHealth;
-            ev.Player.ReferenceHub.serverRoles.Network_myText = ev.Player.IsDead ? DeadBadge : Badge;
-            ev.Player.ReferenceHub.serverRoles.Network_myColor = ev.Player.IsDead ? DeadBadgeColor : BadgeColor;
+            ConfiguredBadge badge = ev.Player.IsAlive ? Badge : DeadBadge;
+            badge?.Apply(ev.Player);
         }
 
         /// <summary>

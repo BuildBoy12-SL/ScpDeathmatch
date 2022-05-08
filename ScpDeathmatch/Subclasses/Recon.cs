@@ -12,6 +12,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using MEC;
+    using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
@@ -33,10 +34,7 @@ namespace ScpDeathmatch.Subclasses
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override string Badge { get; set; } = nameof(Recon);
-
-        /// <inheritdoc />
-        public override string BadgeColor { get; set; } = "mint";
+        public override ConfiguredBadge Badge { get; set; } = new(nameof(Recon), "mint");
 
         /// <inheritdoc />
         public override List<string> Inventory { get; set; } = new();

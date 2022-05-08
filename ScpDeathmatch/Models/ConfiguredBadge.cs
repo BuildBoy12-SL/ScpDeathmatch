@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Badge.cs" company="Build">
+// <copyright file="ConfiguredBadge.cs" company="Build">
 // Copyright (c) Build. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
@@ -12,21 +12,21 @@ namespace ScpDeathmatch.Models
     /// <summary>
     /// Represents a rank badge.
     /// </summary>
-    public class Badge
+    public class ConfiguredBadge
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Badge"/> class.
+        /// Initializes a new instance of the <see cref="ConfiguredBadge"/> class.
         /// </summary>
-        public Badge()
+        public ConfiguredBadge()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Badge"/> class.
+        /// Initializes a new instance of the <see cref="ConfiguredBadge"/> class.
         /// </summary>
         /// <param name="name"><inheritdoc cref="Name"/></param>
         /// <param name="color"><inheritdoc cref="Color"/></param>
-        public Badge(string name, string color)
+        public ConfiguredBadge(string name, string color)
         {
             Name = name;
             Color = color;
@@ -49,7 +49,7 @@ namespace ScpDeathmatch.Models
         public void Apply(Player player)
         {
             player.ReferenceHub.serverRoles.Network_myText = Name;
-            player.ReferenceHub.serverRoles.Network_myColor = Color;
+            player.RankColor = Color;
         }
     }
 }

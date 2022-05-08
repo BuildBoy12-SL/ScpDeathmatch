@@ -9,6 +9,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
@@ -51,6 +52,16 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         [Description("The effects to apply to the affected players.")]
         public List<ConfiguredEffect> Effects { get; set; } = new();
 
+        /// <summary>
+        /// Gets or sets the rooms that players cannot be teleported to.
+        /// </summary>
+        [Description("The rooms that players cannot be teleported to.")]
+        public List<RoomType> RoomBlacklist { get; set; } = new()
+        {
+            RoomType.Lcz173,
+            RoomType.Hcz106,
+        };
+
         /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)
         {
@@ -73,7 +84,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
                 {
                     room = SameZone ? Room.Random(player.Zone) : Room.Random();
                 }
-                while (!PlayerMovementSync.FindSafePosition(room.Position + Vector3.up, out newPosition));
+                while (RoomBlacklist.Contains(room.Type) || !PlayerMovementSync.FindSafePosition(room.Position + Vector3.up, out newPosition));
 
                 if (Delay > 0f)
                     Timing.CallDelayed(Delay, () => player.Teleport(newPosition));

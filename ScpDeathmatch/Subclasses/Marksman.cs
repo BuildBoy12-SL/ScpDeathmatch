@@ -37,10 +37,7 @@ namespace ScpDeathmatch.Subclasses
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override string Badge { get; set; } = nameof(Marksman);
-
-        /// <inheritdoc />
-        public override string BadgeColor { get; set; } = "army_green";
+        public override ConfiguredBadge Badge { get; set; } = new(nameof(Marksman), "army_green");
 
         /// <summary>
         /// Gets or sets the amount of health received on kill.

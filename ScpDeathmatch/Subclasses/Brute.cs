@@ -35,10 +35,7 @@ namespace ScpDeathmatch.Subclasses
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override string Badge { get; set; } = nameof(Brute);
-
-        /// <inheritdoc />
-        public override string BadgeColor { get; set; } = "crimson";
+        public override ConfiguredBadge Badge { get; set; } = new(nameof(Brute), "crimson");
 
         /// <summary>
         /// Gets or sets the amount of health per tick that should be healed.

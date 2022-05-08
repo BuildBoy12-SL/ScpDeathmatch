@@ -17,6 +17,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using Mirror;
+    using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
@@ -48,10 +49,7 @@ namespace ScpDeathmatch.Subclasses
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override string Badge { get; set; } = nameof(Scavenger);
-
-        /// <inheritdoc />
-        public override string BadgeColor { get; set; } = "tomato";
+        public override ConfiguredBadge Badge { get; set; } = new(nameof(Scavenger), "tomato");
 
         /// <summary>
         /// Gets or sets a value indicating whether janitor keycards will be replaced with scientist keycards during spawning.

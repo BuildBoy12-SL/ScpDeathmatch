@@ -17,10 +17,10 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
+    using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Abilities;
     using ScpDeathmatch.Subclasses.Models;
     using YamlDotNet.Serialization;
-    using Badge = ScpDeathmatch.Models.Badge;
 
     /// <inheritdoc />
     public class Insurgent : Subclass
@@ -42,17 +42,10 @@ namespace ScpDeathmatch.Subclasses
 
         /// <inheritdoc />
         [YamlIgnore]
-        public override string Badge { get; set; } = nameof(Insurgent);
+        public override ConfiguredBadge Badge { get; set; } = new(nameof(Insurgent), "emerald");
 
         /// <inheritdoc />
-        [YamlIgnore]
-        public override string BadgeColor { get; set; } = "emerald";
-
-        /// <inheritdoc />
-        public override string DeadBadge { get; set; } = "Dead Insurgent";
-
-        /// <inheritdoc />
-        public override string DeadBadgeColor { get; set; } = "nickel";
+        public override ConfiguredBadge DeadBadge { get; set; } = new("Dead Insurgent", "nickel");
 
         /// <summary>
         /// Gets or sets the amount of time, in seconds, before this subclass can no longer respawn as an Scp079.
@@ -92,10 +85,10 @@ namespace ScpDeathmatch.Subclasses
         /// </summary>
         public List<InsurgentType> InsurgentTypes { get; set; } = new()
         {
-            new InsurgentType(RoleType.ClassD, new Badge("Starter Insurgent", "emerald")),
-            new InsurgentType(RoleType.Scientist, new Badge("Weak Insurgent", "emerald")),
-            new InsurgentType(RoleType.ChaosRifleman, new Badge("Strong Insurgent", "emerald")),
-            new InsurgentType(RoleType.Scp079, new Badge("Meddling Insurgent", "emerald")),
+            new InsurgentType(RoleType.ClassD, new ConfiguredBadge("Starter Insurgent", "emerald")),
+            new InsurgentType(RoleType.Scientist, new ConfiguredBadge("Weak Insurgent", "emerald")),
+            new InsurgentType(RoleType.ChaosRifleman, new ConfiguredBadge("Strong Insurgent", "emerald")),
+            new InsurgentType(RoleType.Scp079, new ConfiguredBadge("Meddling Insurgent", "emerald")),
         };
 
         /// <inheritdoc />

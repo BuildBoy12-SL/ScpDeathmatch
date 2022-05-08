@@ -17,6 +17,7 @@ namespace ScpDeathmatch.Subclasses
     using GameCore;
     using MEC;
     using PlayerStatsSystem;
+    using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Abilities;
 
     /// <inheritdoc />
@@ -37,10 +38,7 @@ namespace ScpDeathmatch.Subclasses
         public override string CustomInfo { get; set; }
 
         /// <inheritdoc />
-        public override string Badge { get; set; } = nameof(Athlete);
-
-        /// <inheritdoc />
-        public override string BadgeColor { get; set; } = "yellow";
+        public override ConfiguredBadge Badge { get; set; } = new(nameof(Athlete), "yellow");
 
         /// <summary>
         /// Gets or sets the multiplier for movement speed.

@@ -28,7 +28,7 @@ namespace ScpDeathmatch.Subclasses.Models
         /// <param name="role"><inheritdoc cref="Role"/></param>
         /// <param name="badge"><inheritdoc cref="Badge"/></param>
         /// <param name="inventory"><inheritdoc cref="Inventory"/></param>
-        public InsurgentType(RoleType role, Badge badge, List<string> inventory = null)
+        public InsurgentType(RoleType role, ConfiguredBadge badge, List<string> inventory = null)
         {
             Role = role;
             Badge = badge;
@@ -43,7 +43,7 @@ namespace ScpDeathmatch.Subclasses.Models
         /// <summary>
         /// Gets or sets the badge to use.
         /// </summary>
-        public Badge Badge { get; set; }
+        public ConfiguredBadge Badge { get; set; }
 
         /// <summary>
         /// Gets or sets the items to give.
