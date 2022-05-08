@@ -17,7 +17,6 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
-    using MEC;
 
     /// <summary>
     /// Represents a subclass.
@@ -213,18 +212,6 @@ namespace ScpDeathmatch.Subclasses
             if (Check(player))
                 return;
 
-            Timing.CallDelayed(1.5f, () =>
-            {
-                if (Inventory is not null)
-                {
-                    foreach (string item in Inventory)
-                        TryAddItem(player, item);
-                }
-
-                player.Health = MaxHealth;
-                player.MaxHealth = MaxHealth;
-            });
-
             player.CustomInfo = CustomInfo;
             player.InfoArea &= ~PlayerInfoArea.Role;
             if (CustomAbilities is not null)
@@ -269,11 +256,18 @@ namespace ScpDeathmatch.Subclasses
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSpawned(ReferenceHub)"/>
         protected virtual void OnSpawned(SpawnedEventArgs ev)
         {
-            if (Check(ev.Player))
+            if (!Check(ev.Player))
+                return;
+
+            if (Inventory is not null)
             {
-                ev.Player.ReferenceHub.serverRoles.Network_myText = ev.Player.IsDead ? DeadBadge : Badge;
-                ev.Player.ReferenceHub.serverRoles.Network_myColor = ev.Player.IsDead ? DeadBadgeColor : BadgeColor;
+                foreach (string item in Inventory)
+                    TryAddItem(ev.Player, item);
             }
+
+            ev.Player.Health = ev.Player.MaxHealth = MaxHealth;
+            ev.Player.ReferenceHub.serverRoles.Network_myText = ev.Player.IsDead ? DeadBadge : Badge;
+            ev.Player.ReferenceHub.serverRoles.Network_myColor = ev.Player.IsDead ? DeadBadgeColor : BadgeColor;
         }
 
         /// <summary>

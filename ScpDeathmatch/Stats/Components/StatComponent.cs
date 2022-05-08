@@ -34,7 +34,7 @@ namespace ScpDeathmatch.Stats.Components
             {
                 globalTimer = 0f;
 
-                string healthString = player.IsAlive ? "Max Health: " + player.MaxHealth : string.Empty;
+                string healthString = player.IsAlive && player.Role.Type != RoleType.Scp079 ? "Max Health: " + player.MaxHealth : string.Empty;
                 if (ScpDeathmatch.Plugin.Instance.StatDatabase.TryGet(player, out PlayerInfo playerInfo))
                     player.ShowManagedHint("<align=left>" + healthString + "</align>                                                                               <align=right>" + playerInfo + "</align>", 2.2f, true, DisplayLocation.Bottom);
             }

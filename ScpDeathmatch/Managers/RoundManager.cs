@@ -63,6 +63,22 @@ namespace ScpDeathmatch.Managers
         private void OnEndingRound(EndingRoundEventArgs ev)
         {
             ev.IsRoundEnded = AliveCount + Plugin.RespawnManager.Count <= 1;
+            bool spawnedMore = false;
+            if (ev.IsRoundEnded)
+            {
+                foreach (Player player in Player.List)
+                {
+                    if (!Plugin.Config.Subclasses.Insurgent.Check(player) || player.Role.Type != RoleType.Scp079)
+                        continue;
+
+                    player.Role.Type = RoleType.Scientist;
+                    spawnedMore = true;
+                }
+            }
+
+            if (spawnedMore)
+                ev.IsRoundEnded = false;
+
             ev.IsAllowed = true;
         }
     }
