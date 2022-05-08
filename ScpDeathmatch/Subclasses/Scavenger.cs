@@ -117,12 +117,14 @@ namespace ScpDeathmatch.Subclasses
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+            base.SubscribeEvents();
         }
 
         /// <inheritdoc />
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+            base.UnsubscribeEvents();
         }
 
         private static void SyncCategoryLimits(Player player, SyncList<sbyte> limits)

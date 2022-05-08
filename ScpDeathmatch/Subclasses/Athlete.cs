@@ -110,6 +110,7 @@ namespace ScpDeathmatch.Subclasses
             Exiled.Events.Handlers.Player.Died += OnDied;
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
+            base.SubscribeEvents();
         }
 
         /// <inheritdoc />
@@ -118,6 +119,7 @@ namespace ScpDeathmatch.Subclasses
             Exiled.Events.Handlers.Player.Died -= OnDied;
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
+            base.UnsubscribeEvents();
         }
 
         private void OnDied(DiedEventArgs ev)

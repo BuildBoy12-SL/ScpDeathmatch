@@ -9,6 +9,7 @@ namespace ScpDeathmatch.Subclasses
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
@@ -90,20 +91,6 @@ namespace ScpDeathmatch.Subclasses
 
             healthCoroutines.Remove(player);
             base.RoleRemoved(player);
-        }
-
-        /// <inheritdoc />
-        protected override void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-            base.SubscribeEvents();
-        }
-
-        /// <inheritdoc />
-        protected override void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-            base.UnsubscribeEvents();
         }
 
         /// <inheritdoc />
