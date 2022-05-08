@@ -12,6 +12,7 @@ namespace ScpDeathmatch.Configs
     using Exiled.CustomItems.API.Features;
     using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.CustomItems.Qed;
+    using ScpDeathmatch.Subclasses.Items;
 
     /// <summary>
     /// Handles configs related to custom items.
@@ -21,12 +22,12 @@ namespace ScpDeathmatch.Configs
         private IEnumerable<CustomItem> registeredItems;
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="BigIron"/> class.
+        /// Gets or sets a configurable instance of the <see cref="CustomItems.BigIron"/> class.
         /// </summary>
         public BigIron BigIron { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="CustomItems.ColaCoin"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Items.ColaCoin"/> class.
         /// </summary>
         public ColaCoin ColaCoin { get; set; } = new();
 

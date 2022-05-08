@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.CustomItems
+namespace ScpDeathmatch.Subclasses.Items
 {
     using System.ComponentModel;
     using System.Linq;
@@ -50,6 +50,8 @@ namespace ScpDeathmatch.CustomItems
         /// <inheritdoc />
         protected override void SubscribeEvents()
         {
+            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Scp914.UpgradingItem += OnUpgradingItem;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += OnUpgradingPlayer;
             base.SubscribeEvents();
@@ -58,9 +60,26 @@ namespace ScpDeathmatch.CustomItems
         /// <inheritdoc />
         protected override void UnsubscribeEvents()
         {
+            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Scp914.UpgradingItem -= OnUpgradingItem;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= OnUpgradingPlayer;
             base.UnsubscribeEvents();
+        }
+
+        private void OnDroppingItem(DroppingItemEventArgs ev)
+        {
+            if (Check(ev.Item))
+                ev.IsAllowed = false;
+        }
+
+        private void OnDying(DyingEventArgs ev)
+        {
+            foreach (Item item in ev.Target.Items.ToList())
+            {
+                if (Check(item))
+                    ev.Target.RemoveItem(item);
+            }
         }
 
         private void OnUpgradingItem(UpgradingItemEventArgs ev)
