@@ -96,7 +96,7 @@ namespace ScpDeathmatch.Subclasses
         /// <inheritdoc />
         protected override void OnSpawned(SpawnedEventArgs ev)
         {
-            if (Check(ev.Player))
+            if (Check(ev.Player) && !ev.Player.ActiveArtificialHealthProcesses.Any())
                 Ahp.AddTo(ev.Player);
 
             base.OnSpawned(ev);
