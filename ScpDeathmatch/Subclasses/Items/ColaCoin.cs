@@ -13,14 +13,13 @@ namespace ScpDeathmatch.Subclasses.Items
     using Exiled.API.Features.Attributes;
     using Exiled.API.Features.Items;
     using Exiled.API.Features.Spawn;
-    using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomItem(ItemType.Coin)]
-    public class ColaCoin : CustomItem
+    public class ColaCoin : SubclassItem
     {
         /// <inheritdoc />
         public override uint Id { get; set; } = 128;
@@ -50,8 +49,6 @@ namespace ScpDeathmatch.Subclasses.Items
         /// <inheritdoc />
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
-            Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Scp914.UpgradingItem += OnUpgradingItem;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += OnUpgradingPlayer;
             base.SubscribeEvents();
@@ -60,26 +57,9 @@ namespace ScpDeathmatch.Subclasses.Items
         /// <inheritdoc />
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
-            Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Scp914.UpgradingItem -= OnUpgradingItem;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= OnUpgradingPlayer;
             base.UnsubscribeEvents();
-        }
-
-        private void OnDroppingItem(DroppingItemEventArgs ev)
-        {
-            if (Check(ev.Item))
-                ev.IsAllowed = false;
-        }
-
-        private void OnDying(DyingEventArgs ev)
-        {
-            foreach (Item item in ev.Target.Items.ToList())
-            {
-                if (Check(item))
-                    ev.Target.RemoveItem(item);
-            }
         }
 
         private void OnUpgradingItem(UpgradingItemEventArgs ev)
