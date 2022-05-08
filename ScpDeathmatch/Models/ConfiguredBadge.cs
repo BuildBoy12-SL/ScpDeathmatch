@@ -48,7 +48,7 @@ namespace ScpDeathmatch.Models
         /// <param name="player">The player to add the badge to.</param>
         public void Apply(Player player)
         {
-            player.ReferenceHub.serverRoles.Network_myText = Name;
+            player.RankName = Name;
             player.RankColor = Color;
         }
     }
