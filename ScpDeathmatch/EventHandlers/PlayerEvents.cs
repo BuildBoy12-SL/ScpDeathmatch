@@ -7,9 +7,11 @@
 
 namespace ScpDeathmatch.EventHandlers
 {
+    using System.Linq;
     using CustomPlayerEffects;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
+    using InventorySystem.Disarming;
     using MapGeneration.Distributors;
     using ScpDeathmatch.Models;
     using UnityEngine;
@@ -34,6 +36,7 @@ namespace ScpDeathmatch.EventHandlers
         {
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
+            Exiled.Events.Handlers.Player.ProcessingHotkey += OnProcessingHotkey;
         }
 
         /// <inheritdoc />
@@ -41,6 +44,7 @@ namespace ScpDeathmatch.EventHandlers
         {
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractingLocker;
+            Exiled.Events.Handlers.Player.ProcessingHotkey -= OnProcessingHotkey;
         }
 
         private void OnDying(DyingEventArgs ev)
@@ -72,6 +76,12 @@ namespace ScpDeathmatch.EventHandlers
                     return;
                 }
             }
+        }
+
+        private void OnProcessingHotkey(ProcessingHotkeyEventArgs ev)
+        {
+            if (DisarmedPlayers.Entries.Any(entry => entry.DisarmedPlayer == ev.Player.NetworkIdentity.netId))
+                ev.IsAllowed = false;
         }
     }
 }

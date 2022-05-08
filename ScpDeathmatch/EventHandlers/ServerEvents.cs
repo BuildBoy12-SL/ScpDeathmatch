@@ -13,8 +13,10 @@ namespace ScpDeathmatch.EventHandlers
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
+    using Exiled.Events.EventArgs;
     using MEC;
     using ScpDeathmatch.Models;
+    using ScpDeathmatch.Subclasses.Items;
     using ServerHandlers = Exiled.Events.Handlers.Server;
 
     /// <summary>
@@ -37,6 +39,7 @@ namespace ScpDeathmatch.EventHandlers
         public override void Subscribe()
         {
             ServerHandlers.ReloadedConfigs += OnReloadedConfigs;
+            ServerHandlers.RoundEnded += OnRoundEnded;
             ServerHandlers.RoundStarted += OnRoundStarted;
         }
 
@@ -44,6 +47,7 @@ namespace ScpDeathmatch.EventHandlers
         public override void Unsubscribe()
         {
             ServerHandlers.ReloadedConfigs -= OnReloadedConfigs;
+            ServerHandlers.RoundEnded -= OnRoundEnded;
             ServerHandlers.RoundStarted -= OnRoundStarted;
         }
 
@@ -73,14 +77,14 @@ namespace ScpDeathmatch.EventHandlers
                     for (int i = 0; i < player.Items.Count; i++)
                     {
                         Item item = player.Items.ElementAt(i);
-                        if (item.Type == ItemType.Coin && !CustomItem.TryGet(item, out _))
+                        if (item.Type == ItemType.Coin && (!CustomItem.TryGet(item, out CustomItem customItem) || customItem is ColaCoin))
                             player.RemoveItem(item);
                     }
                 }
             });
         }
 
-        private void OnRoundEnded()
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             if (coinCoroutine.IsRunning)
                 Timing.KillCoroutines(coinCoroutine);

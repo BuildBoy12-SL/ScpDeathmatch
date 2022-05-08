@@ -24,6 +24,7 @@ namespace ScpDeathmatch.Subclasses
     public class Athlete : Subclass
     {
         private readonly Dictionary<Player, byte> previousIntensities = new();
+        private readonly Dictionary<Player, int> curMaxHealth = new();
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 90;
@@ -75,6 +76,18 @@ namespace ScpDeathmatch.Subclasses
         {
             new Tantrum(),
         };
+
+        /// <summary>
+        /// Finds the player's current maximum health.
+        /// </summary>
+        /// <param name="player">The player to check.</param>
+        /// <returns>The player's adjusted maximum health or -1 if the player is not an <see cref="Athlete"/>.</returns>
+        public int CurrentMaximumHealth(Player player)
+        {
+            if (Check(player))
+                return curMaxHealth.TryGetValue(player, out int maxHealth) ? maxHealth : MaxHealth;
+            return -1;
+        }
 
         /// <inheritdoc />
         protected override void RoleAdded(Player player)
@@ -145,8 +158,14 @@ namespace ScpDeathmatch.Subclasses
                 return;
 
             previousIntensities[ev.Player] = newIntensity;
-            if (ColaHealth.TryGetValue(newIntensity, out int additionalHealth))
-                ev.Player.MaxHealth += additionalHealth;
+            if (!ColaHealth.TryGetValue(newIntensity, out int additionalHealth))
+                return;
+
+            ev.Player.MaxHealth += additionalHealth;
+            if (curMaxHealth.ContainsKey(ev.Player))
+                curMaxHealth[ev.Player] += additionalHealth;
+            else
+                curMaxHealth[ev.Player] = MaxHealth + additionalHealth;
         }
     }
 }

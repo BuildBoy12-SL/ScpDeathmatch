@@ -34,14 +34,9 @@ namespace ScpDeathmatch.HealthSystem.Components
             Subclass subclass = Subclass.GetSubclasses(player).FirstOrDefault();
             int maxHp = subclass?.MaxHealth ?? player.ReferenceHub.characterClassManager.CurRole.maxHP;
 
-            if (config.Subclasses.Athlete.Check(player))
-            {
-                for (byte i = 0; i < player.GetEffectIntensity<Scp207>(); i++)
-                {
-                    if (config.Subclasses.Athlete.ColaHealth.TryGetValue(i, out int additionalHealth))
-                        maxHp += additionalHealth;
-                }
-            }
+            int athleteMaxHp = config.Subclasses.Athlete.CurrentMaximumHealth(player);
+            if (athleteMaxHp != -1)
+                maxHp = athleteMaxHp;
 
             player.Health = player.MaxHealth = maxHp;
         }
