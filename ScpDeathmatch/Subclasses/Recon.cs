@@ -36,9 +36,6 @@ namespace ScpDeathmatch.Subclasses
         /// <inheritdoc />
         public override ConfiguredBadge Badge { get; set; } = new(nameof(Recon), "mint");
 
-        /// <inheritdoc />
-        public override List<string> Inventory { get; set; } = new();
-
         /// <summary>
         /// Gets or sets the alert to send to recons when a player enters their zone.
         /// </summary>

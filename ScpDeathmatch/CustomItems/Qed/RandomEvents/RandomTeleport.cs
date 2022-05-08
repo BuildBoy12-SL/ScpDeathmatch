@@ -44,13 +44,16 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// Gets or sets the delay before teleporting the affected players.
         /// </summary>
         [Description("The delay before teleporting the affected players.")]
-        public float Delay { get; set; } = 0f;
+        public float Delay { get; set; } = 3f;
 
         /// <summary>
         /// Gets or sets the effects to apply to the affected players.
         /// </summary>
         [Description("The effects to apply to the affected players.")]
-        public List<ConfiguredEffect> Effects { get; set; } = new();
+        public List<ConfiguredEffect> Effects { get; set; } = new()
+        {
+            new ConfiguredEffect(EffectType.Concussed, 2, 3f),
+        };
 
         /// <summary>
         /// Gets or sets the rooms that players cannot be teleported to.
