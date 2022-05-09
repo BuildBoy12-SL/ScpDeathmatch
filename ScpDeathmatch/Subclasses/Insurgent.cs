@@ -95,6 +95,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Scp079.GainingExperience += OnGainingExperience;
             Exiled.Events.Handlers.Scp079.Recontained += OnRecontained;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
@@ -106,6 +107,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Scp079.GainingExperience -= OnGainingExperience;
             Exiled.Events.Handlers.Scp079.Recontained -= OnRecontained;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
@@ -157,6 +159,12 @@ namespace ScpDeathmatch.Subclasses
             {
                 ev.Target.Role.Type = RoleType.Scp079;
             }
+        }
+
+        private void OnHurting(HurtingEventArgs ev)
+        {
+            if (Check(ev.Target) && ev.Target.Role.Type == RoleType.Scp079 && ev.Handler.Type == DamageType.Crushed)
+                ev.IsAllowed = false;
         }
 
         private void OnGainingExperience(GainingExperienceEventArgs ev)

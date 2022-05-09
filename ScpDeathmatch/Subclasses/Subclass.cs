@@ -244,6 +244,34 @@ namespace ScpDeathmatch.Subclasses
         /// <returns>True if the player has this role.</returns>
         public bool Check(Player player) => trackedPlayers.Contains(player);
 
+        /// <summary>
+        /// Called when the role is initialized to setup internal events.
+        /// </summary>
+        protected virtual void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+        }
+
+        /// <summary>
+        /// Called when the role is destroyed to unsubscribe internal event handlers.
+        /// </summary>
+        protected virtual void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnChangingRole(ChangingRoleEventArgs)"/>
+        protected virtual void OnChangingRole(ChangingRoleEventArgs ev)
+        {
+            if (!Check(ev.Player))
+                return;
+
+            ConfiguredBadge badge = ev.NewRole.GetTeam() != Team.RIP ? Badge : DeadBadge;
+            badge?.Apply(ev.Player);
+        }
+
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSpawned(ReferenceHub)"/>
         protected virtual void OnSpawned(SpawnedEventArgs ev)
         {
@@ -257,24 +285,6 @@ namespace ScpDeathmatch.Subclasses
             }
 
             ev.Player.Health = ev.Player.MaxHealth = MaxHealth;
-            ConfiguredBadge badge = ev.Player.IsAlive ? Badge : DeadBadge;
-            badge?.Apply(ev.Player);
-        }
-
-        /// <summary>
-        /// Called when the role is initialized to setup internal events.
-        /// </summary>
-        protected virtual void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
-        }
-
-        /// <summary>
-        /// Called when the role is destroyed to unsubscribe internal event handlers.
-        /// </summary>
-        protected virtual void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         }
 
         /// <summary>

@@ -56,6 +56,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             base.SubscribeEvents();
         }
 
@@ -63,6 +64,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             base.UnsubscribeEvents();
         }
 
@@ -74,32 +76,35 @@ namespace ScpDeathmatch.Subclasses
             coroutineHandle = Timing.RunCoroutine(RunZoneTracking());
         }
 
+        private void OnWaitingForPlayers()
+        {
+            if (coroutineHandle.IsRunning)
+                Timing.KillCoroutines(coroutineHandle);
+
+            previousZones.Clear();
+        }
+
         private IEnumerator<float> RunZoneTracking()
         {
-            yield return Timing.WaitForSeconds(3f);
             foreach (Player player in Player.List)
             {
                 if (!player.SessionVariables.ContainsKey("IsNPC"))
                     previousZones.Add(player, player.Zone);
             }
 
-            while (Round.IsStarted)
+            while (true)
             {
+                yield return Timing.WaitForSeconds(2f);
                 foreach (Player player in Player.List)
                 {
-                    if (player.SessionVariables.ContainsKey("IsNPC"))
+                    if (player.SessionVariables.ContainsKey("IsNPC") ||
+                        !previousZones.TryGetValue(player, out ZoneType zoneType) || zoneType == player.Zone)
                         continue;
 
-                    if (previousZones.TryGetValue(player, out ZoneType zoneType) && zoneType != player.Zone)
-                        Alert(player, zoneType);
-
+                    Alert(player, zoneType);
                     previousZones[player] = player.Zone;
                 }
-
-                yield return Timing.WaitForSeconds(2f);
             }
-
-            previousZones.Clear();
         }
 
         private void Alert(Player player, ZoneType previousZone)
@@ -109,13 +114,13 @@ namespace ScpDeathmatch.Subclasses
                 if (player == recon)
                     continue;
 
-                if (recon.Zone == previousZone)
+                if (previousZone != ZoneType.Unspecified && recon.Zone == previousZone)
                 {
                     recon.ShowHint(string.Format(AlertLeft, player.DisplayNickname ?? player.Nickname));
                     continue;
                 }
 
-                if (recon.Zone == player.Zone)
+                if (player.Zone != ZoneType.Unspecified && recon.Zone == player.Zone)
                 {
                     recon.ShowHint(string.Format(AlertEntered, player.DisplayNickname ?? player.Nickname));
                 }
