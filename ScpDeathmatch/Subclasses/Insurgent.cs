@@ -135,9 +135,7 @@ namespace ScpDeathmatch.Subclasses
                 return;
             }
 
-            ev.Player.ReferenceHub.serverRoles.Network_myText = insurgentType.Badge.Name;
-            ev.Player.ReferenceHub.serverRoles.Network_myColor = insurgentType.Badge.Color;
-
+            insurgentType.Badge.Apply(ev.Player);
             if (insurgentType.Inventory is not null)
             {
                 foreach (string item in insurgentType.Inventory)
