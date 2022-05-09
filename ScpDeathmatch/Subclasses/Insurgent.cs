@@ -121,10 +121,13 @@ namespace ScpDeathmatch.Subclasses
             if (!Check(ev.Player))
                 return;
 
-            if (ev.Player.Role.Is(out Scp079Role scp079))
-                scp079.Level = currentLevel;
-
             ev.Player.Health = ev.Player.MaxHealth = MaxHealth;
+            if (ev.Player.Role.Is(out Scp079Role scp079))
+            {
+                scp079.Level = currentLevel;
+                ev.Player.Health = ev.Player.MaxHealth = ev.Player.ReferenceHub.characterClassManager.CurRole.maxHP;
+            }
+
             InsurgentType insurgentType = InsurgentTypes.FirstOrDefault(type => type.Role == ev.Player.Role);
             if (insurgentType is null)
             {

@@ -29,9 +29,16 @@ namespace ScpDeathmatch.Subclasses.Patches
             List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
 
             Label addPositionLabel = generator.DefineLabel();
+            Label skipBypassLabel = generator.DefineLabel();
 
-            int offset = 4;
-            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Ldloc_S) + offset;
+            int offset = 1;
+            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Beq_S) + offset;
+            newInstructions[index].labels.Add(addPositionLabel);
+
+            offset = 4;
+            index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Ldloc_S) + offset;
+
+            newInstructions[index].labels.Add(skipBypassLabel);
 
             newInstructions.InsertRange(index, new[]
             {
@@ -43,12 +50,11 @@ namespace ScpDeathmatch.Subclasses.Patches
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Scp079PlayerScript), nameof(Scp079PlayerScript.gameObject))),
                 new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(GameObject) })),
                 new CodeInstruction(OpCodes.Callvirt, Method(typeof(Scavenger), nameof(Scavenger.Check))),
-                new CodeInstruction(OpCodes.Brtrue_S, addPositionLabel),
+                new CodeInstruction(OpCodes.Brfalse_S, skipBypassLabel),
+                new CodeInstruction(OpCodes.Ldloc_S, 6),
+                new CodeInstruction(OpCodes.Ldc_I4_7),
+                new CodeInstruction(OpCodes.Bne_Un_S, addPositionLabel),
             });
-
-            offset = 1;
-            index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Beq_S) + offset;
-            newInstructions[index].labels.Add(addPositionLabel);
 
             for (int z = 0; z < newInstructions.Count; z++)
                 yield return newInstructions[z];
