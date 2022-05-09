@@ -84,7 +84,7 @@ namespace ScpDeathmatch.API.Extensions
             T closestObject = default;
             foreach (T obj in enumerable)
             {
-                if (predicate != null && !predicate(obj))
+                if (predicate is not null && !predicate(obj))
                     continue;
 
                 float distance = Vector3.Distance(obj.transform.position, position);
@@ -105,7 +105,7 @@ namespace ScpDeathmatch.API.Extensions
             Player closestObject = null;
             foreach (Player player in enumerable)
             {
-                if (predicate != null && !predicate(player))
+                if (predicate is not null && !predicate(player))
                     continue;
 
                 float distance = Vector3.Distance(player.Position, position);
@@ -126,7 +126,7 @@ namespace ScpDeathmatch.API.Extensions
             Door closestObject = null;
             foreach (Door door in enumerable)
             {
-                if (predicate != null && !predicate(door))
+                if (predicate is not null && !predicate(door))
                     continue;
 
                 float distance = Vector3.Distance(door.Position, position);

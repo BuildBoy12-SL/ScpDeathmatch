@@ -74,7 +74,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
                     (player.Position - ev.Grenade.transform.position).magnitude > MaxDistance * MaxDistance)
                     continue;
 
-                if (Effects != null)
+                if (Effects is not null)
                 {
                     foreach (ConfiguredEffect effect in Effects)
                         effect.Apply(player);

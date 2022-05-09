@@ -33,7 +33,7 @@ namespace ScpDeathmatch.Subclasses.Patches.Manual
             PropertyInfo staminaUsageMultiplier = firearmType.GetProperty("StaminaUsageMultiplier", BindingFlags.Public | BindingFlags.Instance);
             PropertyInfo movementSpeedMultiplier = firearmType.GetProperty("MovementSpeedMultiplier", BindingFlags.Public | BindingFlags.Instance);
 
-            if (staminaUsageMultiplier == null || movementSpeedMultiplier == null)
+            if (staminaUsageMultiplier is null || movementSpeedMultiplier is null)
                 return;
 
             HarmonyMethod transpiler = new HarmonyMethod(typeof(MobilityModifier).GetMethod(nameof(Transpiler), BindingFlags.NonPublic | BindingFlags.Static));
