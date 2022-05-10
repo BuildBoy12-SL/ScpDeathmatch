@@ -8,7 +8,6 @@
 namespace ScpDeathmatch.HealthSystem.Components
 {
     using System.Collections.Generic;
-    using System.Linq;
     using CustomPlayerEffects;
     using Exiled.API.Features;
     using MEC;
@@ -31,7 +30,7 @@ namespace ScpDeathmatch.HealthSystem.Components
         /// </summary>
         public void Heal()
         {
-            Subclass subclass = Subclass.GetSubclasses(player).FirstOrDefault();
+            Subclass subclass = Subclass.Get(player);
             int maxHp = subclass?.MaxHealth ?? player.ReferenceHub.characterClassManager.CurRole.maxHP;
 
             int athleteMaxHp = config.Subclasses.Athlete.CurrentMaximumHealth(player);

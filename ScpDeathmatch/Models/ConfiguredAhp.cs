@@ -9,6 +9,7 @@ namespace ScpDeathmatch.Models
 {
     using System.ComponentModel;
     using Exiled.API.Features;
+    using PlayerStatsSystem;
 
     /// <summary>
     /// Represents a configured ahp model.
@@ -81,6 +82,7 @@ namespace ScpDeathmatch.Models
         /// Applies the ahp process to the provided player.
         /// </summary>
         /// <param name="player">The player to add the process to.</param>
-        public void AddTo(Player player) => player.AddAhp(StartingAmount, Limit, DecayRate, Efficacy, Sustain, Persistant);
+        /// <returns>The created ahp process.</returns>
+        public AhpStat.AhpProcess AddTo(Player player) => player.ReferenceHub.playerStats.GetModule<AhpStat>().ServerAddProcess(StartingAmount, Limit, DecayRate, Efficacy, Sustain, Persistant);
     }
 }

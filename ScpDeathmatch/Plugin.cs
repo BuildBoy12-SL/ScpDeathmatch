@@ -69,9 +69,7 @@ namespace ScpDeathmatch
 
             Config.Reload();
 
-            harmony = new Harmony($"deathMatch.{DateTime.UtcNow.Ticks}");
-            harmony.PatchAll();
-            PatchManual();
+            PatchAll();
 
             RespawnManager = new RespawnManager();
 
@@ -129,6 +127,20 @@ namespace ScpDeathmatch
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(Config.ZoneAnnouncer.ForceAnnouncerCommand);
             Config.ClientCommands.Unregister();
             Config.MiscCommands.Unregister();
+        }
+
+        private void PatchAll()
+        {
+            try
+            {
+                harmony = new Harmony($"deathMatch.{DateTime.UtcNow.Ticks}");
+                harmony.PatchAll();
+                PatchManual();
+            }
+            catch (Exception e)
+            {
+                Log.Error("An exception has occured while patching events!\n" + e.Message);
+            }
         }
 
         private void PatchManual()

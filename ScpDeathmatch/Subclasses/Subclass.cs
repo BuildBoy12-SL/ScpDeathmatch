@@ -81,14 +81,21 @@ namespace ScpDeathmatch.Subclasses
         /// </summary>
         /// <param name="name">The name of the role to get.</param>
         /// <returns>The role, or <see langword="null"/> if it doesn't exist.</returns>
-        public static Subclass Get(string name) => Registered?.FirstOrDefault(subclass => subclass.Name == name);
+        public static Subclass Get(string name) => Registered.FirstOrDefault(subclass => subclass.Name == name);
 
         /// <summary>
         /// Gets a <see cref="CustomRole"/> by type.
         /// </summary>
         /// <param name="type">The <see cref="Type"/> to get.</param>
         /// <returns>The role, or <see langword="null"/> if it doesn't exist.</returns>
-        public static Subclass Get(Type type) => Registered.FirstOrDefault(r => r.GetType() == type);
+        public static Subclass Get(Type type) => Registered.FirstOrDefault(subclass => subclass.GetType() == type);
+
+        /// <summary>
+        /// Gets all of the subclasses a player has attached.
+        /// </summary>
+        /// <param name="player">The player to check.</param>
+        /// <returns>The player's subclass, or null if one is not found.</returns>
+        public static Subclass Get(Player player) => Registered.FirstOrDefault(subclass => subclass.Check(player));
 
         /// <summary>
         /// Registers all subclasses in the selected class.
@@ -122,23 +129,6 @@ namespace ScpDeathmatch.Subclasses
         {
             foreach (Subclass subclass in Registered.ToList())
                 subclass.TryUnregister();
-        }
-
-        /// <summary>
-        /// Gets all of the subclasses a player has attached.
-        /// </summary>
-        /// <param name="player">The player to check.</param>
-        /// <returns>A collection of subclasses that the player has.</returns>
-        public static ReadOnlyCollection<Subclass> GetSubclasses(Player player)
-        {
-            List<Subclass> subclassList = new List<Subclass>();
-            foreach (Subclass subclass in Registered)
-            {
-                if (subclass.Check(player))
-                    subclassList.Add(subclass);
-            }
-
-            return subclassList.AsReadOnly();
         }
 
         /// <summary>
@@ -202,6 +192,9 @@ namespace ScpDeathmatch.Subclasses
         {
             if (Check(player))
                 return;
+
+            if (Get(player) is Subclass subclass)
+                subclass.RemoveRole(player);
 
             player.CustomInfo = CustomInfo;
             player.InfoArea &= ~PlayerInfoArea.Role;

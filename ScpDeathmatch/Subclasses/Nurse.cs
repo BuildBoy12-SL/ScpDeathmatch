@@ -9,14 +9,20 @@ namespace ScpDeathmatch.Subclasses
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs;
     using MEC;
+    using PlayerStatsSystem;
+    using ScpDeathmatch.API.Events.EventArgs;
     using ScpDeathmatch.Models;
+    using UnityEngine;
 
     /// <inheritdoc />
     public class Nurse : Subclass
     {
         private readonly Dictionary<Player, CoroutineHandle> healthCoroutines = new();
+        private readonly Dictionary<Player, AhpStat.AhpProcess> ahpProcesses = new();
 
         /// <inheritdoc />
         public override int MaxHealth { get; set; } = 100;
@@ -51,6 +57,12 @@ namespace ScpDeathmatch.Subclasses
         [Description("The amount of maximum health to regenerate per tick.")]
         public int MaxHealthRegen { get; set; } = 1;
 
+        /// <summary>
+        /// Gets or sets the ahp settings. The limit is automatically adjusted to the player's lost max health.
+        /// </summary>
+        [Description("The ahp settings. The limit is automatically adjusted to the player's lost max health.")]
+        public ConfiguredAhp Ahp { get; set; } = new(0f, 0f, -1f, 0.7f, 0f, true);
+
         /// <inheritdoc />
         protected override void RoleAdded(Player player)
         {
@@ -67,7 +79,37 @@ namespace ScpDeathmatch.Subclasses
                 healthCoroutines.Remove(player);
             }
 
+            ahpProcesses.Remove(player);
             base.RoleRemoved(player);
+        }
+
+        /// <inheritdoc />
+        protected override void SubscribeEvents()
+        {
+            API.Events.Handlers.Player.ChangingMaxHealth += OnChangingMaxHealth;
+            base.SubscribeEvents();
+        }
+
+        /// <inheritdoc />
+        protected override void UnsubscribeEvents()
+        {
+            API.Events.Handlers.Player.ChangingMaxHealth -= OnChangingMaxHealth;
+            base.UnsubscribeEvents();
+        }
+
+        /// <inheritdoc />
+        protected override void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (Check(ev.Player) && !ev.Player.ActiveArtificialHealthProcesses.Any())
+                ahpProcesses[ev.Player] = Ahp.AddTo(ev.Player);
+
+            base.OnSpawned(ev);
+        }
+
+        private void OnChangingMaxHealth(ChangingMaxHealthEventArgs ev)
+        {
+            if (Check(ev.Player) && ahpProcesses.TryGetValue(ev.Player, out AhpStat.AhpProcess ahpProcess))
+                ahpProcess.Limit = Mathf.Clamp(MaxHealth - ev.NewMaxHealth, 0, int.MaxValue);
         }
 
         private IEnumerator<float> RunRegeneration(Player player)

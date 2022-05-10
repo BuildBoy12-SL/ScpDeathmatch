@@ -16,15 +16,21 @@ namespace ScpDeathmatch.Configs
     public class MiscCommandsConfig
     {
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="SpawnObject"/> command.
+        /// Gets or sets a configurable instance of the <see cref="ChangeSubclassCommand"/> command.
         /// </summary>
-        public SpawnObject SpawnObject { get; set; } = new();
+        public ChangeSubclassCommand ChangeSubclass { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="SpawnObjectCommand"/> command.
+        /// </summary>
+        public SpawnObjectCommand SpawnObject { get; set; } = new();
 
         /// <summary>
         /// Registers all commands.
         /// </summary>
         public void Register()
         {
+            CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(ChangeSubclass);
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(SpawnObject);
         }
 
@@ -33,6 +39,7 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public void Unregister()
         {
+            CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(ChangeSubclass);
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(SpawnObject);
         }
     }

@@ -17,7 +17,7 @@ namespace ScpDeathmatch.Commands
     using UnityEngine;
 
     /// <inheritdoc />
-    public class SpawnObject : ICommand
+    public class SpawnObjectCommand : ICommand
     {
         private SpawnableStructure[] spawnableStructures;
 
