@@ -57,6 +57,9 @@ namespace ScpDeathmatch.Decontamination
 
         private void OnRoundStarted()
         {
+            if (coroutineHandle.IsRunning)
+                Timing.KillCoroutines(coroutineHandle);
+
             if (Plugin.Config.Decontamination.IsEnabled)
                 coroutineHandle = Timing.RunCoroutine(RunDecontamination());
         }
