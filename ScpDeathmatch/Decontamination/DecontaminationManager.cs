@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.Decontamination
 {
     using System.Collections.Generic;
+    using Exiled.Events.EventArgs;
     using LightContainmentZoneDecontamination;
     using MEC;
     using ScpDeathmatch.Decontamination.Models;
@@ -33,6 +34,7 @@ namespace ScpDeathmatch.Decontamination
         public override void Subscribe()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
+            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         }
 
@@ -40,6 +42,7 @@ namespace ScpDeathmatch.Decontamination
         public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         }
 
@@ -55,11 +58,14 @@ namespace ScpDeathmatch.Decontamination
                Timing.KillCoroutines(coroutineHandle);
         }
 
-        private void OnRoundStarted()
+        private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             if (coroutineHandle.IsRunning)
                 Timing.KillCoroutines(coroutineHandle);
+        }
 
+        private void OnRoundStarted()
+        {
             if (Plugin.Config.Decontamination.IsEnabled)
                 coroutineHandle = Timing.RunCoroutine(RunDecontamination());
         }

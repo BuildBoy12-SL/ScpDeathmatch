@@ -17,6 +17,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
+    using PlayerStatsSystem;
     using ScpDeathmatch.Models;
 
     /// <summary>
@@ -227,6 +228,7 @@ namespace ScpDeathmatch.Subclasses
                     ability.RemoveAbility(player);
             }
 
+            player.ReferenceHub.playerStats.GetModule<AhpStat>()._activeProcesses.Clear();
             RoleRemoved(player);
         }
 

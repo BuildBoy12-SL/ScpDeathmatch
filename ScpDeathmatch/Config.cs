@@ -16,6 +16,7 @@ namespace ScpDeathmatch
     using Exiled.API.Features;
     using Exiled.API.Interfaces;
     using Exiled.Loader;
+    using ScpDeathmatch.API.Attributes;
     using ScpDeathmatch.Configs;
     using YamlDotNet.Serialization;
 
@@ -187,6 +188,7 @@ namespace ScpDeathmatch
         /// Gets or sets the configs for the custom roles.
         /// </summary>
         [YamlIgnore]
+        [NestedConfig]
         public SubclassesConfig Subclasses { get; set; }
 
         /// <summary>
@@ -208,21 +210,47 @@ namespace ScpDeathmatch
                 if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
                     continue;
 
-                try
+                if (Attribute.IsDefined(property, typeof(NestedConfigAttribute)))
                 {
-                    string path = Path.Combine(Folder, property.Name + ".yml");
-                    object value = File.Exists(path)
-                        ? Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType)
-                        : Activator.CreateInstance(property.PropertyType);
+                    LoadNested(property);
+                    continue;
+                }
 
-                    property.SetValue(this, value);
-                    File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(this)));
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Error while attempting to reload config file '{property.Name}', defaults will be loaded instead!\n{e.Message}");
-                    property.SetValue(this, Activator.CreateInstance(property.PropertyType));
-                }
+                string path = Path.Combine(Folder, property.Name + ".yml");
+                LoadProperty(path, property, this);
+            }
+        }
+
+        private void LoadNested(PropertyInfo property)
+        {
+            string directory = Path.Combine(Folder, property.Name);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            property.SetValue(this, Activator.CreateInstance(property.PropertyType));
+            object value = property.GetValue(this);
+            foreach (PropertyInfo nestedProperty in property.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                string path = Path.Combine(directory, nestedProperty.Name + ".yml");
+                LoadProperty(path, nestedProperty, value);
+            }
+        }
+
+        private void LoadProperty(string path, PropertyInfo property, object parentClass)
+        {
+            try
+            {
+                object value = File.Exists(path)
+                    ? Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType)
+                    : Activator.CreateInstance(property.PropertyType);
+
+                property.SetValue(parentClass, value);
+                File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(parentClass)));
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error while attempting to reload config file '{property.Name}', defaults will be loaded instead!\n{e.Message}");
+                property.SetValue(parentClass, Activator.CreateInstance(property.PropertyType));
             }
         }
     }
