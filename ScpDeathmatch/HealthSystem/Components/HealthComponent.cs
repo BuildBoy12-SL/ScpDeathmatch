@@ -93,7 +93,7 @@ namespace ScpDeathmatch.HealthSystem.Components
 
         private IEnumerator<float> RunAttemptRegeneration()
         {
-            while (true)
+            while (player.IsConnected)
             {
                 yield return Timing.WaitForSeconds(config.Health.RegenerationTick);
                 if (player.IsDead)

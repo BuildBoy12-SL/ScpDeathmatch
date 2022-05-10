@@ -104,7 +104,7 @@ namespace ScpDeathmatch.Subclasses
 
         private IEnumerator<float> RunRegeneration(Player player)
         {
-            while (true)
+            while (player.IsConnected)
             {
                 yield return Timing.WaitForSeconds(SecondsPerTick);
                 player.Heal(HealthPerTick);
