@@ -20,7 +20,6 @@ namespace ScpDeathmatch.CustomItems
     using Scp914;
     using ScpDeathmatch.API.Extensions;
     using ScpDeathmatch.Models;
-    using UnityEngine;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
@@ -53,17 +52,7 @@ namespace ScpDeathmatch.CustomItems
         public Dictionary<ItemType, UpgradeSetting> UpgradeSettings { get; set; } = new()
         {
             {
-                ItemType.KeycardJanitor, new UpgradeSetting
-                {
-                    Chances = new Dictionary<Scp914KnobSetting, int>
-                    {
-                        { Scp914KnobSetting.Rough, 0 },
-                        { Scp914KnobSetting.Coarse, 0 },
-                        { Scp914KnobSetting.OneToOne, 100 },
-                        { Scp914KnobSetting.Fine, 0 },
-                        { Scp914KnobSetting.VeryFine, 0 },
-                    },
-                }
+                ItemType.KeycardJanitor, new UpgradeSetting(oneToOne: 100)
             },
         };
 
@@ -142,15 +131,15 @@ namespace ScpDeathmatch.CustomItems
         {
             if (ev.HeldOnly)
             {
-                UpgradeItem(ev.Player.CurrentItem, ev.KnobSetting, ev.Player, ev.OutputPosition);
+                UpgradeItem(ev.Player.CurrentItem, ev.KnobSetting, ev.Player);
                 return;
             }
 
             foreach (Item item in ev.Player.Items.ToList())
-                UpgradeItem(item, ev.KnobSetting, ev.Player, ev.OutputPosition);
+                UpgradeItem(item, ev.KnobSetting, ev.Player);
         }
 
-        private void UpgradeItem(Item item, Scp914KnobSetting setting, Player player, Vector3 outputPosition)
+        private void UpgradeItem(Item item, Scp914KnobSetting setting, Player player)
         {
             if (item is null ||
                 TryGet(item, out _) ||

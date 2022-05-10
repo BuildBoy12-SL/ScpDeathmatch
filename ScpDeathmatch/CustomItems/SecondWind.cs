@@ -69,17 +69,7 @@ namespace ScpDeathmatch.CustomItems
         public Dictionary<ItemType, UpgradeSetting> UpgradeSettings { get; set; } = new()
         {
             {
-                ItemType.Coin, new UpgradeSetting
-                {
-                    Chances = new Dictionary<Scp914KnobSetting, int>
-                    {
-                        { Scp914KnobSetting.Rough, 0 },
-                        { Scp914KnobSetting.Coarse, 0 },
-                        { Scp914KnobSetting.OneToOne, 100 },
-                        { Scp914KnobSetting.Fine, 0 },
-                        { Scp914KnobSetting.VeryFine, 0 },
-                    },
-                }
+                ItemType.Coin, new UpgradeSetting(oneToOne: 100)
             },
         };
 

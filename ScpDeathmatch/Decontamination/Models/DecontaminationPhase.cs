@@ -69,13 +69,13 @@ namespace ScpDeathmatch.Decontamination.Models
                     continue;
 
                 float y = player.Position.y;
-                if (IsGlobal || (y < 200f && y > -200.0f))
-                {
-                    if (Broadcast is not null)
-                        player.Broadcast(Broadcast);
+                if (!IsGlobal && y is >= 200f or <= -200.0f)
+                    continue;
 
-                    player.PlayCassieAnnouncement(Cassie, makeNoise: !SuppressNoise);
-                }
+                if (Broadcast is not null)
+                    player.Broadcast(Broadcast);
+
+                player.PlayCassieAnnouncement(Cassie, makeNoise: !SuppressNoise);
             }
 
             if (SpecialAction == SpecialAction.Checkpoints)

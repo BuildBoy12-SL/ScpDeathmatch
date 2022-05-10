@@ -19,7 +19,7 @@ namespace ScpDeathmatch.Commands
     /// <inheritdoc />
     public class SpawnObject : ICommand
     {
-        private SpawnablesDistributorSettings[] settingsArray;
+        private SpawnableStructure[] spawnableStructures;
 
         /// <inheritdoc />
         public string Command { get; set; } = "spawnobject";
@@ -63,14 +63,14 @@ namespace ScpDeathmatch.Commands
                 return false;
             }
 
-            settingsArray ??= Resources.LoadAll<MapGeneration.Distributors.SpawnablesDistributorSettings>(string.Empty);
-            if (id < 0 || id >= settingsArray[0].SpawnableStructures.Length)
+            spawnableStructures ??= Resources.LoadAll<MapGeneration.Distributors.SpawnablesDistributorSettings>(string.Empty)[0].SpawnableStructures;
+            if (id < 0 || id >= spawnableStructures.Length)
             {
-                response = "Invalid object id. The object id must be between 0 and " + (settingsArray[0].SpawnableStructures.Length - 1) + ".";
+                response = "Invalid object id. The object id must be between 0 and " + (spawnableStructures.Length - 1) + ".";
                 return false;
             }
 
-            SpawnableStructure spawnableStructure = UnityEngine.Object.Instantiate(settingsArray[0].SpawnableStructures[id], player.Position, player.CameraTransform.rotation);
+            SpawnableStructure spawnableStructure = UnityEngine.Object.Instantiate(spawnableStructures[id], player.Position, player.CameraTransform.rotation);
             spawnableStructure.transform.localScale = Vector3.one;
             NetworkServer.Spawn(spawnableStructure.gameObject);
             response = "Done.";

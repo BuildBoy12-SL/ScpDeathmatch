@@ -22,14 +22,15 @@ namespace ScpDeathmatch.HealthSystem.Patches
         {
             foreach (PlayerEffect allEffect in __instance._allEffects)
             {
-                if (allEffect is Scp207 && !Plugin.Instance.Config.MedicalItems.Scp500RemoveScp207)
-                    continue;
-
-                if (allEffect is Scp1853 && !Plugin.Instance.Config.MedicalItems.Scp500RemoveScp1853)
-                    continue;
-
-                if (allEffect is IHealablePlayerEffect healablePlayerEffect && healablePlayerEffect.IsHealable(itemType))
-                    allEffect.Intensity = 0;
+                switch (allEffect)
+                {
+                    case Scp207 when !Plugin.Instance.Config.MedicalItems.Scp500RemoveScp207:
+                    case Scp1853 when !Plugin.Instance.Config.MedicalItems.Scp500RemoveScp1853:
+                        continue;
+                    case IHealablePlayerEffect healablePlayerEffect when healablePlayerEffect.IsHealable(itemType):
+                        allEffect.Intensity = 0;
+                        break;
+                }
             }
 
             return false;

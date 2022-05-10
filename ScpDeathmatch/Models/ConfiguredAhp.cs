@@ -77,7 +77,10 @@ namespace ScpDeathmatch.Models
         [Description("Whether the hume shield will be removed when the players current ahp hits 0.")]
         public bool Persistant { get; set; }
 
-        /// <inheritdoc cref="Player.AddAhp"/>
+        /// <summary>
+        /// Applies the ahp process to the provided player.
+        /// </summary>
+        /// <param name="player">The player to add the process to.</param>
         public void AddTo(Player player) => player.AddAhp(StartingAmount, Limit, DecayRate, Efficacy, Sustain, Persistant);
     }
 }
