@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Subclasses.Patches
+namespace ScpDeathmatch.HealthSystem.Patches
 {
 #pragma warning disable SA1118
     using System.Collections.Generic;
@@ -36,9 +36,8 @@ namespace ScpDeathmatch.Subclasses.Patches
             {
                 new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
                 new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Subclasses))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(SubclassesConfig), nameof(SubclassesConfig.Marksman))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Marksman), nameof(Marksman.Scp1853StaminaImmune))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
+                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp1853StaminaImmune))),
                 new CodeInstruction(OpCodes.Brtrue_S, skipStaminaLabel),
             });
 

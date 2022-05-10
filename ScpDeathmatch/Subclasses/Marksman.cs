@@ -78,12 +78,6 @@ namespace ScpDeathmatch.Subclasses
         public float DamageMultiplier { get; set; } = 1f;
 
         /// <summary>
-        /// Gets or sets a value indicating whether Scp1853's stamina penalty will be ignored.
-        /// </summary>
-        [Description("Whether Scp1853's stamina penalty will be ignored.")]
-        public bool Scp1853StaminaImmune { get; set; } = true;
-
-        /// <summary>
         /// Gets or sets a value indicating whether the player will be granted an <see cref="ItemType.SCP1853"/> when they pick up a gun for the first time.
         /// </summary>
         public bool GiveScp1853OnFirstWeapon { get; set; } = true;

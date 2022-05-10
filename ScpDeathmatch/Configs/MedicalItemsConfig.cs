@@ -54,6 +54,12 @@ namespace ScpDeathmatch.Configs
         public ConfiguredAhp PainkillersAhp { get; set; } = new(25f, sustain: 10f);
 
         /// <summary>
+        /// Gets or sets a value indicating whether Scp1853's stamina penalty will be ignored.
+        /// </summary>
+        [Description("Whether Scp1853's stamina penalty will be ignored.")]
+        public bool Scp1853StaminaImmune { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets a value indicating whether Scp500 should keep its regeneration.
         /// </summary>
         [Description("Whether Scp500 should keep its regeneration.")]
