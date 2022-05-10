@@ -197,6 +197,8 @@ namespace ScpDeathmatch.Subclasses
             if (Get(player) is Subclass subclass)
                 subclass.RemoveRole(player);
 
+            player.Health = player.MaxHealth = MaxHealth;
+
             player.CustomInfo = CustomInfo;
             player.InfoArea &= ~PlayerInfoArea.Role;
             if (CustomAbilities is not null)

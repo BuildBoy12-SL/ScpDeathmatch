@@ -77,6 +77,7 @@ namespace ScpDeathmatch.Subclasses
         protected override void RoleAdded(Player player)
         {
             healthCoroutines[player] = Timing.RunCoroutine(RunRegeneration(player));
+            Ahp.AddTo(player);
             base.RoleAdded(player);
         }
 

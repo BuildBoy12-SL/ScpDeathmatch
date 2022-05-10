@@ -68,7 +68,7 @@ namespace ScpDeathmatch
         /// Gets or sets the folder containing miscellaneous config files.
         /// </summary>
         [Description("The folder containing miscellaneous config files.")]
-        public string Folder { get; set; } = Path.Combine(Paths.Configs, "ScpDeathmatch");
+        public string Folder { get; set; } = Path.Combine(Paths.Configs, "ScpDeathmatch", "Configs");
 
         /// <summary>
         /// Gets or sets the configs for body slamming.
@@ -98,6 +98,7 @@ namespace ScpDeathmatch
         /// Gets or sets the configs for the custom items.
         /// </summary>
         [YamlIgnore]
+        [NestedConfig]
         public CustomItemsConfig CustomItems { get; set; }
 
         /// <summary>
@@ -221,6 +222,27 @@ namespace ScpDeathmatch
             }
         }
 
+        private static void LoadProperty(string path, PropertyInfo property, object parentClass)
+        {
+            try
+            {
+                object value = File.Exists(path)
+                    ? Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType)
+                    : DefaultPropertyValue(property, parentClass);
+
+                property.SetValue(parentClass, value);
+                File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(parentClass)));
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error while attempting to reload config file '{property.Name}', defaults will be loaded instead!\n{e.Message}");
+                property.SetValue(parentClass, Activator.CreateInstance(property.PropertyType));
+            }
+        }
+
+        private static object DefaultPropertyValue(PropertyInfo property, object parentClass)
+            => property.GetValue(parentClass) ?? Activator.CreateInstance(property.PropertyType);
+
         private void LoadNested(PropertyInfo property)
         {
             string directory = Path.Combine(Folder, property.Name);
@@ -233,24 +255,6 @@ namespace ScpDeathmatch
             {
                 string path = Path.Combine(directory, nestedProperty.Name + ".yml");
                 LoadProperty(path, nestedProperty, value);
-            }
-        }
-
-        private void LoadProperty(string path, PropertyInfo property, object parentClass)
-        {
-            try
-            {
-                object value = File.Exists(path)
-                    ? Loader.Deserializer.Deserialize(File.ReadAllText(path), property.PropertyType)
-                    : Activator.CreateInstance(property.PropertyType);
-
-                property.SetValue(parentClass, value);
-                File.WriteAllText(path, Loader.Serializer.Serialize(property.GetValue(parentClass)));
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error while attempting to reload config file '{property.Name}', defaults will be loaded instead!\n{e.Message}");
-                property.SetValue(parentClass, Activator.CreateInstance(property.PropertyType));
             }
         }
     }

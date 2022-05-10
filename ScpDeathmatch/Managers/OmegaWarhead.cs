@@ -73,7 +73,7 @@ namespace ScpDeathmatch.Managers
                 if (player.SessionVariables.ContainsKey("IsNPC"))
                     continue;
 
-                player.Kill(DamageType.Warhead);
+                player.Kill("Vaporized by the Omega Warhead.");
             }
         }
     }

@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.Subclasses.Abilities
 {
     using System.ComponentModel;
+    using CustomPlayerEffects;
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
 
@@ -31,6 +32,18 @@ namespace ScpDeathmatch.Subclasses.Abilities
         /// </summary>
         [Description("The multiplier for the range of the goggles while the ability is active.")]
         public float RangeMultiplier { get; set; } = 2;
+
+        /// <inheritdoc />
+        public override bool CanUseAbility(Player player, out string response)
+        {
+            if (!player.GetEffectActive<Visuals939>())
+            {
+                response = "You do not have the recon switch visual effects activated.";
+                return false;
+            }
+
+            return base.CanUseAbility(player, out response);
+        }
 
         /// <inheritdoc />
         protected override void AbilityUsed(Player player)
