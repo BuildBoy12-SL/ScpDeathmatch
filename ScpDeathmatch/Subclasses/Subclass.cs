@@ -250,6 +250,7 @@ namespace ScpDeathmatch.Subclasses
         protected virtual void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+            Exiled.Events.Handlers.Player.Destroying += OnDestroying;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
         }
 
@@ -259,6 +260,7 @@ namespace ScpDeathmatch.Subclasses
         protected virtual void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+            Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         }
 
@@ -335,6 +337,12 @@ namespace ScpDeathmatch.Subclasses
 
             Log.Warn($"{Name}: {nameof(TryAddItem)}: {itemName} is not a valid ItemType or Custom Item name.");
             return false;
+        }
+
+        private void OnDestroying(DestroyingEventArgs ev)
+        {
+            if (Check(ev.Player))
+                RemoveRole(ev.Player);
         }
     }
 }
