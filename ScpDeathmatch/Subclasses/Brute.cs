@@ -84,9 +84,11 @@ namespace ScpDeathmatch.Subclasses
         protected override void RoleRemoved(Player player)
         {
             if (healthCoroutines.TryGetValue(player, out CoroutineHandle coroutineHandle))
+            {
                 Timing.KillCoroutines(coroutineHandle);
+                healthCoroutines.Remove(player);
+            }
 
-            healthCoroutines.Remove(player);
             base.RoleRemoved(player);
         }
 
