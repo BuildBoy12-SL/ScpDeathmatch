@@ -62,7 +62,7 @@ namespace ScpDeathmatch.Managers
 
         private void OnEndingRound(EndingRoundEventArgs ev)
         {
-            ev.IsRoundEnded = AliveCount + Plugin.RespawnManager.Count <= 1;
+            ev.IsRoundEnded = AliveCount + RespawnManager.Count <= 1;
             bool spawnedMore = false;
             if (ev.IsRoundEnded)
             {

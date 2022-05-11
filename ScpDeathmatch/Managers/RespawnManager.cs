@@ -14,26 +14,26 @@ namespace ScpDeathmatch.Managers
     /// <summary>
     /// Manages an underlying collection of players that are considered to be respawning.
     /// </summary>
-    public class RespawnManager
+    public static class RespawnManager
     {
-        private readonly List<Respawner> toRespawn = new();
+        private static readonly List<Respawner> ToRespawn = new();
 
         /// <summary>
         /// Gets the amount of players that are considered to be respawning.
         /// </summary>
-        public int Count => toRespawn.Count;
+        public static int Count => ToRespawn.Count;
 
         /// <summary>
         /// Adds a spawner to the respawn collection, verifying them after 0.5 seconds.
         /// </summary>
         /// <param name="spawner">The spawner to add.</param>
-        public void Add(Respawner spawner)
+        public static void Add(Respawner spawner)
         {
-            toRespawn.Add(spawner);
+            ToRespawn.Add(spawner);
             Timing.RunCoroutine(RunChecks(spawner));
         }
 
-        private IEnumerator<float> RunChecks(Respawner spawner)
+        private static IEnumerator<float> RunChecks(Respawner spawner)
         {
             yield return Timing.WaitForSeconds(0.5f);
             if (spawner.VerifyCondition())
@@ -47,7 +47,7 @@ namespace ScpDeathmatch.Managers
             }
 
             yield return Timing.WaitForSeconds(1f);
-            toRespawn.Remove(spawner);
+            ToRespawn.Remove(spawner);
         }
     }
 }

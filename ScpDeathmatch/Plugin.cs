@@ -30,11 +30,6 @@ namespace ScpDeathmatch
         public static Plugin Instance { get; private set; }
 
         /// <summary>
-        /// Gets an instance of the <see cref="Managers.RespawnManager"/> class.
-        /// </summary>
-        public RespawnManager RespawnManager { get; private set; }
-
-        /// <summary>
         /// Gets an instance of the <see cref="Stats.StatDatabase"/> class.
         /// </summary>
         public StatDatabase StatDatabase { get; private set; }
@@ -71,8 +66,6 @@ namespace ScpDeathmatch
 
             PatchAll();
 
-            RespawnManager = new RespawnManager();
-
             StatDatabase = new StatDatabase(this);
             StatDatabase.Open();
 
@@ -100,8 +93,6 @@ namespace ScpDeathmatch
 
             StatDatabase?.Close();
             StatDatabase = null;
-
-            RespawnManager = null;
 
             harmony?.UnpatchAll(harmony.Id);
             harmony = null;

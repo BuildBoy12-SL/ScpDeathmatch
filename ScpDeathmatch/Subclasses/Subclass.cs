@@ -33,7 +33,7 @@ namespace ScpDeathmatch.Subclasses
         public static HashSet<Subclass> Registered { get; } = new();
 
         /// <summary>
-        /// Gets a collection of players considered to be ghosts.
+        /// Gets a collection of players that have the subclass.
         /// </summary>
         public ReadOnlyCollection<Player> TrackedPlayers => trackedPlayers.AsReadOnly();
 

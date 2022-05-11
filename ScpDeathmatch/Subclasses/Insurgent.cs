@@ -192,6 +192,7 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnRoundStarted()
         {
+            currentLevel = 0;
             if (levelsCoroutine.IsRunning)
                 Timing.KillCoroutines(levelsCoroutine);
 
@@ -215,9 +216,9 @@ namespace ScpDeathmatch.Subclasses
                     continue;
 
                 currentLevel++;
-                foreach (Player player in Player.List)
+                foreach (Player player in TrackedPlayers)
                 {
-                    if (!Check(player) || !player.Role.Is(out Scp079Role scp079))
+                    if (!player.Role.Is(out Scp079Role scp079))
                         continue;
 
                     scp079.Level = currentLevel;

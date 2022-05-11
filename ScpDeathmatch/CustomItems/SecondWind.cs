@@ -23,6 +23,7 @@ namespace ScpDeathmatch.CustomItems
     using PlayerStatsSystem;
     using Scp914;
     using ScpDeathmatch.Enums;
+    using ScpDeathmatch.Managers;
     using ScpDeathmatch.Models;
     using UnityEngine;
     using Utils.Networking;
@@ -114,7 +115,7 @@ namespace ScpDeathmatch.CustomItems
                 return;
 
             lastDetonator = null;
-            Plugin.Instance.RespawnManager.Add(new Respawner(ev.Thrower, () => !KillRequired || ev.TargetsToAffect.Count > 0, TeleportType));
+            RespawnManager.Add(new Respawner(ev.Thrower, () => !KillRequired || ev.TargetsToAffect.Count > 0, TeleportType));
             foreach (Player player in ev.TargetsToAffect)
                 player.Hurt(new UniversalDamageHandler(-1f, DeathTranslations.Explosion, DamageHandlerBase.CassieAnnouncement.Default));
         }
