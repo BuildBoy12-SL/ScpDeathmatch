@@ -37,10 +37,12 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public Marksman Marksman { get; set; } = new();
 
+        /*
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Nurse"/> class.
         /// </summary>
         public Nurse Nurse { get; set; } = new();
+        */
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Recon"/> class.
@@ -52,10 +54,12 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public Scavenger Scavenger { get; set; } = new();
 
+        /*
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Zombie"/> class.
         /// </summary>
         public Zombie Zombie { get; set; } = new();
+        */
 
         /// <summary>
         /// Registers all custom items.
