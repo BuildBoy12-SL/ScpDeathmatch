@@ -62,12 +62,12 @@ namespace ScpDeathmatch.Configs
         */
 
         /// <summary>
-        /// Registers all custom items.
+        /// Registers all subclasses.
         /// </summary>
         public void Register() => registeredSubclasses = Subclass.RegisterSubclasses(this);
 
         /// <summary>
-        /// Unregisters all custom items.
+        /// Unregisters all registered subclasses.
         /// </summary>
         public void Unregister()
         {
