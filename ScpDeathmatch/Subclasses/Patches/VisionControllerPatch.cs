@@ -11,7 +11,6 @@ namespace ScpDeathmatch.Subclasses.Patches
     using CustomPlayerEffects;
     using Exiled.API.Features;
     using HarmonyLib;
-    using ScpDeathmatch.Subclasses.Abilities;
     using UnityEngine;
 
     /// <summary>
@@ -27,20 +26,12 @@ namespace ScpDeathmatch.Subclasses.Patches
                 return true;
 
             float maximumDistance = Plugin.Instance.Config.ClientCommands.SubclassCommands.ToggleGoggles.MaximumDistance;
-            bool enhancementActivated = false;
-            if (player.SessionVariables.TryGetValue("EnhancedReconSwitch", out object obj) &&
-                obj is EnhancedReconSwitch enhancedReconSwitch)
-            {
-                maximumDistance *= enhancedReconSwitch.RangeMultiplier;
-                enhancementActivated = true;
-            }
-
             foreach (Visuals939 enabledEffect in Visuals939.EnabledEffects)
             {
                 if (enabledEffect is null)
                     continue;
 
-                if (!enhancementActivated && enabledEffect.Hub.playerEffectsController.AllEffects.TryGetValue(typeof(Invisible), out PlayerEffect playerEffect) && playerEffect.IsEnabled)
+                if (enabledEffect.Hub.playerEffectsController.AllEffects.TryGetValue(typeof(Invisible), out PlayerEffect playerEffect) && playerEffect.IsEnabled)
                     continue;
 
                 if (enabledEffect.Hub.characterClassManager.CurClass == RoleType.Spectator ||

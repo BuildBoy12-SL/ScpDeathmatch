@@ -49,7 +49,7 @@ namespace ScpDeathmatch.Subclasses
         /// <inheritdoc />
         public override List<CustomAbility> CustomAbilities { get; set; } = new()
         {
-            new EnhancedReconSwitch(),
+            new StatusAffliction(),
         };
 
         /// <inheritdoc />
