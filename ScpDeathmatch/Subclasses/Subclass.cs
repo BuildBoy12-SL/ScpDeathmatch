@@ -19,6 +19,7 @@ namespace ScpDeathmatch.Subclasses
     using Exiled.Events.EventArgs;
     using PlayerStatsSystem;
     using ScpDeathmatch.Models;
+    using YamlDotNet.Serialization;
 
     /// <summary>
     /// Represents a subclass.
@@ -35,6 +36,7 @@ namespace ScpDeathmatch.Subclasses
         /// <summary>
         /// Gets a collection of players that have the subclass.
         /// </summary>
+        [YamlIgnore]
         public ReadOnlyCollection<Player> TrackedPlayers => trackedPlayers.AsReadOnly();
 
         /// <summary>

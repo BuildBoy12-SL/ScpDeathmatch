@@ -38,12 +38,6 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities
         public float MaximumDistance { get; set; } = 40f;
 
         /// <summary>
-        /// Gets or sets the response to send when the player is not a recon.
-        /// </summary>
-        [Description("The response to send when the player is not a recon.")]
-        public string NotReconResponse { get; set; } = "You are not a Recon!";
-
-        /// <summary>
         /// Gets or sets the response to send when the player activates the recon goggles.
         /// </summary>
         [Description("The response to send when the player activates the recon goggles.")]
@@ -58,18 +52,6 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities
         /// <inheritdoc />
         public bool Toggle(Player player, out string response)
         {
-            if (player is null)
-            {
-                response = "You need to be a player to execute this command!";
-                return false;
-            }
-
-            if (!Plugin.Instance.Config.Subclasses.Recon.Check(player))
-            {
-                response = NotReconResponse;
-                return false;
-            }
-
             if (activeList.Contains(player))
             {
                 Disable(player);

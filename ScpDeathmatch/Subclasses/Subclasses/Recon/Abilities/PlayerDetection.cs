@@ -12,12 +12,15 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using MEC;
+    using ScpDeathmatch.Subclasses.Interfaces;
+    using UnityEngine;
 
-    /// <inheritdoc />
-    public class PlayerDetection : PassiveAbility
+    /// <inheritdoc cref="PassiveAbility"/>
+    public class PlayerDetection : PassiveAbility, IToggleablePassiveAbility
     {
         private readonly Dictionary<Player, CoroutineHandle> trackingCoroutines = new();
         private readonly Dictionary<Player, HashSet<Player>> inRange = new();
+        private readonly List<Player> disabled = new();
 
         /// <inheritdoc />
         public override string Name { get; set; } = "Player Detection";
@@ -40,6 +43,29 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities
         /// Gets or sets the alert to send to recons when a player leaves their detection zone.
         /// </summary>
         public string AlertLeft { get; set; } = "{0} has left your detection range";
+
+        /// <summary>
+        /// Gets or sets the response to send when the player activates the player detection.
+        /// </summary>
+        [Description("The response to send when the player activates the recon goggles.")]
+        public string ActivatedDetection { get; set; } = "Passive player detection is now active.";
+
+        /// <summary>
+        /// Gets or sets the response to send when the player pauses the player detection.
+        /// </summary>
+        [Description("The response to send when the player disables the recon goggles.")]
+        public string DisabledDetection { get; set; } = "Passive player detection is now disabled.";
+
+        /// <inheritdoc />
+        public bool Toggle(Player player, out string response)
+        {
+            if (!disabled.Remove(player))
+                disabled.Add(player);
+
+            bool isDisabled = disabled.Contains(player);
+            response = isDisabled ? DisabledDetection : ActivatedDetection;
+            return true;
+        }
 
         /// <inheritdoc />
         protected override void AbilityAdded(Player player)
@@ -66,12 +92,15 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities
             while (player.IsConnected)
             {
                 yield return Timing.WaitForSeconds(2f);
+                if (disabled.Contains(player))
+                    continue;
+
                 foreach (Player ply in Player.List)
                 {
                     if (ply.SessionVariables.ContainsKey("IsNPC"))
                         continue;
 
-                    bool isInRange = (player.Position - ply.Position).magnitude < MinimumDistance * MinimumDistance;
+                    bool isInRange = Vector3.Distance(player.Position, ply.Position) <= MinimumDistance;
                     bool previouslyInRange = inRange[player].Contains(ply);
                     if (isInRange && !previouslyInRange)
                     {

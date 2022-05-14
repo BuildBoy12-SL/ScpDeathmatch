@@ -40,6 +40,12 @@ namespace ScpDeathmatch.Configs
         public TogglePassive TogglePassive { get; set; } = new();
 
         /// <summary>
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Commands.TriggerActive"/> class which allows a subclass to trigger their active abilities.
+        /// </summary>
+        [Description("Allows a subclass to trigger their active abilities.")]
+        public TriggerActive TriggerActive { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets custom client commands.
         /// </summary>
         [Description("Custom client commands.")]

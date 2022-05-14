@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="TogglePassive.cs" company="Build">
+// <copyright file="TriggerActive.cs" company="Build">
 // Copyright (c) Build. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
@@ -10,39 +10,43 @@ namespace ScpDeathmatch.Subclasses.Commands
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
     using System.Text;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using NorthwoodLib.Pools;
-    using ScpDeathmatch.Subclasses.Interfaces;
 
     /// <inheritdoc />
-    public class TogglePassive : ICommand
+    public class TriggerActive : ICommand
     {
         private static readonly Comparer<CustomAbility> AbilityComparer = Comparer<CustomAbility>.Create((ability1, ability2) => string.Compare(ability1.Name, ability2.Name, StringComparison.Ordinal));
 
         /// <inheritdoc />
-        public string Command { get; set; } = "togglepassive";
+        public string Command { get; set; } = "triggeractive";
 
         /// <inheritdoc />
-        public string[] Aliases { get; set; } = { "tpassive", "passive" };
+        public string[] Aliases { get; set; } = { "tactive", "active" };
 
         /// <inheritdoc />
-        public string Description { get; set; } = "Toggles the user's passive abilities.";
+        public string Description { get; set; } = "Triggers a subclasses active ability.";
 
         /// <summary>
-        /// Gets or sets the response to give when the player has no available abilities to toggle.
+        /// Gets or sets the response to give when the player has no available abilities to activate.
         /// </summary>
-        [Description("The response to give when the player has no available abilities to toggle.")]
-        public string NoToggleablesResponse { get; set; } = "You have no passive abilities to toggle.";
+        [Description("The response to give when the player has no available abilities to activate.")]
+        public string NoAbilitiesResponse { get; set; } = "You have no active abilities to engage.";
 
         /// <summary>
         /// Gets or sets the response to give when the player specified an invalid ability to toggle.
         /// </summary>
         [Description("The response to give when the player specified an invalid ability to toggle.")]
         public string InvalidIndexResponse { get; set; } = "Invalid selection. Valid selections are 1-{0}.\n{1}";
+
+        /// <summary>
+        /// Gets or sets the response to give when the player successfully activates an ability.
+        /// </summary>
+        [Description("The response to give when the player successfully activates an ability.")]
+        public string AbilityUsedResponse { get; set; } = "Ability {0} used.";
 
         /// <inheritdoc />
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -59,47 +63,53 @@ namespace ScpDeathmatch.Subclasses.Commands
                 return false;
             }
 
-            SortedList<CustomAbility, IToggleablePassiveAbility> toggleableAbilities = new SortedList<CustomAbility, IToggleablePassiveAbility>(AbilityComparer);
+            List<ActiveAbility> activeAbilities = new List<ActiveAbility>();
             foreach (CustomAbility customAbility in subclass.CustomAbilities)
             {
-                if (customAbility is IToggleablePassiveAbility toggleableAbility)
-                    toggleableAbilities.Add(customAbility, toggleableAbility);
+                if (customAbility is ActiveAbility activeAbility)
+                    activeAbilities.Add(activeAbility);
             }
 
-            if (toggleableAbilities.Count == 0)
+            activeAbilities.Sort(AbilityComparer);
+            if (activeAbilities.Count == 0)
             {
-                response = NoToggleablesResponse;
+                response = NoAbilitiesResponse;
                 return false;
             }
 
-            KeyValuePair<CustomAbility, IToggleablePassiveAbility> toToggle;
+            ActiveAbility toActivate;
             if (arguments.Count > 0)
             {
-                if (int.TryParse(arguments.At(0), out int index) && index > 0 && index <= toggleableAbilities.Count)
+                if (int.TryParse(arguments.At(0), out int index) && index > 0 && index <= activeAbilities.Count)
                 {
-                    toToggle = toggleableAbilities.ElementAt(index - 1);
+                    toActivate = activeAbilities[index - 1];
                 }
                 else
                 {
-                    response = string.Format(InvalidIndexResponse, toggleableAbilities.Count, FormatAbilities(toggleableAbilities));
+                    response = string.Format(InvalidIndexResponse, activeAbilities.Count, FormatAbilities(activeAbilities));
                     return false;
                 }
             }
             else
             {
-                toToggle = toggleableAbilities.ElementAt(0);
+                toActivate = activeAbilities[0];
             }
 
-            return toToggle.Value.Toggle(player, out response);
+            if (!toActivate.CanUseAbility(player, out response))
+                return false;
+
+            toActivate.UseAbility(player);
+            response = string.Format(AbilityUsedResponse, toActivate.Name);
+            return true;
         }
 
-        private static string FormatAbilities(SortedList<CustomAbility, IToggleablePassiveAbility> toggleableAbilities)
+        private static string FormatAbilities(List<ActiveAbility> activeAbilities)
         {
             StringBuilder stringBuilder = StringBuilderPool.Shared.Rent();
             int i = 1;
-            foreach (CustomAbility customAbility in toggleableAbilities.Keys)
+            foreach (ActiveAbility activeAbility in activeAbilities)
             {
-                stringBuilder.Append(i).Append(": ").AppendLine(customAbility.Name);
+                stringBuilder.Append(i).Append(": ").AppendLine(activeAbility.Name);
                 i++;
             }
 

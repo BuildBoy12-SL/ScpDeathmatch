@@ -8,10 +8,7 @@
 namespace ScpDeathmatch.Subclasses.Subclasses.Recon
 {
     using System.Collections.Generic;
-    using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
-    using MEC;
     using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities;
 
