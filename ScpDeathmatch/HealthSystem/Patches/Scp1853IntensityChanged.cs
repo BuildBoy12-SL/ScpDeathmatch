@@ -18,7 +18,7 @@ namespace ScpDeathmatch.HealthSystem.Patches
     using static HarmonyLib.AccessTools;
 
     /// <summary>
-    /// Patches <see cref="Scp1853.IntensityChanged"/> to remove the stamina modifier for the <see cref="Marksman"/> subclass.
+    /// Patches <see cref="Scp1853.IntensityChanged"/> to respect <see cref="MedicalItemsConfig.Scp1853StaminaImmune"/>.
     /// </summary>
     [HarmonyPatch(typeof(Scp1853), nameof(Scp1853.IntensityChanged))]
     internal static class Scp1853IntensityChanged

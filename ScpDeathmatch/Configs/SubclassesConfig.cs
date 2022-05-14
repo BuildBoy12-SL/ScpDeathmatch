@@ -9,6 +9,12 @@ namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
     using ScpDeathmatch.Subclasses;
+    using ScpDeathmatch.Subclasses.Subclasses.Athlete;
+    using ScpDeathmatch.Subclasses.Subclasses.Brute;
+    using ScpDeathmatch.Subclasses.Subclasses.Insurgent;
+    using ScpDeathmatch.Subclasses.Subclasses.Marksman;
+    using ScpDeathmatch.Subclasses.Subclasses.Recon;
+    using ScpDeathmatch.Subclasses.Subclasses.Scavenger;
 
     /// <summary>
     /// Handles configs related to custom roles.
@@ -23,17 +29,17 @@ namespace ScpDeathmatch.Configs
         public Athlete Athlete { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Brute"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Brute.Brute"/> class.
         /// </summary>
         public Brute Brute { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Insurgent"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Insurgent.Insurgent"/> class.
         /// </summary>
         public Insurgent Insurgent { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Marksman"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Marksman.Marksman"/> class.
         /// </summary>
         public Marksman Marksman { get; set; } = new();
 
@@ -45,12 +51,12 @@ namespace ScpDeathmatch.Configs
         */
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Recon"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Recon.Recon"/> class.
         /// </summary>
         public Recon Recon { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Scavenger"/> class.
+        /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Scavenger.Scavenger"/> class.
         /// </summary>
         public Scavenger Scavenger { get; set; } = new();
 
