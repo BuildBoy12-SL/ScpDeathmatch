@@ -51,7 +51,7 @@ namespace ScpDeathmatch.Configs
         [Description("Custom client commands.")]
         public List<ConsoleCommand> CustomCommands { get; set; } = new()
         {
-            new ConsoleCommand("info207", "207 has been tweaked on out server to not do damage!"),
+            new ConsoleCommand("info207", "207 has been tweaked on our server to not do damage!"),
         };
 
         /// <summary>
