@@ -147,12 +147,12 @@ namespace ScpDeathmatch
         {
             foreach (Type type in Assembly.GetTypes())
             {
-                if (type.IsSubclassOf(typeof(Subscribable)))
-                {
-                    Subscribable subscribable = (Subscribable)Activator.CreateInstance(type, args: this);
-                    subscribable.Subscribe();
-                    subscribed.Add(subscribable);
-                }
+                if (!type.IsSubclassOf(typeof(Subscribable)))
+                    continue;
+
+                Subscribable subscribable = (Subscribable)Activator.CreateInstance(type, args: this);
+                subscribable.Subscribe();
+                subscribed.Add(subscribable);
             }
         }
 
