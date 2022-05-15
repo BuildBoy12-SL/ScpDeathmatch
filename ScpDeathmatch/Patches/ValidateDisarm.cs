@@ -1,11 +1,11 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ValidateDisarmPatch.cs" company="Build">
+// <copyright file="ValidateDisarm.cs" company="Build">
 // Copyright (c) Build. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Subclasses.Patches
+namespace ScpDeathmatch.Patches
 {
 #pragma warning disable SA1118
     using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace ScpDeathmatch.Subclasses.Patches
     /// Patches <see cref="DisarmedPlayers.ValidateEntry"/> to implement configs from <see cref="DisarmingConfig"/>.
     /// </summary>
     [HarmonyPatch(typeof(DisarmedPlayers), nameof(DisarmedPlayers.ValidateEntry))]
-    internal static class ValidateDisarmPatch
+    internal static class ValidateDisarm
     {
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {

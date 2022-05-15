@@ -121,11 +121,14 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnVerified(VerifiedEventArgs ev)
         {
-            if (Plugin.Config.ClassSelection.Selections is null || Plugin.Config.ClassSelection.Selections.Count == 0)
+            if (Plugin.Config.ClassSelection.Selections is null || Plugin.Config.ClassSelection.Selections.Count == 0 || !Round.IsStarted)
                 return;
 
-            if (Round.IsStarted)
-                Plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(ev.Player);
+            Timing.CallDelayed(1f, () =>
+            {
+                Plugin.Config.Subclasses.Insurgent.AddRole(ev.Player);
+                ev.Player.Role.Type = RoleType.Scp079;
+            });
         }
 
         private void OnRoundStarted()

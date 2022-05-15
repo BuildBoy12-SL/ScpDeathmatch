@@ -37,6 +37,11 @@ namespace ScpDeathmatch.Patches
                 new CodeInstruction(OpCodes.Brtrue_S, retLabel),
             });
 
+            const int offset = -6;
+            int index = newInstructions.FindIndex(instruction => instruction.OperandIs(Method(typeof(string), nameof(string.Concat), new[] { typeof(string), typeof(string), typeof(string) }))) + offset;
+            newInstructions.RemoveRange(index, 7);
+            newInstructions.Insert(index, new CodeInstruction(OpCodes.Ldloc_2));
+
             newInstructions[newInstructions.Count - 1].labels.Add(retLabel);
 
             for (int z = 0; z < newInstructions.Count; z++)

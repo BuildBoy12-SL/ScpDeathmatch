@@ -193,6 +193,12 @@ namespace ScpDeathmatch
         public SubclassesConfig Subclasses { get; set; }
 
         /// <summary>
+        /// Gets or sets for the configs for weapon tokens.
+        /// </summary>
+        [YamlIgnore]
+        public WeaponTokenConfig WeaponToken { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs for the <see cref="Managers.ZoneAnnouncer"/>.
         /// </summary>
         [YamlIgnore]
