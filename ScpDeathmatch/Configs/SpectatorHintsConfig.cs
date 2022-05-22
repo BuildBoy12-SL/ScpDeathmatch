@@ -9,6 +9,7 @@ namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using AdvancedHints.Enums;
 
     /// <summary>
     /// Handles configs related to showing spectators hints.
@@ -25,7 +26,13 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets the time, in seconds, to display the hint.
         /// </summary>
         [Description("The time, in seconds, to display the hint.")]
-        public float DisplayDuration { get; set; } = 7f;
+        public float Duration { get; set; } = 7f;
+
+        /// <summary>
+        /// Gets or sets the location to display the hint.
+        /// </summary>
+        [Description("The location to display the hint.")]
+        public DisplayLocation Location { get; set; } = DisplayLocation.Top;
 
         /// <summary>
         /// Gets or sets the hints to choose from.

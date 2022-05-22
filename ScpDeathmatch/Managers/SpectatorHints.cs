@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.Managers
 {
     using System.Collections.Generic;
+    using AdvancedHints;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
@@ -23,7 +24,7 @@ namespace ScpDeathmatch.Managers
         /// Initializes a new instance of the <see cref="SpectatorHints"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public SpectatorHints(Plugin plugin)
+        public SpectatorHints(ScpDeathmatch.Plugin plugin)
             : base(plugin)
         {
         }
@@ -76,7 +77,7 @@ namespace ScpDeathmatch.Managers
 
                     string randomHint = Plugin.Config.SpectatorHints.AvailableHints.Random();
                     if (randomHint is not null)
-                        player.ShowHint(randomHint, Plugin.Config.SpectatorHints.DisplayDuration);
+                        player.ShowManagedHint(randomHint, Plugin.Config.SpectatorHints.Duration, true, Plugin.Config.SpectatorHints.Location);
                 }
             }
         }
