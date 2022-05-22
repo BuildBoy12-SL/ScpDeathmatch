@@ -126,23 +126,10 @@ namespace ScpDeathmatch
         public GeneratorsConfig Generators { get; set; }
 
         /// <summary>
-        /// Gets or sets the configs related to the micro healing.
-        /// </summary>
-        [YamlIgnore]
-        public HealingMicroConfig HealingMicro { get; set; }
-
-        /// <summary>
         /// Gets or sets the configs related to the health system.
         /// </summary>
         [YamlIgnore]
         public HealthConfig Health { get; set; }
-
-        /// <summary>
-        /// Gets or sets the configs for item translations.
-        /// </summary>
-        [YamlIgnore]
-        [NestedConfig]
-        public TranslationsConfig Translations { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to map generation.
@@ -156,6 +143,13 @@ namespace ScpDeathmatch
         [YamlIgnore]
         [NestedConfig]
         public MedicalItemsConfig MedicalItems { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configs related to the <see cref="ItemType.MicroHID"/>.
+        /// </summary>
+        [YamlIgnore]
+        [NestedConfig]
+        public MicroHidConfig MicroHid { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for misc. commands.
@@ -176,12 +170,6 @@ namespace ScpDeathmatch
         public RewardsConfig Rewards { get; set; }
 
         /// <summary>
-        /// Gets or sets the configs related to the micro movement enhancement.
-        /// </summary>
-        [YamlIgnore]
-        public SpeedyMicroConfig SpeedyMicro { get; set; }
-
-        /// <summary>
         /// Gets or sets the configs for the stat broadcast.
         /// </summary>
         [YamlIgnore]
@@ -199,6 +187,13 @@ namespace ScpDeathmatch
         [YamlIgnore]
         [NestedConfig]
         public SubclassesConfig Subclasses { get; set; }
+
+        /// <summary>
+        /// Gets or sets the configs for item translations.
+        /// </summary>
+        [YamlIgnore]
+        [NestedConfig]
+        public TranslationsConfig Translations { get; set; }
 
         /// <summary>
         /// Gets or sets for the configs for weapon tokens.

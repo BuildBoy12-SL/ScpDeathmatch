@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="MicroHidHealing.cs" company="Build">
+// <copyright file="MicroHidEffects.cs" company="Build">
 // Copyright (c) Build. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
@@ -8,25 +8,23 @@
 namespace ScpDeathmatch.MicroHidEnhancers
 {
     using System.Collections.Generic;
+    using CustomPlayerEffects;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using InventorySystem.Items.MicroHID;
     using MEC;
     using ScpDeathmatch.Models;
-    using UnityEngine;
 
-    /// <summary>
-    /// Manages the <see cref="ItemType.MicroHID"/> healing.
-    /// </summary>
-    public class MicroHidHealing : Subscribable
+    /// <inheritdoc />
+    public class MicroHidEffects : Subscribable
     {
-        private readonly Dictionary<Player, CoroutineHandle> healingCoroutines = new();
+        private readonly Dictionary<Player, CoroutineHandle> effectCoroutines = new();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MicroHidHealing"/> class.
+        /// Initializes a new instance of the <see cref="MicroHidEffects"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="Plugin"/> class.</param>
-        public MicroHidHealing(Plugin plugin)
+        public MicroHidEffects(Plugin plugin)
             : base(plugin)
         {
         }
@@ -45,16 +43,16 @@ namespace ScpDeathmatch.MicroHidEnhancers
 
         private void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
         {
-            if (!Plugin.Config.MicroHid.Healing.IsEnabled || !ev.IsAllowed)
+            if (!Plugin.Config.MicroHid.MiscEffects.IsEnabled || !ev.IsAllowed)
                 return;
 
             switch (ev.NewState)
             {
                 case HidState.PoweringUp:
-                    healingCoroutines[ev.Player] = Timing.RunCoroutine(RunHealing(ev.Player));
+                    effectCoroutines[ev.Player] = Timing.RunCoroutine(RefreshEffects(ev.Player));
                     break;
                 case HidState.PoweringDown:
-                    if (healingCoroutines.TryGetValue(ev.Player, out CoroutineHandle coroutineHandle))
+                    if (effectCoroutines.TryGetValue(ev.Player, out CoroutineHandle coroutineHandle))
                         Timing.KillCoroutines(coroutineHandle);
 
                     break;
@@ -65,24 +63,17 @@ namespace ScpDeathmatch.MicroHidEnhancers
             }
         }
 
-        private IEnumerator<float> RunHealing(Player player)
+        private IEnumerator<float> RefreshEffects(Player player)
         {
-            yield return Timing.WaitForSeconds(Plugin.Config.MicroHid.Healing.InitialDelay);
-            if (player.MaxArtificialHealth == 0f)
-                player.AddAhp(0f, Plugin.Config.MicroHid.Healing.MaximumAhp, Plugin.Config.MicroHid.Healing.AhpDecayRate, Plugin.Config.MicroHid.Healing.AhpEfficacy, 0f, true);
-
-            while (Round.IsStarted)
+            while (player.IsConnected)
             {
-                yield return Timing.WaitForSeconds(Plugin.Config.MicroHid.Healing.SecondsPerTick);
-                float newHealth = player.Health + Plugin.Config.MicroHid.Healing.HealthPerTick;
-                if (newHealth > player.MaxHealth)
+                yield return Timing.WaitForSeconds(1f);
+                foreach (ConfiguredEffect effect in Plugin.Config.MicroHid.MiscEffects.Effects)
                 {
-                    player.Health = player.MaxHealth;
-                    player.ArtificialHealth = Mathf.Clamp((newHealth - player.MaxHealth) + player.ArtificialHealth, 0f, player.MaxArtificialHealth);
-                    continue;
+                    PlayerEffect playerEffect = player.GetEffect(effect.Type);
+                    playerEffect.Intensity = effect.Intensity;
+                    playerEffect.Duration++;
                 }
-
-                player.Health = newHealth;
             }
         }
     }

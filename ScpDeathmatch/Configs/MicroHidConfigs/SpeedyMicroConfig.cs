@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Configs
+namespace ScpDeathmatch.Configs.MicroHidConfigs
 {
     using System.ComponentModel;
 

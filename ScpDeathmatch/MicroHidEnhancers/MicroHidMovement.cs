@@ -46,7 +46,7 @@ namespace ScpDeathmatch.MicroHidEnhancers
 
         private void OnChangingMicroHIDState(ChangingMicroHIDStateEventArgs ev)
         {
-            if (!Plugin.Config.SpeedyMicro.IsEnabled || !ev.IsAllowed)
+            if (!Plugin.Config.MicroHid.Speed.IsEnabled || !ev.IsAllowed)
                 return;
 
             CoroutineHandle coroutineHandle;
@@ -73,16 +73,16 @@ namespace ScpDeathmatch.MicroHidEnhancers
 
         private IEnumerator<float> RunMovementIncrease(Player player)
         {
-            yield return Timing.WaitForSeconds(Plugin.Config.SpeedyMicro.InitialDelay);
+            yield return Timing.WaitForSeconds(Plugin.Config.MicroHid.Speed.InitialDelay);
 
             PlayerEffect movementBoost = player.GetEffect(EffectType.MovementBoost);
             while (Round.IsStarted)
             {
-                yield return Timing.WaitForSeconds(Plugin.Config.SpeedyMicro.SecondsPerTick);
-                byte newIntensity = (byte)(movementBoost.Intensity + Plugin.Config.SpeedyMicro.BoostIncreasePerTick);
-                if (newIntensity > Plugin.Config.SpeedyMicro.MaximumBoost)
+                yield return Timing.WaitForSeconds(Plugin.Config.MicroHid.Speed.SecondsPerTick);
+                byte newIntensity = (byte)(movementBoost.Intensity + Plugin.Config.MicroHid.Speed.BoostIncreasePerTick);
+                if (newIntensity > Plugin.Config.MicroHid.Speed.MaximumBoost)
                 {
-                    movementBoost.Intensity = Plugin.Config.SpeedyMicro.MaximumBoost;
+                    movementBoost.Intensity = Plugin.Config.MicroHid.Speed.MaximumBoost;
                     continue;
                 }
 
@@ -95,8 +95,8 @@ namespace ScpDeathmatch.MicroHidEnhancers
             PlayerEffect movementBoost = player.GetEffect(EffectType.MovementBoost);
             while (movementBoost.IsEnabled)
             {
-                yield return Timing.WaitForSeconds(Plugin.Config.SpeedyMicro.SecondsPerTick);
-                movementBoost.Intensity -= Plugin.Config.SpeedyMicro.BoostDecreasePerTick;
+                yield return Timing.WaitForSeconds(Plugin.Config.MicroHid.Speed.SecondsPerTick);
+                movementBoost.Intensity -= Plugin.Config.MicroHid.Speed.BoostDecreasePerTick;
             }
         }
     }
