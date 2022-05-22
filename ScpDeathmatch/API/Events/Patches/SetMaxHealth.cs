@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.HealthSystem.Patches
+namespace ScpDeathmatch.API.Events.Patches
 {
 #pragma warning disable SA1118
     using System.Collections.Generic;

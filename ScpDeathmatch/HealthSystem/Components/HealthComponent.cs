@@ -13,7 +13,7 @@ namespace ScpDeathmatch.HealthSystem.Components
     using MEC;
     using PlayerStatsSystem;
     using ScpDeathmatch.API.Events.EventArgs;
-    using ScpDeathmatch.Subclasses;
+    using ScpDeathmatch.HealthSystem.Models;
     using UnityEngine;
 
     /// <summary>
@@ -25,21 +25,6 @@ namespace ScpDeathmatch.HealthSystem.Components
         private Config config;
         private Player player;
         private float lastHurt;
-
-        /// <summary>
-        /// Heals a players health and maximum health.
-        /// </summary>
-        public void Heal()
-        {
-            Subclass subclass = Subclass.Get(player);
-            int maxHp = subclass?.MaxHealth ?? player.ReferenceHub.characterClassManager.CurRole.maxHP;
-
-            int athleteMaxHp = config.Subclasses.Athlete.CurrentMaximumHealth(player);
-            if (athleteMaxHp != -1)
-                maxHp = athleteMaxHp;
-
-            player.Health = player.MaxHealth = maxHp;
-        }
 
         private void Awake()
         {
@@ -96,8 +81,11 @@ namespace ScpDeathmatch.HealthSystem.Components
 
         private void OnActivatingConsumableEffects(ActivatingConsumableEffectsEventArgs ev)
         {
-            if (ev.Player != player)
+            if (ev.Player != player || Plugin.Instance.Config.MedicalItems.GetActions(ev.Consumable) is not MedicalActions medicalActions)
                 return;
+
+            medicalActions.ApplyTo(player);
+            ev.IsAllowed = false;
         }
 
         private IEnumerator<float> RunAttemptRegeneration()

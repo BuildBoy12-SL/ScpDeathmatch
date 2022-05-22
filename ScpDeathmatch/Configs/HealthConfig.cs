@@ -63,6 +63,12 @@ namespace ScpDeathmatch.Configs
         public bool Scp207Damage { get; set; } = false;
 
         /// <summary>
+        /// Gets or sets a value indicating whether Scp1853's stamina penalty will be ignored.
+        /// </summary>
+        [Description("Whether Scp1853's stamina penalty will be ignored.")]
+        public bool Scp1853StaminaImmune { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the amount of stamina to add when they hit the stamina threshold.
         /// </summary>
         [Description("The amount of stamina to add when they hit the stamina threshold.")]

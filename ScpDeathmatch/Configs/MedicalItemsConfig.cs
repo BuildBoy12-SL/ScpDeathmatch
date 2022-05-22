@@ -7,9 +7,13 @@
 
 namespace ScpDeathmatch.Configs
 {
+    using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
+    using System.Linq;
+    using System.Reflection;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
+    using InventorySystem.Items.Usables;
     using ScpDeathmatch.HealthSystem.Models;
     using ScpDeathmatch.Models;
 
@@ -18,8 +22,10 @@ namespace ScpDeathmatch.Configs
     /// </summary>
     public class MedicalItemsConfig
     {
+        private Dictionary<Type, PropertyInfo> cachedProperties;
+
         /// <summary>
-        /// Gets or sets the actions to run when adrenaline is used.
+        /// Gets or sets the actions to run when <see cref="InventorySystem.Items.Usables.Adrenaline"/> is used.
         /// </summary>
         public MedicalActions Adrenaline { get; set; } = new()
         {
@@ -28,68 +34,78 @@ namespace ScpDeathmatch.Configs
                 new(EffectType.MovementBoost, 20, 8f, true),
                 new(EffectType.Invigorated, 1, 8f, true),
             },
-            Ahp = new ConfiguredAhp(0f),
+            RegeneratedStamina = 100f,
         };
 
         /// <summary>
-        /// Gets or sets a value indicating whether painkillers should keep their regeneration.
+        /// Gets or sets the actions to run when a <see cref="InventorySystem.Items.Usables.Medkit"/> is used.
         /// </summary>
-        [Description("Whether painkillers should keep their regeneration.")]
-        public bool PainkillersRegeneration { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets the ahp to grant players when they consume painkillers.
-        /// </summary>
-        [Description("The amount of ahp to grant players when they consume painkillers.")]
-        public ConfiguredAhp PainkillersAhp { get; set; } = new(25f, sustain: 10f);
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Scp1853's stamina penalty will be ignored.
-        /// </summary>
-        [Description("Whether Scp1853's stamina penalty will be ignored.")]
-        public bool Scp1853StaminaImmune { get; set; } = true;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Scp500 should keep its regeneration.
-        /// </summary>
-        [Description("Whether Scp500 should keep its regeneration.")]
-        public bool Scp500Regeneration { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets the ahp to grant players when they consume painkillers.
-        /// </summary>
-        [Description("The amount of ahp to grant players when they consume painkillers.")]
-        public ConfiguredAhp Scp500Ahp { get; set; } = new(50f, sustain: 10f);
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Scp500 will remove the Scp207 effect.
-        /// </summary>
-        [Description("Whether Scp500 will remove the Scp207 effect.")]
-        public bool Scp500RemoveScp207 { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Scp500 will remove the Scp1853 effect.
-        /// </summary>
-        [Description("Whether Scp500 will remove the Scp1853 effect.")]
-        public bool Scp500RemoveScp1853 { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets a list of all effects to activate when Scp500 is consumed.
-        /// </summary>
-        [Description("A list of all effects to activate when Scp500 is consumed.")]
-        public List<ConfiguredEffect> Scp500Effects { get; set; } = new()
+        public MedicalActions Medkit { get; set; } = new()
         {
-            new ConfiguredEffect(EffectType.MovementBoost, 50, 10f),
+            InstantHealth = 100,
+            InstantMaxHealth = 100,
         };
 
         /// <summary>
-        /// Gets or sets a value indicating whether using Scp500 will disarm the player.
+        /// Gets or sets the actions to run when a <see cref="InventorySystem.Items.Usables.Painkillers"/> is used.
         /// </summary>
-        public bool Scp500DisarmUser { get; set; } = true;
+        public MedicalActions Painkillers { get; set; } = new()
+        {
+            Ahp = new ConfiguredAhp(25f, sustain: 10f),
+        };
 
         /// <summary>
-        /// Gets or sets a value indicating how long to disarm the player for.
+        /// Gets or sets the actions to run when a <see cref="InventorySystem.Items.Usables.Scp500"/> is used.
         /// </summary>
-        public float Scp500DisarmDuration { get; set; } = 10f;
+        public MedicalActions Scp500 { get; set; } = new()
+        {
+            AddedEffects = new List<ConfiguredEffect>()
+            {
+                new(EffectType.MovementBoost, 50, 10f),
+            },
+            Ahp = new ConfiguredAhp(50f, sustain: 10f),
+            DisarmDuration = 10f,
+        };
+
+        /// <summary>
+        /// Gets the corresponding medical action with the specified consumable.
+        /// </summary>
+        /// <param name="consumable">The type of consumable.</param>
+        /// <returns>The corresponding medical actions, or null if one is not found.</returns>
+        public MedicalActions GetActions(Consumable consumable)
+        {
+            cachedProperties ??= GenerateCache();
+            Log.Warn(consumable.GetType());
+            if (cachedProperties.TryGetValue(consumable.GetType(), out PropertyInfo property))
+            {
+                Log.Warn(property.Name);
+                return property.GetValue(this) as MedicalActions;
+            }
+
+            return null;
+        }
+
+        private Dictionary<Type, PropertyInfo> GenerateCache()
+        {
+            Dictionary<Type, PropertyInfo> cache = new();
+
+            List<Type> consumables = typeof(Consumable).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Consumable))).ToList();
+            foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (property.PropertyType != typeof(MedicalActions))
+                    continue;
+
+                foreach (Type type in consumables)
+                {
+                    if (type.Name.Equals(property.Name))
+                    {
+                        cache.Add(type, property);
+                        break;
+                    }
+                }
+            }
+
+            return cache;
+        }
     }
 }

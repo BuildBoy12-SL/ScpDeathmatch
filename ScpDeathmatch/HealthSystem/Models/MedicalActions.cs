@@ -10,6 +10,7 @@ namespace ScpDeathmatch.HealthSystem.Models
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using MEC;
     using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses;
     using UnityEngine;
@@ -60,6 +61,11 @@ namespace ScpDeathmatch.HealthSystem.Models
         public List<EffectType> RemovedEffects { get; set; }
 
         /// <summary>
+        /// Gets or sets the duration to handcuff the user.
+        /// </summary>
+        public float DisarmDuration { get; set; }
+
+        /// <summary>
         /// Applies all configured actions to the player.
         /// </summary>
         /// <param name="player">The player to apply the actions to.</param>
@@ -86,6 +92,12 @@ namespace ScpDeathmatch.HealthSystem.Models
                 {
                     effect.Apply(player);
                 }
+            }
+
+            if (DisarmDuration > 0f)
+            {
+                player.Handcuff();
+                Timing.CallDelayed(DisarmDuration, () => player?.RemoveHandcuffs());
             }
         }
 

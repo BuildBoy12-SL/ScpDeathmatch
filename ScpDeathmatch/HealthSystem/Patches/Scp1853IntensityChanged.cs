@@ -14,11 +14,10 @@ namespace ScpDeathmatch.HealthSystem.Patches
     using HarmonyLib;
     using NorthwoodLib.Pools;
     using ScpDeathmatch.Configs;
-    using ScpDeathmatch.Subclasses;
     using static HarmonyLib.AccessTools;
 
     /// <summary>
-    /// Patches <see cref="Scp1853.IntensityChanged"/> to respect <see cref="MedicalItemsConfig.Scp1853StaminaImmune"/>.
+    /// Patches <see cref="Scp1853.IntensityChanged"/> to respect <see cref="HealthConfig.Scp1853StaminaImmune"/>.
     /// </summary>
     [HarmonyPatch(typeof(Scp1853), nameof(Scp1853.IntensityChanged))]
     internal static class Scp1853IntensityChanged
@@ -36,8 +35,8 @@ namespace ScpDeathmatch.HealthSystem.Patches
             {
                 new(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
                 new(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
-                new(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp1853StaminaImmune))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Health))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(HealthConfig), nameof(HealthConfig.Scp1853StaminaImmune))),
                 new(OpCodes.Brtrue_S, skipStaminaLabel),
             });
 

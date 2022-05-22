@@ -154,6 +154,7 @@ namespace ScpDeathmatch
         /// Gets or sets the configs related to medical items.
         /// </summary>
         [YamlIgnore]
+        [NestedConfig]
         public MedicalItemsConfig MedicalItems { get; set; }
 
         /// <summary>
