@@ -60,10 +60,12 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public Scavenger Scavenger { get; set; } = new();
 
+        /*
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Zombie.Zombie"/> class.
         /// </summary>
         public Zombie Zombie { get; set; } = new();
+        */
 
         /// <summary>
         /// Registers all subclasses.

@@ -27,7 +27,7 @@ namespace ScpDeathmatch.Configs
             { ItemType.SCP500, new SubclassSelection("Nurse", "You've selected the Nurse subclass") },
             { ItemType.Flashlight, new SubclassSelection("Recon", "You've selected the Recon subclass") },
             { ItemType.KeycardScientist, new SubclassSelection("Scavenger", "You've selected the Scavenger subclass") },
-            { ItemType.Adrenaline, new SubclassSelection("Zombie", "You've selected the Zombie subclass") },
+            /* { ItemType.Adrenaline, new SubclassSelection("Zombie", "You've selected the Zombie subclass") }, */
         };
     }
 }

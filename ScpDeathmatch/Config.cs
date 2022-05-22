@@ -170,6 +170,12 @@ namespace ScpDeathmatch
         public RewardsConfig Rewards { get; set; }
 
         /// <summary>
+        /// Gets or sets the configs for hints to display to spectating players.
+        /// </summary>
+        [YamlIgnore]
+        public SpectatorHintsConfig SpectatorHints { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs for the stat broadcast.
         /// </summary>
         [YamlIgnore]

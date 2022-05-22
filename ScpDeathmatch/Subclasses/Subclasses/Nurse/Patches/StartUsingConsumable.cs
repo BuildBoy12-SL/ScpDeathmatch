@@ -7,10 +7,10 @@
 
 namespace ScpDeathmatch.Subclasses.Subclasses.Nurse.Patches
 {
-    using System.Collections.Generic;
+#pragma warning disable SA1313
+    using Exiled.API.Features;
     using HarmonyLib;
     using InventorySystem.Items.Usables;
-    using NorthwoodLib.Pools;
 
     /// <summary>
     /// Patches <see cref="Consumable.OnUsingStarted"/> to allow the <see cref="Nurse"/> subclass to instantly consume medical items.
@@ -18,14 +18,15 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Nurse.Patches
     [HarmonyPatch(typeof(Consumable), nameof(Consumable.OnUsingStarted))]
     internal static class StartUsingConsumable
     {
-        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        private static bool Prefix(Consumable __instance)
         {
-            List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
+            Player player = Player.Get(__instance.Owner);
+            Subclass subclass = Subclass.Get(player);
+            if (subclass is not Nurse)
+                return true;
 
-            for (int z = 0; z < newInstructions.Count; z++)
-                yield return newInstructions[z];
-
-            ListPool<CodeInstruction>.Shared.Return(newInstructions);
+            __instance.ServerOnUsingCompleted();
+            return false;
         }
     }
 }

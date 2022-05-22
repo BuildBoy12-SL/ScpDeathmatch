@@ -68,7 +68,7 @@ namespace ScpDeathmatch.Stats
             if (!Round.IsStarted)
                 return;
 
-            if (Plugin.StatDatabase.TryGet(ev.Target, out PlayerInfo targetInfo))
+            if (!ev.Target.DoNotTrack && Plugin.StatDatabase.TryGet(ev.Target, out PlayerInfo targetInfo))
             {
                 targetInfo.Deaths++;
                 Plugin.StatDatabase.Upsert(targetInfo);
@@ -77,7 +77,7 @@ namespace ScpDeathmatch.Stats
             if (ev.Killer is null || ev.Killer == ev.Target)
                 return;
 
-            if (Plugin.StatDatabase.TryGet(ev.Killer, out PlayerInfo killerInfo))
+            if (!ev.Killer.DoNotTrack && Plugin.StatDatabase.TryGet(ev.Killer, out PlayerInfo killerInfo))
             {
                 killerInfo.RoundKills++;
                 Plugin.StatDatabase.Upsert(killerInfo);
@@ -86,6 +86,9 @@ namespace ScpDeathmatch.Stats
 
         private void OnVerified(VerifiedEventArgs ev)
         {
+            if (ev.Player.DoNotTrack)
+                return;
+
             if (!Plugin.StatDatabase.TryGet(ev.Player, out _))
                 Plugin.StatDatabase.Upsert(new PlayerInfo(ev.Player.UserId));
 

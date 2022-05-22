@@ -21,49 +21,14 @@ namespace ScpDeathmatch.HealthSystem.Models
     public class MedicalActions
     {
         /// <summary>
-        /// Gets or sets the health to immediately restore.
+        /// Gets or sets the actions to apply.
         /// </summary>
-        public int InstantHealth { get; set; }
+        public Actions ToApply { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets the maximum health restored.
+        /// Gets or sets the subclass specific overrides.
         /// </summary>
-        public int InstantMaxHealth { get; set; }
-
-        /// <summary>
-        /// Gets or sets the amount of stamina to regenerate.
-        /// </summary>
-        public float RegeneratedStamina { get; set; }
-
-        /// <summary>
-        /// Gets or sets the health regeneration.
-        /// </summary>
-        public Regeneration Regeneration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the maximum health regeneration.
-        /// </summary>
-        public Regeneration MaxHealthRegeneration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ahp to add.
-        /// </summary>
-        public ConfiguredAhp Ahp { get; set; }
-
-        /// <summary>
-        /// Gets or sets a collection of the effects to apply.
-        /// </summary>
-        public List<ConfiguredEffect> AddedEffects { get; set; }
-
-        /// <summary>
-        /// Gets or sets a collection of the effects to remove.
-        /// </summary>
-        public List<EffectType> RemovedEffects { get; set; }
-
-        /// <summary>
-        /// Gets or sets the duration to handcuff the user.
-        /// </summary>
-        public float DisarmDuration { get; set; }
+        public Dictionary<string, Actions> SubclassOverrides { get; set; } = new();
 
         /// <summary>
         /// Applies all configured actions to the player.
@@ -71,34 +36,14 @@ namespace ScpDeathmatch.HealthSystem.Models
         /// <param name="player">The player to apply the actions to.</param>
         public void ApplyTo(Player player)
         {
-            player.MaxHealth = Mathf.Clamp(player.MaxHealth + InstantMaxHealth, 0, GetMaxHealth(player));
-            player.Heal(InstantHealth);
-
-            player.ReferenceHub.fpc.ModifyStamina(RegeneratedStamina);
-
-            Regeneration?.ApplyTo(player);
-            Ahp?.AddTo(player);
-            if (RemovedEffects != null)
+            Subclass subclass = Subclass.Get(player);
+            if (subclass != null && SubclassOverrides.TryGetValue(subclass.Name, out Actions actions))
             {
-                foreach (EffectType effect in RemovedEffects)
-                {
-                    player.DisableEffect(effect);
-                }
+                actions.Apply(player);
+                return;
             }
 
-            if (AddedEffects != null)
-            {
-                foreach (ConfiguredEffect effect in AddedEffects)
-                {
-                    effect.Apply(player);
-                }
-            }
-
-            if (DisarmDuration > 0f)
-            {
-                player.Handcuff();
-                Timing.CallDelayed(DisarmDuration, () => player?.RemoveHandcuffs());
-            }
+            ToApply.Apply(player);
         }
 
         private static int GetMaxHealth(Player player)
@@ -110,6 +55,93 @@ namespace ScpDeathmatch.HealthSystem.Models
                 maxHp = athleteMaxHp;
 
             return maxHp;
+        }
+
+        /// <summary>
+        /// The actions to apply when a player uses the respective medical item.
+        /// </summary>
+        public class Actions
+        {
+            /// <summary>
+            /// Gets or sets the health to immediately restore.
+            /// </summary>
+            public int InstantHealth { get; set; }
+
+            /// <summary>
+            /// Gets or sets the maximum health restored.
+            /// </summary>
+            public int InstantMaxHealth { get; set; }
+
+            /// <summary>
+            /// Gets or sets the amount of stamina to regenerate.
+            /// </summary>
+            public float RegeneratedStamina { get; set; }
+
+            /// <summary>
+            /// Gets or sets the health regeneration.
+            /// </summary>
+            public Regeneration Regeneration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the maximum health regeneration.
+            /// </summary>
+            public Regeneration MaxHealthRegeneration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the ahp to add.
+            /// </summary>
+            public ConfiguredAhp Ahp { get; set; }
+
+            /// <summary>
+            /// Gets or sets a collection of the effects to apply.
+            /// </summary>
+            public List<ConfiguredEffect> AddedEffects { get; set; }
+
+            /// <summary>
+            /// Gets or sets a collection of the effects to remove.
+            /// </summary>
+            public List<EffectType> RemovedEffects { get; set; }
+
+            /// <summary>
+            /// Gets or sets the duration to handcuff the user.
+            /// </summary>
+            public float DisarmDuration { get; set; }
+
+            /// <summary>
+            /// Applies all configured actions to the player.
+            /// </summary>
+            /// <param name="player">The player to apply the actions to.</param>
+            public void Apply(Player player)
+            {
+                player.MaxHealth = Mathf.Clamp(player.MaxHealth + InstantMaxHealth, 0, GetMaxHealth(player));
+                player.Heal(InstantHealth);
+
+                player.ReferenceHub.fpc.ModifyStamina(RegeneratedStamina);
+
+                Regeneration?.ApplyTo(player);
+                Ahp?.AddTo(player);
+                if (RemovedEffects != null)
+                {
+                    foreach (EffectType effect in RemovedEffects)
+                    {
+                        player.DisableEffect(effect);
+                    }
+                }
+
+                if (AddedEffects != null)
+                {
+                    foreach (ConfiguredEffect effect in AddedEffects)
+                    {
+                        effect.Apply(player);
+                    }
+                }
+
+                if (DisarmDuration > 0f)
+                {
+                    player.Handcuff();
+                    Timing.CallDelayed(DisarmDuration, () => player?.RemoveHandcuffs());
+                }
+            }
         }
     }
 }

@@ -12,7 +12,6 @@ namespace ScpDeathmatch.Configs
     using System.Linq;
     using System.Reflection;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using InventorySystem.Items.Usables;
     using ScpDeathmatch.HealthSystem.Models;
     using ScpDeathmatch.Models;
@@ -29,12 +28,31 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public MedicalActions Adrenaline { get; set; } = new()
         {
-            AddedEffects = new List<ConfiguredEffect>
+            ToApply = new MedicalActions.Actions
             {
-                new(EffectType.MovementBoost, 20, 8f, true),
-                new(EffectType.Invigorated, 1, 8f, true),
+                AddedEffects = new List<ConfiguredEffect>
+                {
+                    new(EffectType.MovementBoost, 20, 8f, true),
+                    new(EffectType.Invigorated, 1, 8f, true),
+                },
+                RegeneratedStamina = 100f,
             },
-            RegeneratedStamina = 100f,
+            SubclassOverrides = new Dictionary<string, MedicalActions.Actions>
+            {
+                {
+                    "Nurse", new MedicalActions.Actions
+                    {
+                        Ahp = new ConfiguredAhp(25f, sustain: 10f),
+                        AddedEffects = new List<ConfiguredEffect>
+                        {
+                            new(EffectType.MovementBoost, 20, 12f, true),
+                            new(EffectType.Invigorated, 1, 12f, true),
+                        },
+                        RegeneratedStamina = 100f,
+                        InstantMaxHealth = 100,
+                    }
+                },
+            },
         };
 
         /// <summary>
@@ -42,8 +60,11 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public MedicalActions Medkit { get; set; } = new()
         {
-            InstantHealth = 100,
-            InstantMaxHealth = 100,
+            ToApply = new MedicalActions.Actions
+            {
+                InstantHealth = 100,
+                InstantMaxHealth = 100,
+            },
         };
 
         /// <summary>
@@ -51,7 +72,20 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public MedicalActions Painkillers { get; set; } = new()
         {
-            Ahp = new ConfiguredAhp(25f, sustain: 10f),
+            ToApply = new MedicalActions.Actions
+            {
+                Ahp = new ConfiguredAhp(25f, sustain: 10f),
+            },
+            SubclassOverrides = new Dictionary<string, MedicalActions.Actions>
+            {
+                {
+                    "Nurse", new MedicalActions.Actions
+                    {
+                        Ahp = new ConfiguredAhp(25f, sustain: 10f),
+                        InstantMaxHealth = 100,
+                    }
+                },
+            },
         };
 
         /// <summary>
@@ -59,12 +93,15 @@ namespace ScpDeathmatch.Configs
         /// </summary>
         public MedicalActions Scp500 { get; set; } = new()
         {
-            AddedEffects = new List<ConfiguredEffect>()
+            ToApply = new MedicalActions.Actions
             {
-                new(EffectType.MovementBoost, 50, 10f),
+                AddedEffects = new List<ConfiguredEffect>
+                {
+                    new(EffectType.MovementBoost, 50, 10f),
+                },
+                Ahp = new ConfiguredAhp(50f, sustain: 10f),
+                DisarmDuration = 10f,
             },
-            Ahp = new ConfiguredAhp(50f, sustain: 10f),
-            DisarmDuration = 10f,
         };
 
         /// <summary>
@@ -75,12 +112,8 @@ namespace ScpDeathmatch.Configs
         public MedicalActions GetActions(Consumable consumable)
         {
             cachedProperties ??= GenerateCache();
-            Log.Warn(consumable.GetType());
             if (cachedProperties.TryGetValue(consumable.GetType(), out PropertyInfo property))
-            {
-                Log.Warn(property.Name);
                 return property.GetValue(this) as MedicalActions;
-            }
 
             return null;
         }
