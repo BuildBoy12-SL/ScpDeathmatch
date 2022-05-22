@@ -20,19 +20,19 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets the amount of time, in seconds, between displaying a hint.
         /// </summary>
         [Description("The amount of time, in seconds, between displaying a hint.")]
-        public float Interval { get; set; } = 45f;
+        public float Interval { get; set; } = 60f;
 
         /// <summary>
         /// Gets or sets the time, in seconds, to display the hint.
         /// </summary>
         [Description("The time, in seconds, to display the hint.")]
-        public float Duration { get; set; } = 7f;
+        public float Duration { get; set; } = 15f;
 
         /// <summary>
         /// Gets or sets the location to display the hint.
         /// </summary>
         [Description("The location to display the hint.")]
-        public DisplayLocation Location { get; set; } = DisplayLocation.Top;
+        public DisplayLocation Location { get; set; } = DisplayLocation.MiddleTop;
 
         /// <summary>
         /// Gets or sets the hints to choose from.
