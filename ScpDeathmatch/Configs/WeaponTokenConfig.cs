@@ -27,7 +27,7 @@ namespace ScpDeathmatch.Configs
         {
             $"{ItemType.GunRevolver}",
             $"{ItemType.MicroHID}",
-            "BigIron",
+            "Big Iron",
         };
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ScpDeathmatch.Configs
             if (Enum.TryParse(name, true, out ItemType itemType))
             {
                 player.AddItem(itemType);
-                player.ShowHint(string.Format(GaveItem, name));
+                player.ShowHint(string.Format(GaveItem, itemType.Translation()));
                 return;
             }
 

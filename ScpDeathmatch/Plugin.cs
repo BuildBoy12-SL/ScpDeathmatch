@@ -130,7 +130,7 @@ namespace ScpDeathmatch
             }
             catch (Exception e)
             {
-                Log.Error("An exception has occured while patching events!\n" + e.Message);
+                Log.Error("ScpDeathmatch: An exception has occured while patching!\n" + e.Message);
             }
         }
 

@@ -23,7 +23,7 @@ namespace ScpDeathmatch.Models
         /// </summary>
         /// <param name="player">The <see cref="Player"/> to teleport.</param>
         /// <param name="teleportType">The type of teleportation.</param>
-        /// <returns>A <see cref="Vector3"/> that represents the selected position.</returns>
+        /// <returns>A <see cref="Vector3"/> that represents the selected position or <see cref="Vector3.zero"/> if no teleportation should occur.</returns>
         public static Vector3 Get(Player player, TeleportType teleportType)
         {
             switch (teleportType)

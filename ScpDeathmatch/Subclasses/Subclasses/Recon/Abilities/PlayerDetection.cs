@@ -97,7 +97,7 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities
 
                 foreach (Player ply in Player.List)
                 {
-                    if (ply.SessionVariables.ContainsKey("IsNPC"))
+                    if (player == ply || ply.SessionVariables.ContainsKey("IsNPC"))
                         continue;
 
                     bool isInRange = Vector3.Distance(player.Position, ply.Position) <= MinimumDistance;
@@ -105,14 +105,14 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Abilities
                     if (isInRange && !previouslyInRange)
                     {
                         inRange[player].Add(ply);
-                        player.ShowHint(string.Format(AlertEntered, player.DisplayNickname ?? player.Nickname));
+                        player.ShowHint(string.Format(AlertEntered, ply.DisplayNickname ?? ply.Nickname));
                         continue;
                     }
 
                     if (!isInRange && previouslyInRange)
                     {
                         inRange[player].Remove(ply);
-                        player.ShowHint(string.Format(AlertLeft, player.DisplayNickname ?? player.Nickname));
+                        player.ShowHint(string.Format(AlertLeft, ply.DisplayNickname ?? ply.Nickname));
                     }
                 }
             }

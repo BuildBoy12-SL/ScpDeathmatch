@@ -42,8 +42,8 @@ namespace ScpDeathmatch.HealthSystem
 
         private void OnDestroying(DestroyingEventArgs ev)
         {
-            if (ev.Player.GameObject.TryGetComponent(out HealthComponent regenComponent))
-                Object.Destroy(regenComponent);
+            if (ev.Player.GameObject.TryGetComponent(out HealthComponent healthComponent))
+                Object.Destroy(healthComponent);
         }
 
         private void OnVerified(VerifiedEventArgs ev)

@@ -36,7 +36,7 @@ namespace ScpDeathmatch.Subclasses.Commands
         /// Gets or sets the response to give when the player has no available abilities to toggle.
         /// </summary>
         [Description("The response to give when the player has no available abilities to toggle.")]
-        public string NoToggleablesResponse { get; set; } = "You have no passive abilities to toggle.";
+        public string NoTogglablesResponse { get; set; } = "You have no passive abilities to toggle.";
 
         /// <summary>
         /// Gets or sets the response to give when the player specified an invalid ability to toggle.
@@ -68,7 +68,7 @@ namespace ScpDeathmatch.Subclasses.Commands
 
             if (toggleableAbilities.Count == 0)
             {
-                response = NoToggleablesResponse;
+                response = NoTogglablesResponse;
                 return false;
             }
 

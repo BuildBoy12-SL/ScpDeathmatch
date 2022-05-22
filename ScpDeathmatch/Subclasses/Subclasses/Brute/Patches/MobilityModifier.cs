@@ -50,27 +50,27 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Brute.Patches
 
             LocalBuilder brute = generator.DeclareLocal(typeof(Brute));
 
-            newInstructions.InsertRange(0, new[]
+            newInstructions.InsertRange(0, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Subclasses))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(SubclassesConfig), nameof(SubclassesConfig.Brute))),
-                new CodeInstruction(OpCodes.Stloc_S, brute.LocalIndex),
+                new(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Subclasses))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(SubclassesConfig), nameof(SubclassesConfig.Brute))),
+                new(OpCodes.Stloc_S, brute.LocalIndex),
 
-                new CodeInstruction(OpCodes.Ldloc_S, brute.LocalIndex),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Firearm), nameof(Firearm.Owner))),
-                new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
-                new CodeInstruction(OpCodes.Callvirt, Method(typeof(Brute), nameof(Brute.Check))),
-                new CodeInstruction(OpCodes.Brfalse_S, baseLogicLabel),
+                new(OpCodes.Ldloc_S, brute.LocalIndex),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Firearm), nameof(Firearm.Owner))),
+                new(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
+                new(OpCodes.Callvirt, Method(typeof(Brute), nameof(Brute.Check))),
+                new(OpCodes.Brfalse_S, baseLogicLabel),
 
-                new CodeInstruction(OpCodes.Ldloc_S, brute.LocalIndex),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Brute), nameof(Brute.IgnoreItemWeight))),
-                new CodeInstruction(OpCodes.Brfalse_S, baseLogicLabel),
+                new(OpCodes.Ldloc_S, brute.LocalIndex),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Brute), nameof(Brute.IgnoreItemWeight))),
+                new(OpCodes.Brfalse_S, baseLogicLabel),
 
-                new CodeInstruction(OpCodes.Ldc_R4, 1f),
-                new CodeInstruction(OpCodes.Ret),
+                new(OpCodes.Ldc_R4, 1f),
+                new(OpCodes.Ret),
             });
 
             for (int z = 0; z < newInstructions.Count; z++)

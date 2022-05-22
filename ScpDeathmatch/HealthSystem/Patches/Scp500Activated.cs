@@ -38,9 +38,9 @@ namespace ScpDeathmatch.HealthSystem.Patches
             newInstructions.InsertRange(index, new[]
             {
                 new CodeInstruction(OpCodes.Ldarg_0).MoveLabelsFrom(newInstructions[index]),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ItemBase), nameof(ItemBase.Owner))),
-                new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
-                new CodeInstruction(OpCodes.Call, Method(typeof(Scp500Activated), nameof(RunAdditionalScp500Effects), new[] { typeof(Player) })),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(ItemBase), nameof(ItemBase.Owner))),
+                new(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
+                new(OpCodes.Call, Method(typeof(Scp500Activated), nameof(RunAdditionalScp500Effects), new[] { typeof(Player) })),
             });
 
             Label skipRegenerationLabel = generator.DefineLabel();
@@ -48,13 +48,13 @@ namespace ScpDeathmatch.HealthSystem.Patches
             offset = 1;
             index = newInstructions.FindIndex(instruction => instruction.OperandIs(Method(typeof(HealthStat), nameof(HealthStat.ServerHeal), new[] { typeof(float) }))) + offset;
 
-            newInstructions.InsertRange(index, new[]
+            newInstructions.InsertRange(index, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp500Regeneration))),
-                new CodeInstruction(OpCodes.Brfalse_S, skipRegenerationLabel),
+                new(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp500Regeneration))),
+                new(OpCodes.Brfalse_S, skipRegenerationLabel),
             });
 
             index = newInstructions.FindIndex(instruction => instruction.OperandIs(Method(typeof(UsableItem), nameof(UsableItem.ServerAddRegeneration)))) + offset;
@@ -83,6 +83,14 @@ namespace ScpDeathmatch.HealthSystem.Patches
                 configuredEffect.Apply(player);
 
             config.Scp500Ahp.AddTo(player);
+        }
+
+        private static void Postfix(Scp500 __instance)
+        {
+            foreach (var keyframe in __instance._healProgress.keys)
+            {
+                Log.Debug(keyframe.time + " - " + keyframe.value);
+            }
         }
     }
 }

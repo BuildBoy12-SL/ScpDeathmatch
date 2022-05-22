@@ -10,6 +10,7 @@ namespace ScpDeathmatch.Models
     using System.Collections.Generic;
     using System.Linq;
     using Scp914;
+    using UnityEngine;
 
     /// <summary>
     /// Represents a chance that an item will upgrade to something on a certain setting.
@@ -24,12 +25,6 @@ namespace ScpDeathmatch.Models
         public UpgradeSetting()
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UpgradeSetting"/> class.
-        /// </summary>
-        /// <param name="chances"><inheritdoc cref="Chances"/></param>
-        public UpgradeSetting(Dictionary<Scp914KnobSetting, int> chances) => Chances = chances;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpgradeSetting"/> class.
@@ -62,10 +57,7 @@ namespace ScpDeathmatch.Models
                 for (int i = 0; i < value.Count; i++)
                 {
                     KeyValuePair<Scp914KnobSetting, int> kvp = value.ElementAt(i);
-                    if (kvp.Value > 100)
-                        value[kvp.Key] = 100;
-                    else if (kvp.Value < 0)
-                        value[kvp.Key] = 0;
+                    value[kvp.Key] = Mathf.Clamp(kvp.Value, 0, 100);
                 }
 
                 chances = value;

@@ -8,10 +8,12 @@
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
+    using AdvancedHints.Enums;
     using Exiled.CustomItems.API;
     using Exiled.CustomItems.API.Features;
     using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.CustomItems.Qed;
+    using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Items;
 
     /// <summary>
@@ -20,6 +22,11 @@ namespace ScpDeathmatch.Configs
     public class CustomItemsConfig
     {
         private IEnumerable<CustomItem> registeredItems;
+
+        /// <summary>
+        /// Gets or sets the message to display to a player that is looking at a custom item.
+        /// </summary>
+        public Hint LookingAtMessage { get; set; } = new("You are looking at a {0}", 2, true, DisplayLocation.Top);
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.BigIron"/> class.

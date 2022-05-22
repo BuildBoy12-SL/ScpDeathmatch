@@ -8,6 +8,7 @@
 namespace ScpDeathmatch.CustomItems.Qed
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using Exiled.API.Features;
     using Exiled.API.Features.Attributes;
     using Exiled.API.Features.Spawn;
@@ -57,6 +58,7 @@ namespace ScpDeathmatch.CustomItems.Qed
         /// <summary>
         /// Gets or sets a value indicating whether debug logs will be shown.
         /// </summary>
+        [Description("Whether debug logs will be shown.")]
         public bool ShowDebug { get; set; } = false;
 
         /// <summary>

@@ -12,6 +12,7 @@ namespace ScpDeathmatch.HealthSystem.Components
     using Exiled.API.Features;
     using MEC;
     using PlayerStatsSystem;
+    using ScpDeathmatch.API.Events.EventArgs;
     using ScpDeathmatch.Subclasses;
     using UnityEngine;
 
@@ -46,6 +47,7 @@ namespace ScpDeathmatch.HealthSystem.Components
             config = Plugin.Instance.Config;
             coroutineHandle = Timing.RunCoroutine(RunAttemptRegeneration());
             PlayerStats.OnAnyPlayerDamaged += OnAnyPlayerDamaged;
+            API.Events.Handlers.Player.ActivatingConsumableEffects += OnActivatingConsumableEffects;
         }
 
         private void FixedUpdate()
@@ -72,6 +74,7 @@ namespace ScpDeathmatch.HealthSystem.Components
         private void OnDestroy()
         {
             PlayerStats.OnAnyPlayerDamaged -= OnAnyPlayerDamaged;
+            API.Events.Handlers.Player.ActivatingConsumableEffects -= OnActivatingConsumableEffects;
             Timing.KillCoroutines(coroutineHandle);
         }
 
@@ -89,6 +92,12 @@ namespace ScpDeathmatch.HealthSystem.Components
 
             float amount = standardDamageHandler.DealtHealthDamage != 0 ? standardDamageHandler.DealtHealthDamage : standardDamageHandler.Damage;
             player.MaxHealth -= (int)(amount * (config.Health.MaxHealthPercentage / 100f));
+        }
+
+        private void OnActivatingConsumableEffects(ActivatingConsumableEffectsEventArgs ev)
+        {
+            if (ev.Player != player)
+                return;
         }
 
         private IEnumerator<float> RunAttemptRegeneration()

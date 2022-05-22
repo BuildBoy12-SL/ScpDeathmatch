@@ -29,21 +29,21 @@ namespace ScpDeathmatch.HealthSystem.Patches
             Label returnLabel = generator.DefineLabel();
             LocalBuilder ev = generator.DeclareLocal(typeof(ChangingMaxHealthEventArgs));
 
-            newInstructions.InsertRange(0, new[]
+            newInstructions.InsertRange(0, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Ldarg_1),
-                new CodeInstruction(OpCodes.Ldc_I4_1),
-                new CodeInstruction(OpCodes.Newobj, GetDeclaredConstructors(typeof(ChangingMaxHealthEventArgs))[0]),
-                new CodeInstruction(OpCodes.Stloc_S, ev.LocalIndex),
-                new CodeInstruction(OpCodes.Ldloc_S, ev.LocalIndex),
-                new CodeInstruction(OpCodes.Call, Method(typeof(API.Events.Handlers.Player), nameof(API.Events.Handlers.Player.OnChangingMaxHealth))),
-                new CodeInstruction(OpCodes.Ldloc_S, ev.LocalIndex),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ChangingMaxHealthEventArgs), nameof(ChangingMaxHealthEventArgs.IsAllowed))),
-                new CodeInstruction(OpCodes.Brfalse_S, returnLabel),
-                new CodeInstruction(OpCodes.Ldloc_S, ev.LocalIndex),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(ChangingMaxHealthEventArgs), nameof(ChangingMaxHealthEventArgs.NewMaxHealth))),
-                new CodeInstruction(OpCodes.Starg_S, 1),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldarg_1),
+                new(OpCodes.Ldc_I4_1),
+                new(OpCodes.Newobj, GetDeclaredConstructors(typeof(ChangingMaxHealthEventArgs))[0]),
+                new(OpCodes.Stloc_S, ev.LocalIndex),
+                new(OpCodes.Ldloc_S, ev.LocalIndex),
+                new(OpCodes.Call, Method(typeof(API.Events.Handlers.Player), nameof(API.Events.Handlers.Player.OnChangingMaxHealth))),
+                new(OpCodes.Ldloc_S, ev.LocalIndex),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(ChangingMaxHealthEventArgs), nameof(ChangingMaxHealthEventArgs.IsAllowed))),
+                new(OpCodes.Brfalse_S, returnLabel),
+                new(OpCodes.Ldloc_S, ev.LocalIndex),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(ChangingMaxHealthEventArgs), nameof(ChangingMaxHealthEventArgs.NewMaxHealth))),
+                new(OpCodes.Starg_S, 1),
             });
 
             newInstructions[newInstructions.Count - 1].labels.Add(returnLabel);

@@ -16,7 +16,7 @@ namespace ScpDeathmatch.Models
         /// Initializes a new instance of the <see cref="Subscribable"/> class.
         /// </summary>
         /// <param name="plugin">An instance of the <see cref="ScpDeathmatch.Plugin"/> class.</param>
-        public Subscribable(Plugin plugin) => Plugin = plugin;
+        protected Subscribable(Plugin plugin) => Plugin = plugin;
 
         /// <summary>
         /// Gets the plugin class instance.

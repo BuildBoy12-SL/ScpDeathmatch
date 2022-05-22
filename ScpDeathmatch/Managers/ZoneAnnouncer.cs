@@ -66,7 +66,7 @@ namespace ScpDeathmatch.Managers
                     string.IsNullOrEmpty(announcement))
                     continue;
 
-                int playerCount = Player.Get(player => player.IsAlive && player.Zone == zoneType).Count();
+                int playerCount = Player.Get(player => player.IsAlive && player.Role.Type != RoleType.Scp079 && player.Zone == zoneType).Count();
                 if (playerCount < 1)
                     continue;
 

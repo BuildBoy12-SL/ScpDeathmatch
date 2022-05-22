@@ -29,12 +29,12 @@ namespace ScpDeathmatch.Patches
             List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
 
             Label retLabel = generator.DefineLabel();
-            newInstructions.InsertRange(0, new[]
+            newInstructions.InsertRange(0, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Ldarg_1),
-                new CodeInstruction(OpCodes.Callvirt, Method(typeof(ProcessConsoleQuery), nameof(TryRunCommand))),
-                new CodeInstruction(OpCodes.Brtrue_S, retLabel),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldarg_1),
+                new(OpCodes.Callvirt, Method(typeof(ProcessConsoleQuery), nameof(TryRunCommand))),
+                new(OpCodes.Brtrue_S, retLabel),
             });
 
             const int offset = -6;

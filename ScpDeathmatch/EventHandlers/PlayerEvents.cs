@@ -13,6 +13,7 @@ namespace ScpDeathmatch.EventHandlers
     using Exiled.Events.EventArgs;
     using InventorySystem.Disarming;
     using MapGeneration.Distributors;
+    using ScpDeathmatch.CustomItems.Components;
     using ScpDeathmatch.Models;
     using UnityEngine;
     using PlayerHandlers = Exiled.Events.Handlers.Player;
@@ -34,17 +35,27 @@ namespace ScpDeathmatch.EventHandlers
         /// <inheritdoc />
         public override void Subscribe()
         {
+            Exiled.Events.Handlers.Player.Destroying += OnDestroying;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.InteractingLocker += OnInteractingLocker;
             Exiled.Events.Handlers.Player.ProcessingHotkey += OnProcessingHotkey;
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
         }
 
         /// <inheritdoc />
         public override void Unsubscribe()
         {
+            Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractingLocker;
             Exiled.Events.Handlers.Player.ProcessingHotkey -= OnProcessingHotkey;
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
+        }
+
+        private void OnDestroying(DestroyingEventArgs ev)
+        {
+            if (ev.Player.GameObject.TryGetComponent(out ViewingItemComponent viewingItemComponent))
+                Object.Destroy(viewingItemComponent);
         }
 
         private void OnDying(DyingEventArgs ev)
@@ -74,6 +85,11 @@ namespace ScpDeathmatch.EventHandlers
         {
             if (DisarmedPlayers.Entries.Any(entry => entry.DisarmedPlayer == ev.Player.NetworkIdentity.netId))
                 ev.IsAllowed = false;
+        }
+
+        private void OnVerified(VerifiedEventArgs ev)
+        {
+            ev.Player.GameObject.AddComponent<ViewingItemComponent>();
         }
     }
 }

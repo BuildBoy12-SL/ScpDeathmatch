@@ -7,6 +7,7 @@
 
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
+    using System.ComponentModel;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
 
@@ -23,8 +24,15 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public float Weight { get; set; } = -0.8f;
 
         /// <summary>
-        /// Gets or sets the fuse time.
+        /// Gets or sets the amount of grenades to spawn.
         /// </summary>
+        [Description("The amount of grenades to spawn.")]
+        public int Amount { get; set; } = 1;
+
+        /// <summary>
+        /// Gets or sets the fuse time of the spawned grenade.
+        /// </summary>
+        [Description("The fuse time of the spawned grenade.")]
         public float FuseTime { get; set; } = 2f;
 
         /// <inheritdoc />
@@ -32,7 +40,8 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         {
             ExplosiveGrenade explosiveGrenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, ev.Thrower);
             explosiveGrenade.FuseTime = FuseTime;
-            explosiveGrenade.SpawnActive(ev.Grenade.transform.position, ev.Thrower);
+            for (int i = 0; i < Amount; i++)
+                explosiveGrenade.SpawnActive(ev.Grenade.transform.position, ev.Thrower);
         }
     }
 }

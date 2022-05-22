@@ -137,7 +137,7 @@ namespace ScpDeathmatch.Subclasses
         /// <summary>
         /// Tries to register this subclass.
         /// </summary>
-        /// <returns>True if the subclass registered properly.</returns>
+        /// <returns>Whether the subclass registered properly.</returns>
         public bool TryRegister()
         {
             if (Registered.Contains(this))
@@ -154,7 +154,7 @@ namespace ScpDeathmatch.Subclasses
         /// <summary>
         /// Tries to unregister this subclass.
         /// </summary>
-        /// <returns>True if the role is subclass properly.</returns>
+        /// <returns>Whether the subclass is unregistered properly.</returns>
         public bool TryUnregister()
         {
             Destroy();

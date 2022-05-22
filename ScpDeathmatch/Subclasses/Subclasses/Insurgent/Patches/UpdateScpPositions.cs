@@ -39,20 +39,20 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Insurgent.Patches
 
             newInstructions[index].labels.Add(skipBypassLabel);
 
-            newInstructions.InsertRange(index, new[]
+            newInstructions.InsertRange(index, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Subclasses))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(SubclassesConfig), nameof(SubclassesConfig.Insurgent))),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Scp079PlayerScript), nameof(Scp079PlayerScript.gameObject))),
-                new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(GameObject) })),
-                new CodeInstruction(OpCodes.Callvirt, Method(typeof(Insurgent), nameof(Insurgent.Check))),
-                new CodeInstruction(OpCodes.Brfalse_S, skipBypassLabel),
-                new CodeInstruction(OpCodes.Ldloc_S, 6),
-                new CodeInstruction(OpCodes.Ldc_I4_7),
-                new CodeInstruction(OpCodes.Bne_Un_S, addPositionLabel),
+                new(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Subclasses))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(SubclassesConfig), nameof(SubclassesConfig.Insurgent))),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Scp079PlayerScript), nameof(Scp079PlayerScript.gameObject))),
+                new(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(GameObject) })),
+                new(OpCodes.Callvirt, Method(typeof(Insurgent), nameof(Insurgent.Check))),
+                new(OpCodes.Brfalse_S, skipBypassLabel),
+                new(OpCodes.Ldloc_S, 6),
+                new(OpCodes.Ldc_I4_7),
+                new(OpCodes.Bne_Un_S, addPositionLabel),
             });
 
             for (int z = 0; z < newInstructions.Count; z++)

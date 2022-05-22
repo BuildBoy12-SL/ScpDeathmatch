@@ -74,9 +74,8 @@ namespace ScpDeathmatch.EventHandlers
 
                 foreach (Player player in Player.List)
                 {
-                    for (int i = 0; i < player.Items.Count; i++)
+                    foreach (Item item in player.Items.ToList())
                     {
-                        Item item = player.Items.ElementAt(i);
                         if (item.Type == ItemType.Coin && (!CustomItem.TryGet(item, out CustomItem customItem) || customItem is ColaCoin))
                             player.RemoveItem(item);
                     }

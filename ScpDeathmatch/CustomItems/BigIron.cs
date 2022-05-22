@@ -20,7 +20,7 @@ namespace ScpDeathmatch.CustomItems
         public override uint Id { get; set; } = 127;
 
         /// <inheritdoc />
-        public override string Name { get; set; } = nameof(BigIron);
+        public override string Name { get; set; } = "Big Iron";
 
         /// <inheritdoc />
         public override string Description { get; set; } = "A revolver that can only hold one shot.";

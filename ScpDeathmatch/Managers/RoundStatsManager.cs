@@ -51,9 +51,7 @@ namespace ScpDeathmatch.Managers
             if (!Round.IsStarted || ev.Killer is null || ev.Killer == ev.Target)
                 return;
 
-            if (firstBlood is null)
-                firstBlood = ev.Killer;
-
+            firstBlood ??= ev.Killer;
             if (!kills.ContainsKey(ev.Killer))
                 kills.Add(ev.Killer, 0);
 

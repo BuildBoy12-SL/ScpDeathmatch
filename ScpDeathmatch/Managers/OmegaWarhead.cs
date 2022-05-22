@@ -65,15 +65,11 @@ namespace ScpDeathmatch.Managers
             yield return Timing.WaitForSeconds(Plugin.Config.OmegaWarhead.InitialDelay);
             Cassie.Message(Plugin.Config.OmegaWarhead.Cassie, isNoisy: !Plugin.Config.OmegaWarhead.SuppressCassieNoise);
             yield return Timing.WaitForSeconds(Plugin.Config.OmegaWarhead.Time);
-            AlphaWarheadController.Host.InstantPrepare();
-            AlphaWarheadController.Host.StartDetonation();
-            AlphaWarheadController.Host.NetworktimeToDetonation = 0.1f;
+            Warhead.Detonate();
             foreach (Player player in Player.List)
             {
-                if (player.SessionVariables.ContainsKey("IsNPC"))
-                    continue;
-
-                player.Kill("Vaporized by the Omega Warhead.");
+                if (!player.SessionVariables.ContainsKey("IsNPC") && !player.IsGodModeEnabled)
+                    player.Kill("Vaporized by the Omega Warhead.");
             }
         }
     }

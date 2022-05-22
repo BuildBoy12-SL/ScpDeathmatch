@@ -24,17 +24,28 @@ namespace ScpDeathmatch.CustomItems.Qed
     {
         private readonly List<IRandomEvent> selectableEvents = new();
         private AnimationCurve eventChanceCurve = new();
-
-        /// <summary>
-        /// Gets or sets the list of distance to weight pairs that determines the chances of random events being triggered.
-        /// </summary>
-        [Description("The list of distance to weight pairs that determines the chances of random events being triggered.")]
-        public Dictionary<float, float> WeightCurve { get; set; } = new()
+        private SortedList<float, float> rawEventChanceCurve = new()
         {
             { 0f, 1f },
             { 15f, 0f },
             { 30f, -1f },
         };
+
+        /// <summary>
+        /// Gets or sets the list of distance to weight pairs that determines the chances of random events being triggered.
+        /// </summary>
+        [Description("The list of distance to weight pairs that determines the chances of random events being triggered.")]
+        public SortedList<float, float> WeightCurve
+        {
+            get => rawEventChanceCurve;
+            set
+            {
+                rawEventChanceCurve = value;
+                eventChanceCurve = new AnimationCurve();
+                foreach (KeyValuePair<float, float> kvp in value)
+                    eventChanceCurve.AddKey(kvp.Key, kvp.Value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.LockRoom"/> event.
@@ -146,10 +157,6 @@ namespace ScpDeathmatch.CustomItems.Qed
                         selectableEvents.Add(randomEvent);
                 }
             }
-
-            eventChanceCurve = new AnimationCurve();
-            foreach (KeyValuePair<float, float> kvp in WeightCurve)
-                eventChanceCurve.AddKey(kvp.Key, kvp.Value);
         }
 
         /// <summary>

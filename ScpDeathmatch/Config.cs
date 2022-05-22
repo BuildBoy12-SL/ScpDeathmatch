@@ -138,6 +138,13 @@ namespace ScpDeathmatch
         public HealthConfig Health { get; set; }
 
         /// <summary>
+        /// Gets or sets the configs for item translations.
+        /// </summary>
+        [YamlIgnore]
+        [NestedConfig]
+        public TranslationsConfig Translations { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs related to map generation.
         /// </summary>
         [YamlIgnore]

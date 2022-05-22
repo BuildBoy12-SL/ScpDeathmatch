@@ -32,13 +32,13 @@ namespace ScpDeathmatch.HealthSystem.Patches
             const int offset = 1;
             int index = newInstructions.FindLastIndex(instruction => instruction.opcode == OpCodes.Blt_S) + offset;
 
-            newInstructions.InsertRange(index, new[]
+            newInstructions.InsertRange(index, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp1853StaminaImmune))),
-                new CodeInstruction(OpCodes.Brtrue_S, skipStaminaLabel),
+                new(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.Scp1853StaminaImmune))),
+                new(OpCodes.Brtrue_S, skipStaminaLabel),
             });
 
             index = newInstructions.FindIndex(instruction => instruction.OperandIs(Field(typeof(Scp1853), nameof(Scp1853._staminaUsageMultiplier)))) + offset;

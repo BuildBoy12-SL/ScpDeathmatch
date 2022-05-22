@@ -30,11 +30,13 @@ namespace ScpDeathmatch.Models
         /// <param name="effectType"><inheritdoc cref="EffectType"/></param>
         /// <param name="intensity"><inheritdoc cref="Intensity"/></param>
         /// <param name="duration"><inheritdoc cref="Duration"/></param>
-        public ConfiguredEffect(EffectType effectType, byte intensity, float duration)
+        /// <param name="addDurationIfActive"><inheritdoc cref="AddDurationIfActive"/></param>
+        public ConfiguredEffect(EffectType effectType, byte intensity, float duration, bool addDurationIfActive = false)
         {
             Type = effectType;
             Intensity = intensity;
             Duration = duration;
+            AddDurationIfActive = addDurationIfActive;
         }
 
         /// <summary>
@@ -53,12 +55,17 @@ namespace ScpDeathmatch.Models
         public float Duration { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the duration of the effect should be added if the effect is already active.
+        /// </summary>
+        public bool AddDurationIfActive { get; set; }
+
+        /// <summary>
         /// Applies the configured effect to the player.
         /// </summary>
         /// <param name="player">The player to apply the effect to.</param>
         public void Apply(Player player)
         {
-            player.EnableEffect(Type, Duration);
+            player.EnableEffect(Type, Duration, AddDurationIfActive);
             player.ChangeEffectIntensity(Type, Intensity);
         }
     }

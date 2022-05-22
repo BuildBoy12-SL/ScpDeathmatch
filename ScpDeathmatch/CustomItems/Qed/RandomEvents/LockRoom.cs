@@ -7,6 +7,7 @@
 
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
+    using System.ComponentModel;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
@@ -26,6 +27,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <summary>
         /// Gets or sets the duration of the lockdown.
         /// </summary>
+        [Description("The duration of the lockdown.")]
         public float Duration { get; set; } = 5f;
 
         /// <inheritdoc />

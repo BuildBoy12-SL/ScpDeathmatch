@@ -32,18 +32,18 @@ namespace ScpDeathmatch.Patches
             const int offset = 4;
             index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Ldloc_2) + offset;
 
-            newInstructions.InsertRange(index, new[]
+            newInstructions.InsertRange(index, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Ldloc_2),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Ldfld, Field(typeof(StructureDistributor), nameof(StructureDistributor.Settings))),
-                new CodeInstruction(OpCodes.Ldfld, Field(typeof(SpawnablesDistributorSettings), nameof(SpawnablesDistributorSettings.SpawnableStructures))),
-                new CodeInstruction(OpCodes.Ldarg_1),
-                new CodeInstruction(OpCodes.Ldind_I4),
-                new CodeInstruction(OpCodes.Ldelem_Ref),
-                new CodeInstruction(OpCodes.Ldfld, Field(typeof(SpawnableStructure), nameof(SpawnableStructure.StructureType))),
-                new CodeInstruction(OpCodes.Call, Method(typeof(GetNextStructure), nameof(IsValidSpawnpoint))),
-                new CodeInstruction(OpCodes.Brfalse_S, continueLabel),
+                new(OpCodes.Ldloc_2),
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Ldfld, Field(typeof(StructureDistributor), nameof(StructureDistributor.Settings))),
+                new(OpCodes.Ldfld, Field(typeof(SpawnablesDistributorSettings), nameof(SpawnablesDistributorSettings.SpawnableStructures))),
+                new(OpCodes.Ldarg_1),
+                new(OpCodes.Ldind_I4),
+                new(OpCodes.Ldelem_Ref),
+                new(OpCodes.Ldfld, Field(typeof(SpawnableStructure), nameof(SpawnableStructure.StructureType))),
+                new(OpCodes.Call, Method(typeof(GetNextStructure), nameof(IsValidSpawnpoint))),
+                new(OpCodes.Brfalse_S, continueLabel),
             });
 
             for (int z = 0; z < newInstructions.Count; z++)

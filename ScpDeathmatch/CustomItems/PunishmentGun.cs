@@ -12,6 +12,7 @@ namespace ScpDeathmatch.CustomItems
     using Exiled.API.Features.Spawn;
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
+    using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     [CustomItem(ItemType.GunRevolver)]
@@ -46,6 +47,10 @@ namespace ScpDeathmatch.CustomItems
         /// </summary>
         [Description("The reason to use when banning a player shot with this gun.")]
         public string BanReason { get; set; } = "You've been shot through the 4th wall";
+
+        /// <inheritdoc />
+        [YamlIgnore]
+        public override ItemType Type { get; set; } = ItemType.GunRevolver;
 
         /// <inheritdoc />
         protected override void OnShot(ShotEventArgs ev)

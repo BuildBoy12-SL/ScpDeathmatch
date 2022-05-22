@@ -10,6 +10,7 @@ namespace ScpDeathmatch.Configs
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Enums;
+    using ScpDeathmatch.HealthSystem.Models;
     using ScpDeathmatch.Models;
 
     /// <summary>
@@ -18,28 +19,17 @@ namespace ScpDeathmatch.Configs
     public class MedicalItemsConfig
     {
         /// <summary>
-        /// Gets or sets a value indicating whether adrenaline should keep its ahp.
+        /// Gets or sets the actions to run when adrenaline is used.
         /// </summary>
-        [Description("Whether adrenaline should keep its ahp.")]
-        public bool AdrenalineAhp { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets the intensity of the movement speed effect applied by adrenaline.
-        /// </summary>
-        [Description("The intensity of the movement speed effect applied by adrenaline.")]
-        public byte AdrenalineMovementBoost { get; set; } = 20;
-
-        /// <summary>
-        /// Gets or sets the duration of the movement boost effect given by adrenaline.
-        /// </summary>
-        [Description("The duration of the movement boost effect given by adrenaline.")]
-        public float AdrenalineMovementBoostDuration { get; set; } = 8f;
-
-        /// <summary>
-        /// Gets or sets the duration of the invigorated effect given by adrenaline.
-        /// </summary>
-        [Description("The duration of the invigorated effect given by adrenaline.")]
-        public float AdrenalineInvigoratedDuration { get; set; } = 8f;
+        public MedicalActions Adrenaline { get; set; } = new()
+        {
+            AddedEffects = new List<ConfiguredEffect>
+            {
+                new(EffectType.MovementBoost, 20, 8f, true),
+                new(EffectType.Invigorated, 1, 8f, true),
+            },
+            Ahp = new ConfiguredAhp(0f),
+        };
 
         /// <summary>
         /// Gets or sets a value indicating whether painkillers should keep their regeneration.

@@ -7,16 +7,10 @@
 
 namespace ScpDeathmatch.HealthSystem.Patches
 {
-#pragma warning disable SA1118
-    using System.Collections.Generic;
-    using System.Reflection.Emit;
-    using Exiled.API.Enums;
+#pragma warning disable SA1313
     using Exiled.API.Features;
     using HarmonyLib;
     using InventorySystem.Items.Usables;
-    using NorthwoodLib.Pools;
-    using ScpDeathmatch.Configs;
-    using static HarmonyLib.AccessTools;
 
     /// <summary>
     /// Patches <see cref="Medkit.OnEffectsActivated"/> to remove the artificial health gain.
@@ -24,51 +18,11 @@ namespace ScpDeathmatch.HealthSystem.Patches
     [HarmonyPatch(typeof(Adrenaline), nameof(Adrenaline.OnEffectsActivated))]
     internal static class AdrenalineActivated
     {
-        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+        private static bool Prefix(Adrenaline __instance)
         {
-            List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
-
-            Label skipAhpLabel = generator.DefineLabel();
-
-            const int offset = 1;
-            int index = newInstructions.FindIndex(instruction => instruction.OperandIs(Method(typeof(FirstPersonController), nameof(FirstPersonController.ModifyStamina)))) + offset;
-            newInstructions.InsertRange(index, new[]
-            {
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Adrenaline), nameof(Adrenaline.Owner))),
-                new CodeInstruction(OpCodes.Call, Method(typeof(Player), nameof(Player.Get), new[] { typeof(ReferenceHub) })),
-                new CodeInstruction(OpCodes.Call, Method(typeof(AdrenalineActivated), nameof(EnableMovementBoost))),
-
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.AdrenalineAhp))),
-                new CodeInstruction(OpCodes.Brfalse_S, skipAhpLabel),
-            });
-
-            index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Pop) + offset;
-            newInstructions[index].labels.Add(skipAhpLabel);
-
-            index = newInstructions.FindLastIndex(instruction => instruction.opcode == OpCodes.Ldc_R4);
-            newInstructions.RemoveAt(index);
-            newInstructions.InsertRange(index, new[]
-            {
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.MedicalItems))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(MedicalItemsConfig), nameof(MedicalItemsConfig.AdrenalineInvigoratedDuration))),
-            });
-
-            for (int z = 0; z < newInstructions.Count; z++)
-                yield return newInstructions[z];
-
-            ListPool<CodeInstruction>.Shared.Return(newInstructions);
-        }
-
-        private static void EnableMovementBoost(Player player)
-        {
-            player.EnableEffect(EffectType.MovementBoost, Plugin.Instance.Config.MedicalItems.AdrenalineMovementBoostDuration, true);
-            player.ChangeEffectIntensity(EffectType.MovementBoost, Plugin.Instance.Config.MedicalItems.AdrenalineMovementBoost);
+            Plugin.Instance.Config.MedicalItems.Adrenaline.ApplyTo(Player.Get(__instance.Owner));
+            __instance.Owner.playerEffectsController.UseMedicalItem(__instance.ItemTypeId);
+            return false;
         }
     }
 }

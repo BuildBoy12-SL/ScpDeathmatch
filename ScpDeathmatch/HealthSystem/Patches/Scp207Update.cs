@@ -30,13 +30,13 @@ namespace ScpDeathmatch.HealthSystem.Patches
 
             const int offset = 1;
             int index = newInstructions.FindLastIndex(instruction => instruction.opcode == OpCodes.Stfld) + offset;
-            newInstructions.InsertRange(index, new[]
+            newInstructions.InsertRange(index, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Health))),
-                new CodeInstruction(OpCodes.Callvirt, PropertyGetter(typeof(HealthConfig), nameof(HealthConfig.Scp207Damage))),
-                new CodeInstruction(OpCodes.Brfalse_S, returnLabel),
+                new(OpCodes.Call, PropertyGetter(typeof(Plugin), nameof(Plugin.Instance))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Plugin), nameof(Plugin.Config))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(Config), nameof(Config.Health))),
+                new(OpCodes.Callvirt, PropertyGetter(typeof(HealthConfig), nameof(HealthConfig.Scp207Damage))),
+                new(OpCodes.Brfalse_S, returnLabel),
             });
 
             newInstructions[newInstructions.Count - 1].labels.Add(returnLabel);

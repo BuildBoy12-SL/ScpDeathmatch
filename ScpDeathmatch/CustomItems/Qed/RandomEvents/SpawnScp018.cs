@@ -7,6 +7,7 @@
 
 namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
 {
+    using System.ComponentModel;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
     using Footprinting;
@@ -28,11 +29,18 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         /// <inheritdoc />
         public float Weight { get; set; } = -0.5f;
 
+        /// <summary>
+        /// Gets or sets the amount of balls to spawn.
+        /// </summary>
+        [Description("The amount of balls to spawn.")]
+        public int Amount { get; set; } = 1;
+
         /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)
         {
             ExplosiveGrenade explosiveGrenade = (ExplosiveGrenade)Item.Create(ItemType.SCP018, ev.Thrower);
-            Throw(explosiveGrenade.Base, ev.Grenade.transform.position);
+            for (int i = 0; i < Amount; i++)
+                Throw(explosiveGrenade.Base, ev.Grenade.transform.position);
         }
 
         private static void Throw(ThrowableItem throwableItem, Vector3 position)

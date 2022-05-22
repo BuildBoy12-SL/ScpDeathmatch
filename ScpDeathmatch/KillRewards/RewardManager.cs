@@ -31,20 +31,6 @@ namespace ScpDeathmatch.KillRewards
         {
         }
 
-        private static Dictionary<ItemType, DamageType> ItemConversion { get; } = new()
-        {
-            { ItemType.GunCrossvec, DamageType.Crossvec },
-            { ItemType.GunLogicer, DamageType.Logicer },
-            { ItemType.GunRevolver, DamageType.Revolver },
-            { ItemType.GunShotgun, DamageType.Shotgun },
-            { ItemType.GunAK, DamageType.AK },
-            { ItemType.GunCOM15, DamageType.Com15 },
-            { ItemType.GunCOM18, DamageType.Com18 },
-            { ItemType.GunFSP9, DamageType.Fsp9 },
-            { ItemType.GunE11SR, DamageType.E11Sr },
-            { ItemType.MicroHID, DamageType.MicroHid },
-        };
-
         /// <inheritdoc />
         public override void Subscribe()
         {
@@ -87,7 +73,7 @@ namespace ScpDeathmatch.KillRewards
         private void OnShot(ShotEventArgs ev)
         {
             if (ev.Target is not null && ev.Shooter.CurrentItem is not null)
-                cachedHitboxes[ev.Shooter] = (ItemConversion[ev.Shooter.CurrentItem.Type], ev.Hitbox._dmgMultiplier);
+                cachedHitboxes[ev.Shooter] = (DamageTypeExtensions.ItemConversion[ev.Shooter.CurrentItem.Type], ev.Hitbox._dmgMultiplier);
         }
 
         private void OnWaitingForPlayers() => cachedHitboxes.Clear();
