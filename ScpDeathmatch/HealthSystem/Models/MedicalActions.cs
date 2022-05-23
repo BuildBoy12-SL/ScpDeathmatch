@@ -83,11 +83,6 @@ namespace ScpDeathmatch.HealthSystem.Models
             public Regeneration Regeneration { get; set; }
 
             /// <summary>
-            /// Gets or sets the maximum health regeneration.
-            /// </summary>
-            public Regeneration MaxHealthRegeneration { get; set; }
-
-            /// <summary>
             /// Gets or sets the ahp to add.
             /// </summary>
             public ConfiguredAhp Ahp { get; set; }
