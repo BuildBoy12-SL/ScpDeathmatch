@@ -7,7 +7,9 @@
 
 namespace ScpDeathmatch.Configs
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using Exiled.API.Features;
 
     /// <summary>
     /// Handles configs related to the Omega Warhead.
@@ -21,10 +23,22 @@ namespace ScpDeathmatch.Configs
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the cassie announcement to play when the warhead starts.
+        /// Gets or sets the cassie announcements to play leading up to the detonation.
         /// </summary>
-        [Description("The cassie announcement to play when the warhead starts.")]
-        public string Cassie { get; set; } = "omega warhead detonation in 30 . 29 . 28 . 27 . 26 . 25 . 24 . 23 . 22 . 21 . 20 . 19 . 18 . 17 . 16 . 15 . 14 . 13 . 12 . 11 . 10 seconds . 9 . 8 . 7 . 6 . 5 . 4 . 3 . 2 . 1 .";
+        [Description("Cassie announcements to play leading up to the detonation. Starts immediately after alpha warhead detonation.")]
+        public Dictionary<float, string> CassieAnnouncements { get; set; } = new()
+        {
+            { 37f, "Omega warhead detonation in T minus 30 seconds" },
+        };
+
+        /// <summary>
+        /// Gets or sets the broadcasts to show leading up to the detonation.
+        /// </summary>
+        [Description("Broadcasts to show leading up to the detonation. Starts immediately after alpha warhead detonation.")]
+        public Dictionary<float, Broadcast> Broadcasts { get; set; } = new()
+        {
+            { 37f, new Broadcast("Omega warhead detonation in T-30 seconds", 7) },
+        };
 
         /// <summary>
         /// Gets or sets a value indicating whether the cassie noise should be suppressed.
@@ -33,15 +47,9 @@ namespace ScpDeathmatch.Configs
         public bool SuppressCassieNoise { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the time, in seconds, between the alpha warhead detonating and the omega warhead sequence starting.
-        /// </summary>
-        [Description("The time, in seconds, between the alpha warhead detonating and the omega warhead sequence starting.")]
-        public float InitialDelay { get; set; } = 37f;
-
-        /// <summary>
         /// Gets or sets the time, in seconds, after the warhead detonates that the omega warhead should detonate.
         /// </summary>
         [Description("The time, in seconds, after the warhead detonates that the omega warhead should detonate.")]
-        public float Time { get; set; } = 43f;
+        public float DetonationDelay { get; set; } = 80f;
     }
 }

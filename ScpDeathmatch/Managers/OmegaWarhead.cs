@@ -8,7 +8,6 @@
 namespace ScpDeathmatch.Managers
 {
     using System.Collections.Generic;
-    using Exiled.API.Enums;
     using Exiled.API.Features;
     using MEC;
     using ScpDeathmatch.Models;
@@ -18,6 +17,7 @@ namespace ScpDeathmatch.Managers
     /// </summary>
     public class OmegaWarhead : Subscribable
     {
+        private readonly List<CoroutineHandle> displayCoroutines = new();
         private CoroutineHandle warheadCoroutine;
         private bool isOmega;
 
@@ -47,6 +47,7 @@ namespace ScpDeathmatch.Managers
         private void OnWaitingForPlayers()
         {
             isOmega = false;
+            KillDisplayCoroutines();
             if (warheadCoroutine.IsRunning)
                 Timing.KillCoroutines(warheadCoroutine);
         }
@@ -62,15 +63,41 @@ namespace ScpDeathmatch.Managers
 
         private IEnumerator<float> RunWarhead()
         {
-            yield return Timing.WaitForSeconds(Plugin.Config.OmegaWarhead.InitialDelay);
-            Cassie.Message(Plugin.Config.OmegaWarhead.Cassie, isNoisy: !Plugin.Config.OmegaWarhead.SuppressCassieNoise);
-            yield return Timing.WaitForSeconds(Plugin.Config.OmegaWarhead.Time);
+            foreach (KeyValuePair<float, string> kvp in Plugin.Config.OmegaWarhead.CassieAnnouncements)
+            {
+                displayCoroutines.Add(Timing.CallDelayed(kvp.Key, () =>
+                {
+                    Cassie.Message(kvp.Value, isNoisy: !Plugin.Config.OmegaWarhead.SuppressCassieNoise);
+                }));
+            }
+
+            foreach (KeyValuePair<float, Broadcast> kvp in Plugin.Config.OmegaWarhead.Broadcasts)
+            {
+                displayCoroutines.Add(Timing.CallDelayed(kvp.Key, () =>
+                {
+                    Map.Broadcast(kvp.Value);
+                }));
+            }
+
+            yield return Timing.WaitForSeconds(Plugin.Config.OmegaWarhead.DetonationDelay);
             Warhead.Detonate();
+            KillDisplayCoroutines();
             foreach (Player player in Player.List)
             {
                 if (!player.SessionVariables.ContainsKey("IsNPC") && !player.IsGodModeEnabled)
                     player.Kill("Vaporized by the Omega Warhead.");
             }
+        }
+
+        private void KillDisplayCoroutines()
+        {
+            foreach (CoroutineHandle coroutineHandle in displayCoroutines)
+            {
+                if (coroutineHandle.IsRunning)
+                    Timing.KillCoroutines(coroutineHandle);
+            }
+
+            displayCoroutines.Clear();
         }
     }
 }

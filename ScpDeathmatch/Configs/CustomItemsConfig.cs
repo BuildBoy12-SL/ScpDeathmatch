@@ -26,7 +26,7 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets the message to display to a player that is looking at a custom item.
         /// </summary>
-        public Hint LookingAtMessage { get; set; } = new("You are looking at a {0}", 2, true, DisplayLocation.Top);
+        public Hint LookingAtMessage { get; set; } = new("You are looking at a {0}", 2f, true, DisplayLocation.Top);
 
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="CustomItems.BigIron"/> class.
