@@ -13,6 +13,8 @@ namespace ScpDeathmatch.Subclasses
     using MEC;
     using ScpDeathmatch.API.Extensions;
     using ScpDeathmatch.Models;
+    using ScpDeathmatch.Subclasses.Components;
+    using UnityEngine;
 
     /// <summary>
     /// Manages the selection of subclasses at round start.
@@ -35,6 +37,7 @@ namespace ScpDeathmatch.Subclasses
         public override void Subscribe()
         {
             Exiled.Events.Handlers.Player.ChangingItem += OnChangingItem;
+            Exiled.Events.Handlers.Player.Destroying += OnDestroying;
             Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
@@ -48,6 +51,7 @@ namespace ScpDeathmatch.Subclasses
         public override void Unsubscribe()
         {
             Exiled.Events.Handlers.Player.ChangingItem -= OnChangingItem;
+            Exiled.Events.Handlers.Player.Destroying -= OnDestroying;
             Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
             Exiled.Events.Handlers.Player.Shooting -= OnShooting;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
@@ -74,6 +78,12 @@ namespace ScpDeathmatch.Subclasses
                 ev.Player.Broadcast(3, selection.Message, shouldClearPrevious: true);
             else
                 ev.Player.ShowHint(selection.Message);
+        }
+
+        private void OnDestroying(DestroyingEventArgs ev)
+        {
+            if (ev.Player.GameObject.TryGetComponent(out AbilityDisplayComponent abilityDisplayComponent))
+                Object.Destroy(abilityDisplayComponent);
         }
 
         private void OnDroppingItem(DroppingItemEventArgs ev)
@@ -121,6 +131,7 @@ namespace ScpDeathmatch.Subclasses
 
         private void OnVerified(VerifiedEventArgs ev)
         {
+            ev.Player.GameObject.AddComponent<AbilityDisplayComponent>();
             if (Plugin.Config.ClassSelection.Selections is null || Plugin.Config.ClassSelection.Selections.Count == 0 || !Round.IsStarted)
                 return;
 
