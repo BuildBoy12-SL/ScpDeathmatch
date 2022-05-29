@@ -170,6 +170,12 @@ namespace ScpDeathmatch
         public RewardsConfig Rewards { get; set; }
 
         /// <summary>
+        /// Gets or sets the configs related to Scp207.
+        /// </summary>
+        [YamlIgnore]
+        public Scp207Config Scp207 { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs for hints to display to spectating players.
         /// </summary>
         [YamlIgnore]

@@ -9,6 +9,7 @@ namespace ScpDeathmatch.EventHandlers
 {
     using System.Linq;
     using CustomPlayerEffects;
+    using Exiled.API.Enums;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
     using InventorySystem.Disarming;
@@ -90,6 +91,8 @@ namespace ScpDeathmatch.EventHandlers
         private void OnVerified(VerifiedEventArgs ev)
         {
             ev.Player.GameObject.AddComponent<ViewingItemComponent>();
+            Scp207 scp207 = ev.Player.GetEffect(EffectType.Scp207) as Scp207;
+            scp207.numberOfDrinks = Plugin.Config.Scp207.ColaEffects.ToArray();
         }
     }
 }
