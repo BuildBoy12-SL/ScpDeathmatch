@@ -23,11 +23,10 @@ namespace ScpDeathmatch.Patches
             __instance.Owner.fpc.ModifyStamina(100f);
             __instance.Owner.playerStats.GetModule<HealthStat>().ServerHeal(30f);
             CustomPlayerEffects.Scp207 effect = __instance.Owner.playerEffectsController.GetEffect<CustomPlayerEffects.Scp207>();
-            byte num1 = effect != null ? effect.Intensity : byte.MaxValue;
-            if (num1 >= effect.numberOfDrinks.Length)
-                return false;
+            byte currentIntensity = effect != null ? effect.Intensity : byte.MaxValue;
+            if (currentIntensity < effect.numberOfDrinks.Length - 1)
+                __instance.Owner.playerEffectsController.ChangeEffectIntensity<CustomPlayerEffects.Scp207>(++currentIntensity);
 
-            __instance.Owner.playerEffectsController.ChangeEffectIntensity<CustomPlayerEffects.Scp207>((byte)(num1 + 1U));
             return false;
         }
     }

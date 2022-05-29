@@ -23,9 +23,9 @@ namespace ScpDeathmatch.Patches
         {
             List<CodeInstruction> newInstructions = ListPool<CodeInstruction>.Shared.Rent(instructions);
 
-            const int offset = -3;
-            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Mul) + offset;
-            newInstructions.RemoveRange(index, 4);
+            newInstructions.RemoveRange(0, 2);
+            int index = newInstructions.FindIndex(instruction => instruction.opcode == OpCodes.Mul);
+            newInstructions.RemoveAt(index);
 
             for (int z = 0; z < newInstructions.Count; z++)
                 yield return newInstructions[z];

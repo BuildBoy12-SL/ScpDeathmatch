@@ -8,7 +8,7 @@
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
-    using CustomPlayerEffects;
+    using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles configs related to Scp207.
@@ -18,44 +18,15 @@ namespace ScpDeathmatch.Configs
         /// <summary>
         /// Gets or sets the cola effect stack settings.
         /// </summary>
-        public List<Scp207.NumberOfDrinks> ColaEffects { get; set; } = new()
+        public List<ColaEffect> ColaEffects { get; set; } = new()
         {
-            new Scp207.NumberOfDrinks
-            {
-                SpeedMultiplier = 1.15f,
-                DamageMultiplier = 1f,
-                PostProcessIntensity = 0f,
-            },
-            new Scp207.NumberOfDrinks
-            {
-                SpeedMultiplier = 1.3f,
-                DamageMultiplier = 1f,
-                PostProcessIntensity = 0f,
-            },
-            new Scp207.NumberOfDrinks
-            {
-                SpeedMultiplier = 1.45f,
-                DamageMultiplier = 1.5f,
-                PostProcessIntensity = 0.04f,
-            },
-            new Scp207.NumberOfDrinks
-            {
-                SpeedMultiplier = 1.6f,
-                DamageMultiplier = 2.5f,
-                PostProcessIntensity = 0.06f,
-            },
-            new Scp207.NumberOfDrinks
-            {
-                SpeedMultiplier = 1.8f,
-                DamageMultiplier = 4f,
-                PostProcessIntensity = 0.08f,
-            },
-            new Scp207.NumberOfDrinks
-            {
-                SpeedMultiplier = 2f,
-                DamageMultiplier = 5f,
-                PostProcessIntensity = 0.1f,
-            },
+            new ColaEffect(1f, 1f),
+            new ColaEffect(1.15f, 1.25f),
+            new ColaEffect(1.3f, 1.5f),
+            new ColaEffect(1.45f, 2f),
+            new ColaEffect(1.6f, 3f),
+            new ColaEffect(1.8f, 4f),
+            new ColaEffect(2f, 5f),
         };
     }
 }

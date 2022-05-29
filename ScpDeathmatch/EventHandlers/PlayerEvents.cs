@@ -92,7 +92,7 @@ namespace ScpDeathmatch.EventHandlers
         {
             ev.Player.GameObject.AddComponent<ViewingItemComponent>();
             if (ev.Player.GetEffect(EffectType.Scp207) is Scp207 scp207)
-                scp207.numberOfDrinks = Plugin.Config.Scp207.ColaEffects.ToArray();
+                scp207.numberOfDrinks = Plugin.Config.Scp207.ColaEffects.Select(effect => effect.EffectConversion()).ToArray();
         }
     }
 }
