@@ -16,7 +16,6 @@ namespace ScpDeathmatch.Configs
     using ScpDeathmatch.Subclasses.Subclasses.Nurse;
     using ScpDeathmatch.Subclasses.Subclasses.Recon;
     using ScpDeathmatch.Subclasses.Subclasses.Scavenger;
-    using ScpDeathmatch.Subclasses.Subclasses.Zombie;
 
     /// <summary>
     /// Handles configs related to custom roles.
@@ -59,13 +58,6 @@ namespace ScpDeathmatch.Configs
         /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Scavenger.Scavenger"/> class.
         /// </summary>
         public Scavenger Scavenger { get; set; } = new();
-
-        /*
-        /// <summary>
-        /// Gets or sets a configurable instance of the <see cref="Subclasses.Subclasses.Zombie.Zombie"/> class.
-        /// </summary>
-        public Zombie Zombie { get; set; } = new();
-        */
 
         /// <summary>
         /// Registers all subclasses.

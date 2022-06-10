@@ -285,7 +285,8 @@ namespace ScpDeathmatch.Subclasses
                     TryAddItem(ev.Player, item);
             }
 
-            ev.Player.Health = ev.Player.MaxHealth = MaxHealth;
+            if (ev.Player.IsHuman)
+                ev.Player.Health = ev.Player.MaxHealth = MaxHealth;
         }
 
         /// <summary>

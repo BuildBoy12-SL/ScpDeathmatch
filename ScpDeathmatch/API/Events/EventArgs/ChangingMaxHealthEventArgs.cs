@@ -11,7 +11,7 @@ namespace ScpDeathmatch.API.Events.EventArgs
     using Exiled.API.Features;
 
     /// <summary>
-    /// Contains all information after a player's maximum health is changed.
+    /// Contains all information before a player's maximum health is changed.
     /// </summary>
     public class ChangingMaxHealthEventArgs : EventArgs
     {
@@ -29,7 +29,7 @@ namespace ScpDeathmatch.API.Events.EventArgs
         }
 
         /// <summary>
-        /// Gets the player whos max health changed.
+        /// Gets the player who's max health changed.
         /// </summary>
         public Player Player { get; }
 

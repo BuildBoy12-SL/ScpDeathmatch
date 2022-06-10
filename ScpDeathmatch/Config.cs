@@ -59,6 +59,12 @@ namespace ScpDeathmatch
         public bool PreventCom15Lcz { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets a value indicating whether players should be restricted from using guns in lcz.
+        /// </summary>
+        [Description("Whether players should be restricted from using guns in lcz.")]
+        public bool PreventLczGuns { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the time, in seconds, before all coins will be deleted from a round.
         /// </summary>
         [Description("The time, in seconds, before all coins will be deleted from a round.")]

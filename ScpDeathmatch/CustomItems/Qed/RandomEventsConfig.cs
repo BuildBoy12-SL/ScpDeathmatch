@@ -48,6 +48,14 @@ namespace ScpDeathmatch.CustomItems.Qed
         }
 
         /// <summary>
+        /// Gets or sets a collection of the <see cref="RandomEvents.Enrage"/> event.
+        /// </summary>
+        public List<Enrage> Enrage { get; set; } = new()
+        {
+            new Enrage(),
+        };
+
+        /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.LockRoom"/> event.
         /// </summary>
         public List<LockRoom> LockRoom { get; set; } = new()

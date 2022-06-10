@@ -76,7 +76,11 @@ namespace ScpDeathmatch.HealthSystem.Components
                 return;
 
             float amount = standardDamageHandler.DealtHealthDamage != 0 ? standardDamageHandler.DealtHealthDamage : standardDamageHandler.Damage;
-            player.MaxHealth -= (int)(amount * (config.Health.MaxHealthPercentage / 100f));
+            int toReduce = (int)(amount * (config.Health.MaxHealthPercentage / 100f));
+            if (player.MaxHealth - toReduce < player.Health)
+                player.MaxHealth = (int)player.Health;
+            else
+                player.MaxHealth -= toReduce;
         }
 
         private void OnActivatingConsumableEffects(ActivatingConsumableEffectsEventArgs ev)

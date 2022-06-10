@@ -103,18 +103,21 @@ namespace ScpDeathmatch.Subclasses
             if (Plugin.Config.ClassSelection.Selections is null || Plugin.Config.ClassSelection.Selections.Count == 0)
                 return;
 
-            if (Round.IsLobby && !itemsInProgress.Contains(ev.Player.Id))
-            {
-                itemsInProgress.Add(ev.Player.Id);
-                ev.Player.ClearInventory();
-                Timing.CallDelayed(0.5f, () =>
-                {
-                    foreach (ItemType newItem in Plugin.Config.ClassSelection.Selections.Keys)
-                        ev.Player.AddItem(newItem);
+            if (!Round.IsLobby || itemsInProgress.Contains(ev.Player.Id))
+                return;
 
-                    itemsInProgress.Remove(ev.Player.Id);
-                });
-            }
+            itemsInProgress.Add(ev.Player.Id);
+            ev.Player.ClearInventory();
+            Timing.CallDelayed(0.5f, () =>
+            {
+                if (!ev.Player.IsConnected)
+                    return;
+
+                foreach (ItemType newItem in Plugin.Config.ClassSelection.Selections.Keys)
+                    ev.Player.AddItem(newItem);
+
+                itemsInProgress.Remove(ev.Player.Id);
+            });
         }
 
         private void OnTogglingFlashlight(TogglingFlashlightEventArgs ev)
