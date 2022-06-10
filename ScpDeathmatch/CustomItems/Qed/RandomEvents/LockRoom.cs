@@ -11,6 +11,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
 
     /// <inheritdoc />
     public class LockRoom : IRandomEvent
@@ -22,7 +23,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; } = 0.3f;
+        public RangeType Range { get; set; } = RangeType.Neutral;
 
         /// <summary>
         /// Gets or sets the duration of the lockdown.

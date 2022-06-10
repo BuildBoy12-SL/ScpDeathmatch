@@ -15,6 +15,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using InventorySystem.Items.Armor;
     using Scp914;
     using Scp914.Processors;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
 
     /// <inheritdoc />
     public class UpgradeItems : IRandomEvent
@@ -26,7 +27,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; } = 0.7f;
+        public RangeType Range { get; set; } = RangeType.Close;
 
         /// <summary>
         /// Gets or sets the items that should be upgraded.

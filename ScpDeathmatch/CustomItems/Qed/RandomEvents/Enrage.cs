@@ -14,6 +14,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using Exiled.Events.EventArgs;
     using MEC;
     using PlayableScps;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
 
     /// <inheritdoc />
     public class Enrage : IRandomEvent
@@ -25,7 +26,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; } = 0.6f;
+        public RangeType Range { get; set; } = RangeType.Neutral;
 
         /// <inheritdoc />
         public void OnExploding(ExplodingGrenadeEventArgs ev)

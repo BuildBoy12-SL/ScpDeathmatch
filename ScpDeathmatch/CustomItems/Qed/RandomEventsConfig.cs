@@ -7,12 +7,13 @@
 
 namespace ScpDeathmatch.CustomItems.Qed
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
+    using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
     using ScpDeathmatch.CustomItems.Qed.Models;
     using ScpDeathmatch.CustomItems.Qed.RandomEvents;
     using UnityEngine;
@@ -23,29 +24,12 @@ namespace ScpDeathmatch.CustomItems.Qed
     public class RandomEventsConfig
     {
         private readonly List<IRandomEvent> selectableEvents = new();
-        private AnimationCurve eventChanceCurve = new();
-        private SortedList<float, float> rawEventChanceCurve = new()
-        {
-            { 0f, 1f },
-            { 15f, 0f },
-            { 30f, -1f },
-        };
 
         /// <summary>
-        /// Gets or sets the list of distance to weight pairs that determines the chances of random events being triggered.
+        /// Gets or sets the minimum values to trigger each range increment.
         /// </summary>
-        [Description("The list of distance to weight pairs that determines the chances of random events being triggered.")]
-        public SortedList<float, float> WeightCurve
-        {
-            get => rawEventChanceCurve;
-            set
-            {
-                rawEventChanceCurve = value;
-                eventChanceCurve = new AnimationCurve();
-                foreach (KeyValuePair<float, float> kvp in value)
-                    eventChanceCurve.AddKey(kvp.Key, kvp.Value);
-            }
-        }
+        [Description("The minimum values to trigger each range increment.")]
+        public Range Range { get; set; } = new(8f, 15f);
 
         /// <summary>
         /// Gets or sets a collection of the <see cref="RandomEvents.Enrage"/> event.
@@ -178,13 +162,10 @@ namespace ScpDeathmatch.CustomItems.Qed
                 return null;
 
             float distance = Vector3.Distance(ev.Thrower.Position, ev.Grenade.transform.position);
-            float evaluatedWeight = eventChanceCurve.Evaluate(distance);
+            RangeType effectiveRange = Range.Evaluate(distance);
+            Log.Debug("Effective range: " + effectiveRange);
 
-            float minimumWeight = selectableEvents.Min(randomEvent => randomEvent.Weight);
-            float maximumWeight = selectableEvents.Max(randomEvent => randomEvent.Weight);
-            float bounds = Math.Abs(maximumWeight - minimumWeight) / (selectableEvents.Count / 2f);
-
-            List<IRandomEvent> randomEvents = selectableEvents.Where(randomEvent => Math.Abs(randomEvent.Weight - evaluatedWeight) < bounds).ToList();
+            List<IRandomEvent> randomEvents = selectableEvents.Where(randomEvent => randomEvent.Range == effectiveRange).ToList();
             return randomEvents.IsEmpty() ? null : randomEvents[UnityEngine.Random.Range(0, randomEvents.Count)];
         }
     }

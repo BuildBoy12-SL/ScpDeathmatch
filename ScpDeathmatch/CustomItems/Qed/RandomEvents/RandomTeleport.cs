@@ -13,6 +13,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
     using ScpDeathmatch.Models;
     using UnityEngine;
 
@@ -26,7 +27,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; } = 0.5f;
+        public RangeType Range { get; set; } = RangeType.Close;
 
         /// <summary>
         /// Gets or sets the maximum distance the player should be from the grenade to be teleported.

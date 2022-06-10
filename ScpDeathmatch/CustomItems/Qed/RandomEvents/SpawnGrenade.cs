@@ -10,6 +10,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using System.ComponentModel;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
 
     /// <inheritdoc />
     public class SpawnGrenade : IRandomEvent
@@ -21,7 +22,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; } = -0.8f;
+        public RangeType Range { get; set; } = RangeType.Far;
 
         /// <summary>
         /// Gets or sets the amount of grenades to spawn.

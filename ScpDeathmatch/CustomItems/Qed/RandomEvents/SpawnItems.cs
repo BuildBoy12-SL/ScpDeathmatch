@@ -13,6 +13,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
     using ScpDeathmatch.CustomItems.Qed.Models;
     using UnityEngine;
 
@@ -26,7 +27,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; }
+        public RangeType Range { get; set; } = RangeType.Neutral;
 
         /// <summary>
         /// Gets or sets the items that can spawn with the amount to spawn.

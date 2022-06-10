@@ -12,6 +12,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
 
     /// <inheritdoc />
     public class PowerOutage : IRandomEvent
@@ -23,7 +24,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; }
+        public RangeType Range { get; set; } = RangeType.Neutral;
 
         /// <summary>
         /// Gets or sets a value indicating whether the outage should occur in the current room rather than by zones.

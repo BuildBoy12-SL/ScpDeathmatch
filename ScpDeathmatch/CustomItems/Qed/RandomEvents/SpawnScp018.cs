@@ -15,6 +15,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
     using InventorySystem.Items.ThrowableProjectiles;
     using Mirror;
     using Respawning;
+    using ScpDeathmatch.CustomItems.Qed.Enums;
     using UnityEngine;
 
     /// <inheritdoc />
@@ -27,7 +28,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
         public bool IsEnabled { get; set; } = true;
 
         /// <inheritdoc />
-        public float Weight { get; set; } = -0.5f;
+        public RangeType Range { get; set; } = RangeType.Far;
 
         /// <summary>
         /// Gets or sets the amount of balls to spawn.
