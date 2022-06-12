@@ -52,7 +52,7 @@ namespace ScpDeathmatch.CustomItems.Qed.RandomEvents
                     scp096Role.Script.AddTarget(ply.GameObject);
             }
 
-            scp096Role.Script.Windup();
+            scp096Role.Script.Windup(true);
             yield return Timing.WaitUntilTrue(() => scp096Role.State == Scp096PlayerState.Docile);
 
             player.SetRole(previousRole, SpawnReason.ForceClass, true);

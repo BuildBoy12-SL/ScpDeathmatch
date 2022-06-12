@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.Patches.Manual
+namespace ScpDeathmatch.API.Interfaces
 {
     using HarmonyLib;
 

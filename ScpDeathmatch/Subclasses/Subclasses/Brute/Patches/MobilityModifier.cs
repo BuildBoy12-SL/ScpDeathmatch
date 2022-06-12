@@ -17,8 +17,8 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Brute.Patches
     using InventorySystem.Items;
     using InventorySystem.Items.Firearms;
     using NorthwoodLib.Pools;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Configs;
-    using ScpDeathmatch.Patches.Manual;
     using static HarmonyLib.AccessTools;
 
     /// <summary>

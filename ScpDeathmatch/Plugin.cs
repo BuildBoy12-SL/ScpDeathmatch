@@ -13,9 +13,9 @@ namespace ScpDeathmatch
     using Exiled.API.Features;
     using HarmonyLib;
     using RemoteAdmin;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Managers;
     using ScpDeathmatch.Models;
-    using ScpDeathmatch.Patches.Manual;
     using ScpDeathmatch.Stats;
 
     /// <inheritdoc />

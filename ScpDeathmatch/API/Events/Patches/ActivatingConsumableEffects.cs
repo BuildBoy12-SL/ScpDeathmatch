@@ -16,7 +16,7 @@ namespace ScpDeathmatch.API.Events.Patches
     using InventorySystem.Items.Usables;
     using NorthwoodLib.Pools;
     using ScpDeathmatch.API.Events.EventArgs;
-    using ScpDeathmatch.Patches.Manual;
+    using ScpDeathmatch.API.Interfaces;
     using static HarmonyLib.AccessTools;
 
     /// <inheritdoc />
