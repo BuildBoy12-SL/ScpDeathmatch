@@ -66,7 +66,7 @@ namespace ScpDeathmatch.CustomItems
                     firearmPickup.Status = new FirearmStatus(ClipSize, firearm.Base.Status.Flags, firearm.Base.Status.Attachments);
 
                 ThrowItem(ev.Shooter, ev.Shooter.CurrentItem, pickup);
-                ev.Shooter.RemoveHeldItem();
+                ev.Shooter.RemoveHeldItem(true);
             }
 
             base.OnShooting(ev);

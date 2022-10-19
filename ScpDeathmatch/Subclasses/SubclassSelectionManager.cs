@@ -151,26 +151,29 @@ namespace ScpDeathmatch.Subclasses
                 return;
 
             itemsInProgress.Clear();
-            foreach (Player player in Player.List)
+            Timing.CallDelayed(0.5f, () =>
             {
-                if (player.SessionVariables.ContainsKey("IsNPC"))
-                    continue;
-
-                if (selectedItem.TryGetValue(player, out ItemType item) &&
-                    Plugin.Config.ClassSelection.Selections.TryGetValue(item, out SubclassSelection selection))
+                foreach (Player player in Player.List)
                 {
-                    Subclass subclass = selection.GetSelection();
-                    if (subclass is not null)
-                    {
-                        subclass.AddRole(player);
+                    if (player.SessionVariables.ContainsKey("IsNPC") || player.IsScp)
                         continue;
+
+                    if (selectedItem.TryGetValue(player, out ItemType item) &&
+                        Plugin.Config.ClassSelection.Selections.TryGetValue(item, out SubclassSelection selection))
+                    {
+                        Subclass subclass = selection.GetSelection();
+                        if (subclass is not null)
+                        {
+                            subclass.AddRole(player);
+                            continue;
+                        }
                     }
+
+                    Plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(player);
                 }
 
-                Plugin.Config.ClassSelection.Selections.Values.Random().GetSelection()?.AddRole(player);
-            }
-
-            selectedItem.Clear();
+                selectedItem.Clear();
+            });
         }
     }
 }

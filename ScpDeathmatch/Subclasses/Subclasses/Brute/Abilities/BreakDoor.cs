@@ -13,6 +13,7 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Brute.Abilities
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Interactables.Interobjects;
+    using Interactables.Interobjects.DoorUtils;
     using ScpDeathmatch.API.Extensions;
     using YamlDotNet.Serialization;
 
@@ -95,7 +96,7 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Brute.Abilities
 
             uses[player]++;
             if (doors.TryGetValue(player, out Door door))
-                door.BreakDoor();
+                door.BreakDoor(DoorDamageType.ServerCommand);
         }
 
         /// <inheritdoc />

@@ -7,6 +7,7 @@
 
 namespace ScpDeathmatch.Subclasses.Subclasses.Athlete.Abilities
 {
+    using CustomPlayerEffects;
     using Exiled.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
@@ -34,13 +35,13 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Athlete.Abilities
         /// <inheritdoc />
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.WalkingOnTantrum += OnWalkingOnTantrum;
+            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
         }
 
         /// <inheritdoc />
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.WalkingOnTantrum -= OnWalkingOnTantrum;
+            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
         }
 
         /// <inheritdoc />
@@ -56,9 +57,9 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Athlete.Abilities
             }
         }
 
-        private void OnWalkingOnTantrum(WalkingOnTantrumEventArgs ev)
+        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
         {
-            if (Players.Contains(ev.Player))
+            if (Players.Contains(ev.Player) && ev.Effect is Stained)
                 ev.IsAllowed = false;
         }
     }
