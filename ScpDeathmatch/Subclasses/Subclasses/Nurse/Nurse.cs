@@ -11,11 +11,13 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Nurse
     using System.ComponentModel;
     using System.Linq;
     using Exiled.API.Features;
+    using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
     using PlayerStatsSystem;
     using ScpDeathmatch.API.Events.EventArgs;
     using ScpDeathmatch.Models;
+    using ScpDeathmatch.Subclasses.Subclasses.Nurse.Abilities;
     using UnityEngine;
 
     /// <inheritdoc />
@@ -43,6 +45,12 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Nurse
         public override List<string> Inventory { get; set; } = new()
         {
             $"{ItemType.Medkit}",
+        };
+
+        /// <inheritdoc />
+        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        {
+            new AutoMedkit(),
         };
 
         /// <summary>

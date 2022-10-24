@@ -138,6 +138,13 @@ namespace ScpDeathmatch
         public HealthConfig Health { get; set; }
 
         /// <summary>
+        /// Gets or sets the configs related to item throwing.
+        /// </summary>
+        [YamlIgnore]
+        [NestedConfig]
+        public ItemThrowingConfig ItemThrowing { get; set; }
+
+        /// <summary>
         /// Gets or sets the configs related to map generation.
         /// </summary>
         [YamlIgnore]

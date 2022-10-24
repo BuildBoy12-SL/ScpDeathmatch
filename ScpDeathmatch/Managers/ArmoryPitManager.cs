@@ -14,6 +14,7 @@ namespace ScpDeathmatch.Managers
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using MEC;
+    using ScpDeathmatch.ItemThrowing.Components;
     using ScpDeathmatch.Models;
     using UnityEngine;
 
@@ -72,6 +73,7 @@ namespace ScpDeathmatch.Managers
             if (ev.IsThrown)
                 ThrowItem(ev, pickup);
 
+            pickup.GameObject.AddComponent<TouchingPlayerComponent>().Init(ev.Player, pickup);
             Timing.RunCoroutine(RunCheck(ev.Player, pickup));
         }
 
