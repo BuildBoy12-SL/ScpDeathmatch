@@ -61,7 +61,7 @@ namespace ScpDeathmatch.CustomItems
                 if (ev.Shooter.CurrentItem is not Exiled.API.Features.Items.Firearm firearm)
                     return;
 
-                Pickup pickup = Spawn(ev.Shooter.Position, (Player)null);
+                Pickup pickup = Spawn(ev.Shooter.Position, ev.Shooter);
                 if (pickup.Base is FirearmPickup firearmPickup)
                     firearmPickup.Status = new FirearmStatus(ClipSize, firearm.Base.Status.Flags, firearm.Base.Status.Attachments);
 
