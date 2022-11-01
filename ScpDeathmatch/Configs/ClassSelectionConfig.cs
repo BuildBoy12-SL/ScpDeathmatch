@@ -8,12 +8,13 @@
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Subclasses;
 
     /// <summary>
     /// Handles configs related to class selection in lobby.
     /// </summary>
-    public class ClassSelectionConfig
+    public class ClassSelectionConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a collection of items and their corresponding selection definition.

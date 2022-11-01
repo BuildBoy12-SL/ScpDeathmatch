@@ -38,7 +38,6 @@ namespace ScpDeathmatch.EventHandlers
         /// <inheritdoc />
         public override void Subscribe()
         {
-            ServerHandlers.ReloadedConfigs += OnReloadedConfigs;
             ServerHandlers.RoundEnded += OnRoundEnded;
             ServerHandlers.RoundStarted += OnRoundStarted;
         }
@@ -46,14 +45,8 @@ namespace ScpDeathmatch.EventHandlers
         /// <inheritdoc />
         public override void Unsubscribe()
         {
-            ServerHandlers.ReloadedConfigs -= OnReloadedConfigs;
             ServerHandlers.RoundEnded -= OnRoundEnded;
             ServerHandlers.RoundStarted -= OnRoundStarted;
-        }
-
-        private void OnReloadedConfigs()
-        {
-            Plugin.Config.Reload();
         }
 
         private void OnRoundStarted()

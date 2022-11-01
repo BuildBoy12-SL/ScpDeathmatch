@@ -9,11 +9,12 @@ namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using ScpDeathmatch.API.Interfaces;
 
     /// <summary>
     /// Handles configs related to body slamming.
     /// </summary>
-    public class BodySlammingConfig
+    public class BodySlammingConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the minimum amount of fall damage a player must take for it to be transferred.

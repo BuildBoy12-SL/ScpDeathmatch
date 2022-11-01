@@ -11,6 +11,8 @@ namespace ScpDeathmatch.Configs
     using AdvancedHints.Enums;
     using Exiled.CustomItems.API;
     using Exiled.CustomItems.API.Features;
+    using ScpDeathmatch.API.Attributes;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.CustomItems;
     using ScpDeathmatch.CustomItems.Qed;
     using ScpDeathmatch.Models;
@@ -19,7 +21,8 @@ namespace ScpDeathmatch.Configs
     /// <summary>
     /// Handles configs related to custom items.
     /// </summary>
-    public class CustomItemsConfig
+    [NestedConfig]
+    public class CustomItemsConfig : IConfigFile
     {
         private IEnumerable<CustomItem> registeredItems;
 

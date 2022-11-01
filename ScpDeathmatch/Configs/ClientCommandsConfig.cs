@@ -12,6 +12,7 @@ namespace ScpDeathmatch.Configs
     using System.Reflection;
     using CommandSystem;
     using RemoteAdmin;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Commands.Client;
     using ScpDeathmatch.Models;
     using ScpDeathmatch.Subclasses.Commands;
@@ -19,7 +20,7 @@ namespace ScpDeathmatch.Configs
     /// <summary>
     /// Handles configs related to client commands.
     /// </summary>
-    public class ClientCommandsConfig
+    public class ClientCommandsConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="Commands.Client.Remove1853"/> class which is used to remove the Scp1853 effect from a player.

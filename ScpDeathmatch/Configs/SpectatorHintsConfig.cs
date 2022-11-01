@@ -10,11 +10,12 @@ namespace ScpDeathmatch.Configs
     using System.Collections.Generic;
     using System.ComponentModel;
     using AdvancedHints.Enums;
+    using ScpDeathmatch.API.Interfaces;
 
     /// <summary>
     /// Handles configs related to showing spectators hints.
     /// </summary>
-    public class SpectatorHintsConfig
+    public class SpectatorHintsConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the amount of time, in seconds, between displaying a hint.

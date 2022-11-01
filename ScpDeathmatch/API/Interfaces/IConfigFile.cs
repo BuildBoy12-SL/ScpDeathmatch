@@ -1,19 +1,16 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="NestedConfigAttribute.cs" company="Build">
+// <copyright file="IConfigFile.cs" company="Build">
 // Copyright (c) Build. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.API.Attributes
+namespace ScpDeathmatch.API.Interfaces
 {
-    using System;
-
     /// <summary>
-    /// An attribute to mark a property as a nested config.
+    /// Defines the contract for classes that will be read as config files.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
-    public sealed class NestedConfigAttribute : Attribute
+    public interface IConfigFile
     {
     }
 }

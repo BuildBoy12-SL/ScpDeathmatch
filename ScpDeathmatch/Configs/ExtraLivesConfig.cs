@@ -9,12 +9,13 @@ namespace ScpDeathmatch.Configs
 {
     using System.ComponentModel;
     using Exiled.API.Features;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Enums;
 
     /// <summary>
     /// Handles configs related to granting lives for players who have others disarmed.
     /// </summary>
-    public class ExtraLivesConfig
+    public class ExtraLivesConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a value indicating whether extra lives is enabled.

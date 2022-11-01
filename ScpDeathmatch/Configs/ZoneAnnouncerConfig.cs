@@ -10,13 +10,14 @@ namespace ScpDeathmatch.Configs
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Enums;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Commands;
     using ScpDeathmatch.Managers;
 
     /// <summary>
     /// Handles configs for the <see cref="ZoneAnnouncer"/>.
     /// </summary>
-    public class ZoneAnnouncerConfig
+    public class ZoneAnnouncerConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a value indicating whether the announcer is enabled.

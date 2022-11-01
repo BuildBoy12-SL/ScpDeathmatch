@@ -9,12 +9,13 @@ namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
     using Exiled.API.Features;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Decontamination.Models;
 
     /// <summary>
     /// Handles configs related to the custom decontamination sequence.
     /// </summary>
-    public class DecontaminationConfig
+    public class DecontaminationConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a value indicating whether the custom decontamination sequence is enabled.

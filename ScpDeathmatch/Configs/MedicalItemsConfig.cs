@@ -13,13 +13,16 @@ namespace ScpDeathmatch.Configs
     using System.Reflection;
     using Exiled.API.Enums;
     using InventorySystem.Items.Usables;
+    using ScpDeathmatch.API.Attributes;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.HealthSystem.Models;
     using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles the configs for modifying consumable medical items.
     /// </summary>
-    public class MedicalItemsConfig
+    [NestedConfig]
+    public class MedicalItemsConfig : IConfigFile
     {
         private Dictionary<Type, PropertyInfo> cachedProperties;
 

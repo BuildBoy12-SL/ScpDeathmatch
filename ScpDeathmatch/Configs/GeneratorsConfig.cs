@@ -8,11 +8,12 @@
 namespace ScpDeathmatch.Configs
 {
     using System.ComponentModel;
+    using ScpDeathmatch.API.Interfaces;
 
     /// <summary>
     /// Handles configs related to generators.
     /// </summary>
-    public class GeneratorsConfig
+    public class GeneratorsConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the amount of time a generator will take to activate.

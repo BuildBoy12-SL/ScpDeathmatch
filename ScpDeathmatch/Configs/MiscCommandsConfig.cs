@@ -8,12 +8,13 @@
 namespace ScpDeathmatch.Configs
 {
     using RemoteAdmin;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Commands;
 
     /// <summary>
     /// Handles configs for commands that to not fit in any other config.
     /// </summary>
-    public class MiscCommandsConfig
+    public class MiscCommandsConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a configurable instance of the <see cref="ChangeSubclassCommand"/> command.

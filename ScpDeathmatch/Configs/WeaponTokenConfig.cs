@@ -13,11 +13,12 @@ namespace ScpDeathmatch.Configs
     using Exiled.API.Features;
     using Exiled.CustomItems.API.Features;
     using ScpDeathmatch.API.Extensions;
+    using ScpDeathmatch.API.Interfaces;
 
     /// <summary>
     /// Handles configs for the <see cref="Managers.ArmoryPitManager"/>.
     /// </summary>
-    public class WeaponTokenConfig
+    public class WeaponTokenConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the list of possible rewards.

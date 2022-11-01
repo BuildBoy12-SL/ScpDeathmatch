@@ -10,12 +10,13 @@ namespace ScpDeathmatch.Configs
     using System.ComponentModel;
     using System.IO;
     using Exiled.API.Features;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Stats.Commands;
 
     /// <summary>
     /// Handles configs related to the stats database.
     /// </summary>
-    public class StatsDatabaseConfig
+    public class StatsDatabaseConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a value indicating whether stats will be shown to a player.

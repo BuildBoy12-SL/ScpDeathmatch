@@ -8,6 +8,8 @@
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
+    using ScpDeathmatch.API.Attributes;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Subclasses;
     using ScpDeathmatch.Subclasses.Subclasses.Athlete;
     using ScpDeathmatch.Subclasses.Subclasses.Brute;
@@ -20,7 +22,8 @@ namespace ScpDeathmatch.Configs
     /// <summary>
     /// Handles configs related to custom roles.
     /// </summary>
-    public class SubclassesConfig
+    [NestedConfig]
+    public class SubclassesConfig : IConfigFile
     {
         private IEnumerable<Subclass> registeredSubclasses;
 

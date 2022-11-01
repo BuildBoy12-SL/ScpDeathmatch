@@ -10,13 +10,16 @@ namespace ScpDeathmatch.Configs
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using ScpDeathmatch.API.Attributes;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Configs.TranslationConfigs;
     using ScpDeathmatch.Configs.TranslationConfigs.Models;
 
     /// <summary>
     /// Handles miscellaneous translations.
     /// </summary>
-    public class TranslationsConfig
+    [NestedConfig]
+    public class TranslationsConfig : IConfigFile
     {
         private Dictionary<Type, PropertyInfo> cachedProperties;
 

@@ -8,12 +8,13 @@
 namespace ScpDeathmatch.Configs
 {
     using System.ComponentModel;
+    using ScpDeathmatch.API.Interfaces;
     using UnityEngine;
 
     /// <summary>
     /// Handles configs related to health.
     /// </summary>
-    public class HealthConfig
+    public class HealthConfig : IConfigFile
     {
         private int maxHealthPercentage = 20;
         private int regenPercentage = 10;

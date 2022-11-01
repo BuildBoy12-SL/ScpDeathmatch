@@ -9,11 +9,12 @@ namespace ScpDeathmatch.Configs
 {
     using System.ComponentModel;
     using Exiled.API.Features;
+    using ScpDeathmatch.API.Interfaces;
 
     /// <summary>
     /// Handles configs for the end of round statistic broadcast.
     /// </summary>
-    public class StatBroadcastConfig
+    public class StatBroadcastConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the broadcast to be sent at the end of the round.

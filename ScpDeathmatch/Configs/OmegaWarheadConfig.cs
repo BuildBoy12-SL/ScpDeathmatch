@@ -10,11 +10,12 @@ namespace ScpDeathmatch.Configs
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Features;
+    using ScpDeathmatch.API.Interfaces;
 
     /// <summary>
     /// Handles configs related to the Omega Warhead.
     /// </summary>
-    public class OmegaWarheadConfig
+    public class OmegaWarheadConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a value indicating whether the omega warhead is enabled.

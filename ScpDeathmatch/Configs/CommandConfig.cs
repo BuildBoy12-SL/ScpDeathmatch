@@ -9,12 +9,13 @@ namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles configs related to automated command execution.
     /// </summary>
-    public class CommandConfig
+    public class CommandConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the commands to be ran at the start of the round.

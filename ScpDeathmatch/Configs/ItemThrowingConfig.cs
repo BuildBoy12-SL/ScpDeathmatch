@@ -9,13 +9,16 @@ namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
     using Exiled.API.Enums;
+    using ScpDeathmatch.API.Attributes;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.ItemThrowing.Models;
     using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles configs related to item throwing.
     /// </summary>
-    public class ItemThrowingConfig
+    [NestedConfig]
+    public class ItemThrowingConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets a value indicating whether debug logs should be enabled.

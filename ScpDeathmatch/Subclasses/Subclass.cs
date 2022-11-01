@@ -12,11 +12,13 @@ namespace ScpDeathmatch.Subclasses
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
+    using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Events.EventArgs;
+    using InventorySystem.Items.ThrowableProjectiles;
     using PlayerStatsSystem;
     using ScpDeathmatch.Models;
     using YamlDotNet.Serialization;
@@ -26,10 +28,18 @@ namespace ScpDeathmatch.Subclasses
     /// </summary>
     public abstract class Subclass
     {
+        private static readonly Dictionary<Type, GrenadeType> GrenadeTypes = new()
+        {
+            { typeof(ExplosionGrenade), GrenadeType.FragGrenade },
+            { typeof(FlashbangGrenade), GrenadeType.Flashbang },
+            { typeof(Scp018Projectile), GrenadeType.Scp018 },
+            { typeof(Scp2176Projectile), GrenadeType.Scp2176 },
+        };
+
         private readonly List<Player> trackedPlayers = new();
 
         /// <summary>
-        /// Gets a collection of all registered custom roles.
+        /// Gets a collection of all registered subclasses.
         /// </summary>
         public static HashSet<Subclass> Registered { get; } = new();
 
@@ -40,32 +50,32 @@ namespace ScpDeathmatch.Subclasses
         public ReadOnlyCollection<Player> TrackedPlayers => trackedPlayers.AsReadOnly();
 
         /// <summary>
-        /// Gets or sets the max <see cref="Player.Health"/> for the role.
+        /// Gets or sets the max <see cref="Player.Health"/> for the subclass.
         /// </summary>
         public abstract int MaxHealth { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of this role.
+        /// Gets or sets the name of this subclass.
         /// </summary>
         public abstract string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description of this role.
+        /// Gets or sets the description of this subclass.
         /// </summary>
         public abstract string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the CustomInfo of this role.
+        /// Gets or sets the CustomInfo of this subclass.
         /// </summary>
         public abstract string CustomInfo { get; set; }
 
         /// <summary>
-        /// Gets or sets the badge to be applied to players that have the role.
+        /// Gets or sets the badge to be applied to players that have the subclass.
         /// </summary>
         public abstract ConfiguredBadge Badge { get; set; }
 
         /// <summary>
-        /// Gets or sets the badge to be applied to dead players that have the role.
+        /// Gets or sets the badge to be applied to dead players that have the subclass.
         /// </summary>
         public virtual ConfiguredBadge DeadBadge { get; set; } = new("Dead", "silver");
 
@@ -75,22 +85,27 @@ namespace ScpDeathmatch.Subclasses
         public virtual List<CustomAbility> CustomAbilities { get; set; } = new();
 
         /// <summary>
-        /// Gets or sets the starting inventory for the role.
+        /// Gets or sets the starting inventory for the subclass.
         /// </summary>
         public virtual List<string> Inventory { get; set; } = new();
 
         /// <summary>
-        /// Gets a <see cref="CustomRole"/> by name.
+        /// Gets or sets modified grenade fuse times for the subclass.
         /// </summary>
-        /// <param name="name">The name of the role to get.</param>
-        /// <returns>The role, or <see langword="null"/> if it doesn't exist.</returns>
+        public virtual Dictionary<GrenadeType, float> FuseTimes { get; set; } = new();
+
+        /// <summary>
+        /// Gets a <see cref="Subclass"/> by name.
+        /// </summary>
+        /// <param name="name">The name of the subclass to get.</param>
+        /// <returns>The subclass, or <see langword="null"/> if it doesn't exist.</returns>
         public static Subclass Get(string name) => Registered.FirstOrDefault(subclass => subclass.Name == name);
 
         /// <summary>
-        /// Gets a <see cref="CustomRole"/> by type.
+        /// Gets a <see cref="Subclass"/> by type.
         /// </summary>
         /// <param name="type">The <see cref="Type"/> to get.</param>
-        /// <returns>The role, or <see langword="null"/> if it doesn't exist.</returns>
+        /// <returns>The subclass, or <see langword="null"/> if it doesn't exist.</returns>
         public static Subclass Get(Type type) => Registered.FirstOrDefault(subclass => subclass.GetType() == type);
 
         /// <summary>
@@ -242,6 +257,24 @@ namespace ScpDeathmatch.Subclasses
         /// <param name="player">The <see cref="Player"/> to check.</param>
         /// <returns>True if the player has this role.</returns>
         public bool Check(Player player) => trackedPlayers.Contains(player);
+
+        /// <summary>
+        /// Attempts to get the fuse time for a <see cref="TimeGrenade"/> instance.
+        /// </summary>
+        /// <param name="timeGrenade">The grenade.</param>
+        /// <param name="fuseTime">The configured fuse time of the grenade or 0 if one is not found.</param>
+        /// <returns>Whether a configured fuse time was found for the grenade.</returns>
+        public bool TryGetFuseTime(TimeGrenade timeGrenade, out float fuseTime)
+        {
+            foreach (var kvp in GrenadeTypes)
+            {
+                if (kvp.Key == timeGrenade.GetType())
+                    return FuseTimes.TryGetValue(kvp.Value, out fuseTime);
+            }
+
+            fuseTime = 0f;
+            return false;
+        }
 
         /// <summary>
         /// Called when the role is initialized to setup internal events.

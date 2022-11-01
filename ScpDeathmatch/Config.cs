@@ -17,12 +17,18 @@ namespace ScpDeathmatch
     using Exiled.API.Interfaces;
     using Exiled.Loader;
     using ScpDeathmatch.API.Attributes;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Configs;
     using YamlDotNet.Serialization;
 
     /// <inheritdoc />
     public class Config : IConfig
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Config"/> class.
+        /// </summary>
+        public Config() => Reload();
+
         /// <inheritdoc/>
         public bool IsEnabled { get; set; } = true;
 
@@ -76,6 +82,8 @@ namespace ScpDeathmatch
         [Description("The folder containing miscellaneous config files.")]
         public string Folder { get; set; } = Path.Combine(Paths.Configs, "ScpDeathmatch", "Configs");
 
+        // TODO: Config dependency injection w/o breaking custom items/roles
+
         /// <summary>
         /// Gets or sets the configs for body slamming.
         /// </summary>
@@ -104,7 +112,6 @@ namespace ScpDeathmatch
         /// Gets or sets the configs for the custom items.
         /// </summary>
         [YamlIgnore]
-        [NestedConfig]
         public CustomItemsConfig CustomItems { get; set; }
 
         /// <summary>
@@ -141,7 +148,6 @@ namespace ScpDeathmatch
         /// Gets or sets the configs related to item throwing.
         /// </summary>
         [YamlIgnore]
-        [NestedConfig]
         public ItemThrowingConfig ItemThrowing { get; set; }
 
         /// <summary>
@@ -154,14 +160,12 @@ namespace ScpDeathmatch
         /// Gets or sets the configs related to medical items.
         /// </summary>
         [YamlIgnore]
-        [NestedConfig]
         public MedicalItemsConfig MedicalItems { get; set; }
 
         /// <summary>
         /// Gets or sets the configs related to the <see cref="ItemType.MicroHID"/>.
         /// </summary>
         [YamlIgnore]
-        [NestedConfig]
         public MicroHidConfig MicroHid { get; set; }
 
         /// <summary>
@@ -210,14 +214,12 @@ namespace ScpDeathmatch
         /// Gets or sets the configs for the custom roles.
         /// </summary>
         [YamlIgnore]
-        [NestedConfig]
         public SubclassesConfig Subclasses { get; set; }
 
         /// <summary>
         /// Gets or sets the configs for item translations.
         /// </summary>
         [YamlIgnore]
-        [NestedConfig]
         public TranslationsConfig Translations { get; set; }
 
         /// <summary>
@@ -231,30 +233,6 @@ namespace ScpDeathmatch
         /// </summary>
         [YamlIgnore]
         public ZoneAnnouncerConfig ZoneAnnouncer { get; set; }
-
-        /// <summary>
-        /// Reloads all config files.
-        /// </summary>
-        public void Reload()
-        {
-            if (!Directory.Exists(Folder))
-                Directory.CreateDirectory(Folder);
-
-            foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
-                    continue;
-
-                if (Attribute.IsDefined(property, typeof(NestedConfigAttribute)))
-                {
-                    LoadNested(property);
-                    continue;
-                }
-
-                string path = Path.Combine(Folder, property.Name + ".yml");
-                LoadProperty(path, property, this);
-            }
-        }
 
         private static void LoadProperty(string path, PropertyInfo property, object parentClass)
         {
@@ -270,7 +248,7 @@ namespace ScpDeathmatch
             catch (Exception e)
             {
                 Log.Error($"Error while attempting to reload config file '{property.Name}', defaults will be loaded instead!\n{e.Message}");
-                property.SetValue(parentClass, Activator.CreateInstance(property.PropertyType));
+                property.SetValue(parentClass, DefaultPropertyValue(property, parentClass));
             }
         }
 
@@ -289,6 +267,27 @@ namespace ScpDeathmatch
             {
                 string path = Path.Combine(directory, nestedProperty.Name + ".yml");
                 LoadProperty(path, nestedProperty, value);
+            }
+        }
+
+        private void Reload()
+        {
+            if (!Directory.Exists(Folder))
+                Directory.CreateDirectory(Folder);
+
+            foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (!Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)) || !property.PropertyType.GetInterfaces().Contains(typeof(IConfigFile)))
+                    continue;
+
+                if (Attribute.IsDefined(property.PropertyType, typeof(NestedConfigAttribute)))
+                {
+                    LoadNested(property);
+                    continue;
+                }
+
+                string path = Path.Combine(Folder, property.Name + ".yml");
+                LoadProperty(path, property, this);
             }
         }
     }

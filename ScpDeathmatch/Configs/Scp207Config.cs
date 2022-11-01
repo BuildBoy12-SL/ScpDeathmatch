@@ -8,12 +8,13 @@
 namespace ScpDeathmatch.Configs
 {
     using System.Collections.Generic;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles configs related to Scp207.
     /// </summary>
-    public class Scp207Config
+    public class Scp207Config : IConfigFile
     {
         /// <summary>
         /// Gets or sets the cola effect stack settings.

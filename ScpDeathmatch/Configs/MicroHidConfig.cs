@@ -7,12 +7,15 @@
 
 namespace ScpDeathmatch.Configs
 {
+    using ScpDeathmatch.API.Attributes;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Configs.MicroHidConfigs;
 
     /// <summary>
     /// Handles all micro-hid configurations.
     /// </summary>
-    public class MicroHidConfig
+    [NestedConfig]
+    public class MicroHidConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the configs for healing while using the micro.

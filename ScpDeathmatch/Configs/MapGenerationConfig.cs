@@ -11,12 +11,13 @@ namespace ScpDeathmatch.Configs
     using System.ComponentModel;
     using MapGeneration;
     using MapGeneration.Distributors;
+    using ScpDeathmatch.API.Interfaces;
     using ScpDeathmatch.Models;
 
     /// <summary>
     /// Handles configs related to map generation.
     /// </summary>
-    public class MapGenerationConfig
+    public class MapGenerationConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the blacklist for spawning structures in specific rooms.

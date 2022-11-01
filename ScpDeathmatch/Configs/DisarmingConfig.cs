@@ -8,11 +8,12 @@
 namespace ScpDeathmatch.Configs
 {
     using System.ComponentModel;
+    using ScpDeathmatch.API.Interfaces;
 
     /// <summary>
     /// Handles the configs related to disarming.
     /// </summary>
-    public class DisarmingConfig
+    public class DisarmingConfig : IConfigFile
     {
         /// <summary>
         /// Gets or sets the amount of people a single person can detain.
