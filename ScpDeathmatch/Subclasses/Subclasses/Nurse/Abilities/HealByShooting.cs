@@ -29,6 +29,11 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Nurse.Abilities
         /// </summary>
         public Hint Hint { get; set; } = new("You have been healed by {0}", 2);
 
+        /// <summary>
+        /// Gets or sets the value to multiply the damage by when calculating the heal amount.
+        /// </summary>
+        public float HealthMultiplier { get; set; } = 1f;
+
         /// <inheritdoc />
         protected override void SubscribeEvents()
         {
@@ -67,7 +72,9 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Nurse.Abilities
 
             int bulletPenetrationPercent = Mathf.RoundToInt(firearm.Base.ArmorPenetration * 100f);
             float num = (float)ev.Hitbox._dmgMultiplier / 100f;
-            float toHeal = BodyArmorUtils.ProcessDamage(GetArmorEfficacy(ev.Target, ev.Hitbox._dmgMultiplier), ev.Damage, bulletPenetrationPercent) * num;
+            float toHealRaw = BodyArmorUtils.ProcessDamage(GetArmorEfficacy(ev.Target, ev.Hitbox._dmgMultiplier), ev.Damage, bulletPenetrationPercent) * num;
+            float toHeal = toHealRaw * HealthMultiplier;
+
             ev.Target.Heal(toHeal);
             ev.CanHurt = false;
             Hint.DisplayFormatted(ev.Target, ev.Shooter.Nickname);
