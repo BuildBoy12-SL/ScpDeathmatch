@@ -51,6 +51,7 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Nurse
         public override List<CustomAbility> CustomAbilities { get; set; } = new()
         {
             new AutoMedkit(),
+            new HealByShooting(),
         };
 
         /// <summary>

@@ -32,6 +32,11 @@ namespace ScpDeathmatch.ItemThrowing.Models
         public FloatRange AhpHeal { get; set; }
 
         /// <summary>
+        /// Gets or sets the hint to show to the player being healed.
+        /// </summary>
+        public Hint HealHint { get; set; }
+
+        /// <summary>
         /// Gets or sets the effects to be applied on hit.
         /// </summary>
         public ConfiguredEffect[] Effects { get; set; }
@@ -55,7 +60,8 @@ namespace ScpDeathmatch.ItemThrowing.Models
         /// Applies the settings to a target player.
         /// </summary>
         /// <param name="target">The player to apply the settings to.</param>
-        public void ApplyTo(Player target)
+        /// <param name="thrower">The player that caused the settings to be applied.</param>
+        public void ApplyTo(Player target, Player thrower = null)
         {
             if (ClearEffects)
                 target.DisableAllEffects();
@@ -65,6 +71,9 @@ namespace ScpDeathmatch.ItemThrowing.Models
 
             if (AhpHeal != null)
                 target.ArtificialHealth = Mathf.Clamp(AhpHeal.GetRandomValue(), 0f, target.MaxArtificialHealth);
+
+            if ((Heal != null || AhpHeal != null) && HealHint != null && thrower != null)
+                HealHint.DisplayFormatted(target, thrower.Nickname);
 
             if (Effects != null)
             {

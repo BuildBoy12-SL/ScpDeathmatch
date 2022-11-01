@@ -11,7 +11,6 @@ namespace ScpDeathmatch
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.API.Features.Items;
     using HarmonyLib;
     using RemoteAdmin;
     using ScpDeathmatch.API.Interfaces;

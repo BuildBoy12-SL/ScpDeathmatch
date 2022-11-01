@@ -78,7 +78,7 @@ namespace ScpDeathmatch.ItemThrowing.Components
                         }
 
                         Log.Debug("Applying settings to target", Debug);
-                        itemSettings.ApplyTo(player);
+                        itemSettings.ApplyTo(player, owner);
                         if (itemSettings.ShouldDelete)
                         {
                             pickup.Destroy();

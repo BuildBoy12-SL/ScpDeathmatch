@@ -72,6 +72,17 @@ namespace ScpDeathmatch.Models
         /// Displays the hint to the specified player.
         /// </summary>
         /// <param name="player">The player to display the hint to.</param>
+        /// <param name="args">The arguments to <see cref="string.Format(string,object[])">format</see> the <see cref="Message"/>.</param>
+        public void DisplayFormatted(Player player, params object[] args)
+        {
+            if (Show && args is not null && args.Length > 0)
+                player.ShowHint(string.Format(Message, args), Duration);
+        }
+
+        /// <summary>
+        /// Displays the hint to the specified player.
+        /// </summary>
+        /// <param name="player">The player to display the hint to.</param>
         /// <param name="overrideQueue">Whether this hint should take priority over all other active hints.</param>
         public void DisplayManaged(Player player, bool overrideQueue = true)
         {

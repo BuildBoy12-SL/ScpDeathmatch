@@ -31,6 +31,20 @@ namespace ScpDeathmatch.Subclasses
         /// Checks whether the player is a subclass of the specified type.
         /// </summary>
         /// <param name="player">The player to check.</param>
+        /// <param name="subclass">An instance of the subclass.</param>
+        /// <typeparam name="T">The subclass to check against.</typeparam>
+        /// <returns>Whether the player has the specified subclass.</returns>
+        public static bool IsSubclass<T>(this Player player, out Subclass subclass)
+            where T : Subclass
+        {
+            subclass = Subclass.Get(typeof(T));
+            return subclass != null && subclass.Check(player);
+        }
+
+        /// <summary>
+        /// Checks whether the player is a subclass of the specified type.
+        /// </summary>
+        /// <param name="player">The player to check.</param>
         /// <param name="subclass">The subclass instance.</param>
         /// <typeparam name="T">The subclass to check against.</typeparam>
         /// <returns>Whether the player has the specified subclass.</returns>
