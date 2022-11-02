@@ -26,10 +26,10 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Recon.Patches
         private static bool Prefix(Scp939_VisionController __instance)
         {
             Player player = Player.Get(__instance.gameObject);
-            if (!Plugin.Instance.Config.Subclasses.Recon.Check(player))
+            if (Subclass.Get(player) is not Subclass subclass)
                 return true;
 
-            toggleGoggles ??= Plugin.Instance.Config.Subclasses.Recon.CustomAbilities.FirstOrDefault(ability => ability.GetType() == typeof(ToggleGoggles)) as ToggleGoggles;
+            toggleGoggles ??= subclass.CustomAbilities.FirstOrDefault(ability => ability.GetType() == typeof(ToggleGoggles)) as ToggleGoggles;
             if (toggleGoggles is null)
                 return true;
 

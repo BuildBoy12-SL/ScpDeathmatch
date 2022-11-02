@@ -14,6 +14,7 @@ namespace ScpDeathmatch.Subclasses.Items
     using Exiled.API.Features.Items;
     using Exiled.API.Features.Spawn;
     using Exiled.Events.EventArgs;
+    using ScpDeathmatch.Subclasses.Subclasses.Athlete;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
@@ -82,7 +83,7 @@ namespace ScpDeathmatch.Subclasses.Items
 
         private void UpgradeItem(Item item, Player player)
         {
-            if (item is null || !Check(item) || !Plugin.Instance.Config.Subclasses.Athlete.Check(player))
+            if (item is null || !Check(item) || !player.IsSubclass<Athlete>())
                 return;
 
             player.RemoveItem(item);

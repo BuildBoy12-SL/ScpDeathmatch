@@ -14,6 +14,8 @@ namespace ScpDeathmatch.HealthSystem.Components
     using PlayerStatsSystem;
     using ScpDeathmatch.API.Events.EventArgs;
     using ScpDeathmatch.HealthSystem.Models;
+    using ScpDeathmatch.Subclasses;
+    using ScpDeathmatch.Subclasses.Subclasses.Brute;
     using UnityEngine;
 
     /// <summary>
@@ -72,7 +74,7 @@ namespace ScpDeathmatch.HealthSystem.Components
             if (damageHandler is not StandardDamageHandler standardDamageHandler)
                 return;
 
-            if (Plugin.Instance.Config.Subclasses.Brute.Check(player) && Plugin.Instance.Config.Subclasses.Brute.IgnoreMaxHpReduction)
+            if (player.IsSubclass(out Brute brute) && brute.IgnoreMaxHpReduction)
                 return;
 
             float amount = standardDamageHandler.DealtHealthDamage != 0 ? standardDamageHandler.DealtHealthDamage : standardDamageHandler.Damage;

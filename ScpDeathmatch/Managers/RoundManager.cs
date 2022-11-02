@@ -10,6 +10,8 @@ namespace ScpDeathmatch.Managers
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.Models;
+    using ScpDeathmatch.Subclasses;
+    using ScpDeathmatch.Subclasses.Subclasses.Insurgent;
 
     /// <summary>
     /// Manages deciding when the round should ends.
@@ -35,7 +37,7 @@ namespace ScpDeathmatch.Managers
                     if (player.SessionVariables.ContainsKey("IsNPC"))
                         continue;
 
-                    if (Plugin.Config.Subclasses.Insurgent.Check(player) &&
+                    if (player.IsSubclass<Insurgent>() &&
                         !Plugin.Config.Subclasses.Insurgent.Count079Alive &&
                         player.Role.Type == RoleType.Scp079)
                         continue;
@@ -68,7 +70,7 @@ namespace ScpDeathmatch.Managers
             {
                 foreach (Player player in Player.List)
                 {
-                    if (!Plugin.Config.Subclasses.Insurgent.Check(player) || player.Role.Type != RoleType.Scp079)
+                    if (!player.IsSubclass<Insurgent>() || player.Role.Type != RoleType.Scp079)
                         continue;
 
                     player.Role.Type = RoleType.Scientist;

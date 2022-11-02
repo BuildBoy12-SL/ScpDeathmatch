@@ -12,6 +12,8 @@ namespace ScpDeathmatch.Managers
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using ScpDeathmatch.Models;
+    using ScpDeathmatch.Subclasses;
+    using ScpDeathmatch.Subclasses.Subclasses.Insurgent;
 
     /// <summary>
     /// Handles the counting of kills and display of stats at the end of the round.
@@ -60,10 +62,12 @@ namespace ScpDeathmatch.Managers
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Broadcast broadcast = Plugin.Config.StatBroadcast.Broadcast;
+            if (!Plugin.Config.StatBroadcast.Broadcast.Show)
+                return;
+
             string content = FormatBroadcast();
-            if (broadcast.Show && !string.IsNullOrEmpty(content))
-                Map.Broadcast(broadcast.Duration, content, broadcast.Type, true);
+            if (!string.IsNullOrEmpty(content))
+                Map.Broadcast(Plugin.Config.StatBroadcast.Broadcast.Duration, content, Plugin.Config.StatBroadcast.Broadcast.Type, true);
         }
 
         private void OnWaitingForPlayers()
@@ -74,7 +78,7 @@ namespace ScpDeathmatch.Managers
 
         private string FormatBroadcast()
         {
-            Player winner = Player.Get(player => player.IsAlive && !(Plugin.Config.Subclasses.Insurgent.Check(player) && player.Role.Type == RoleType.Scp079)).FirstOrDefault();
+            Player winner = Player.Get(player => player.IsAlive && !(player.IsSubclass<Insurgent>() && player.Role.Type == RoleType.Scp079)).FirstOrDefault();
             string winnerName = winner?.DisplayNickname ?? winner?.Nickname;
             string firstBloodName = firstBlood?.DisplayNickname ?? firstBlood?.Nickname;
 
