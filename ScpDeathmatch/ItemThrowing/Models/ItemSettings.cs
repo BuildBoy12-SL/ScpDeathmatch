@@ -14,7 +14,7 @@ namespace ScpDeathmatch.ItemThrowing.Models
     /// <summary>
     /// Defines the contract for item settings.
     /// </summary>
-    public abstract class ItemSettings
+    public class ItemSettings
     {
         /// <summary>
         /// Gets or sets the damage to be applied on hit.

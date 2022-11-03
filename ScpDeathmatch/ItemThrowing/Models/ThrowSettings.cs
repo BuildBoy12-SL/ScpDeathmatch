@@ -15,11 +15,11 @@ namespace ScpDeathmatch.ItemThrowing.Models
         /// <summary>
         /// Gets or sets the settings for items thrown at friendly players.
         /// </summary>
-        public FriendlySettings FriendlySettings { get; set; }
+        public ItemSettings FriendlySettings { get; set; }
 
         /// <summary>
         /// Gets or sets the settings for items thrown at enemy players.
         /// </summary>
-        public EnemySettings EnemySettings { get; set; }
+        public ItemSettings EnemySettings { get; set; }
     }
 }

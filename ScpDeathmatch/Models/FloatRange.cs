@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace ScpDeathmatch.ItemThrowing.Models
+namespace ScpDeathmatch.Models
 {
     /// <summary>
     /// Represents a range between two floats.

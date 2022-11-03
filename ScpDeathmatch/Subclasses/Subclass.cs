@@ -131,8 +131,11 @@ namespace ScpDeathmatch.Subclasses
             {
                 if (propertyInfo.PropertyType.IsSubclassOf(typeof(Subclass)))
                 {
-                    Subclass subclass = (Subclass)propertyInfo.GetValue(overrideClass) ?? Activator.CreateInstance(propertyInfo.PropertyType) as Subclass;
-                    subclass?.TryRegister();
+                    Subclass subclass = propertyInfo.GetValue(overrideClass) as Subclass ?? Activator.CreateInstance(propertyInfo.PropertyType) as Subclass;
+                    if (subclass is null)
+                        continue;
+
+                    subclass.TryRegister();
                     subclasses.Add(subclass);
                 }
             }

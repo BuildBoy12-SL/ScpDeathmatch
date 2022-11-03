@@ -81,11 +81,10 @@ namespace ScpDeathmatch.Subclasses.Subclasses.Scavenger
             {
                 rawCategoryLimits = value;
                 categoryLimits.Clear();
-                for (int index = 0; Enum.IsDefined(typeof(ItemCategory), (ItemCategory)index); ++index)
+                foreach (ItemCategory itemCategory in Enum.GetValues(typeof(ItemCategory)))
                 {
-                    ItemCategory key = (ItemCategory)index;
-                    if (rawCategoryLimits.TryGetValue(key, out sbyte def) && def >= 0)
-                        categoryLimits.Add(def);
+                    if (rawCategoryLimits.TryGetValue(itemCategory, out sbyte definedLimit) && definedLimit >= 0)
+                        categoryLimits.Add(definedLimit);
                 }
             }
         }

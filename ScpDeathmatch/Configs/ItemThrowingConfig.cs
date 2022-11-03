@@ -33,7 +33,7 @@ namespace ScpDeathmatch.Configs
             {
                 ItemType.MicroHID, new ThrowSettings
                 {
-                    EnemySettings = new EnemySettings
+                    EnemySettings = new ItemSettings
                     {
                         Damage = new FloatRange(150f, 200f),
                         Effects = new[]
@@ -47,19 +47,21 @@ namespace ScpDeathmatch.Configs
             {
                 ItemType.Painkillers, new ThrowSettings
                 {
-                    FriendlySettings = new FriendlySettings()
+                    FriendlySettings = new ItemSettings
                     {
                         Heal = new FloatRange(10f, 15f),
+                        HealHint = new Hint("{0} healed you with painkillers", 3f),
                     },
                 }
             },
             {
                 ItemType.Adrenaline, new ThrowSettings
                 {
-                    FriendlySettings = new FriendlySettings()
+                    FriendlySettings = new ItemSettings
                     {
                         Heal = new FloatRange(10f, 15f),
                         AhpHeal = new FloatRange(20f, 20f),
+                        HealHint = new Hint("{0} healed you with adrenaline", 3f),
                     },
                 }
             },
